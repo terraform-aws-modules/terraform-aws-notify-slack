@@ -1,5 +1,5 @@
 from __future__ import print_function
-import os, boto3, json
+import os, boto3, json, base64
 import urllib.request, urllib.parse
 import logging
 
@@ -10,7 +10,8 @@ def decrypt(encrypted_url):
     region = os.environ['AWS_DEFAULT_REGION']
     try:
         kms = boto3.client('kms', region_name=region)
-        return kms.decrypt(CiphertextBlob=b64decode(in_message))['Plaintext']
+        plaintext = kms.decrypt(CiphertextBlob=base64.b64decode(encrypted_url))['Plaintext']
+        return plaintext.decode()
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
 
@@ -20,7 +21,7 @@ def notify_slack(message):
     """
     slack_url = os.environ['SLACK_WEBHOOK']
     if not slack_url.startswith("http"):
-        slack_url(decrypt(slack_url))
+        slack_url = decrypt(slack_url)
 
     slack_channel = os.environ['SLACK_CHANNEL']
     
