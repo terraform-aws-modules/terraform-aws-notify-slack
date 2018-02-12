@@ -12,4 +12,5 @@ variable "slack_channel" {
 
 variable "kms_key_arn" {
   description = "ARN of the KMS key used for decrypting slack webhook url"
+  default     = ""
 }
