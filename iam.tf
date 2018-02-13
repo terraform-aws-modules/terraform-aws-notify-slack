@@ -1,39 +1,50 @@
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "default_lambda"
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
     }
-  ]
-}
-EOF
+  }
 }
 
-resource "aws_iam_role_policy" "slack_lambda_policy" {
-  name = "slack-lambda-policy"
-  role = "${aws_iam_role.iam_for_lambda.id}"
+data "aws_iam_policy_document" "lambda" {
+  statement {
+    sid = "AllowWriteToCloudwatchLogs"
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Effect": "Allow",
-    "Action": [
+    effect = "Allow"
+
+    actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "kms:Decrypt"
-    ],
-    "Resource": "*"
-  }]
+    ]
+
+    resources = ["arn:aws:logs:*:*:*"]
+  }
+
+  statement {
+    sid = "${var.kms_key_arn == "" ? "This statement has no effect" : "AllowKMSDecrypt"}"
+
+    effect = "Allow"
+
+    actions = ["${var.kms_key_arn == "" ? "" : "kms:Decrypt"}"]
+
+    resources = ["${var.kms_key_arn}"]
+  }
 }
-EOF
+
+resource "aws_iam_role" "lambda" {
+  name_prefix        = "lambda-"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_role.json}"
+}
+
+resource "aws_iam_role_policy" "lambda" {
+  name_prefix = "lambda-policy-"
+  role        = "${aws_iam_role.lambda.id}"
+
+  policy = "${data.aws_iam_policy_document.lambda.json}"
 }

@@ -7,7 +7,7 @@ def decrypt(encrypted_url):
     """
     Decrypt encrypted URL with KMS
     """
-    region = os.environ['AWS_DEFAULT_REGION']
+    region = os.environ['AWS_REGION']
     try:
         kms = boto3.client('kms', region_name=region)
         plaintext = kms.decrypt(CiphertextBlob=base64.b64decode(encrypted_url))['Plaintext']
@@ -19,15 +19,15 @@ def notify_slack(message):
     """
     Send a message to a slack channel
     """
-    slack_url = os.environ['SLACK_WEBHOOK']
+    slack_url = os.environ['SLACK_WEBHOOK_URL']
     if not slack_url.startswith("http"):
         slack_url = decrypt(slack_url)
 
     slack_channel = os.environ['SLACK_CHANNEL']
-    
+
     text = message['AlarmName']
     states = {'OK' : 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
-    
+
     payload = {
         "channel": slack_channel,
         "username": "AWS Cloudwatch",
@@ -37,7 +37,7 @@ def notify_slack(message):
 
     data = urllib.parse.urlencode({"payload":json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
-    response = urllib.request.urlopen(req, data)
+    urllib.request.urlopen(req, data)
 
 def lambda_handler(event, context):
     message = json.loads(event['Records'][0]['Sns']['Message'])

@@ -1,5 +1,10 @@
-variable "slack_topic_name" {
-  description = "The name of the SNS topic for slack"
+variable "create_sns_topic" {
+  description = "Whether to create new SNS topic"
+  default     = true
+}
+
+variable "sns_topic_name" {
+  description = "The name of the SNS topic to create"
 }
 
 variable "slack_webhook_url" {
