@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "lambda" {
+data "aws_iam_policy_document" "lambda_basic" {
   statement {
     sid = "AllowWriteToCloudwatchLogs"
 
@@ -25,13 +25,19 @@ data "aws_iam_policy_document" "lambda" {
 
     resources = ["arn:aws:logs:*:*:*"]
   }
+}
+
+data "aws_iam_policy_document" "lambda" {
+  count = "${var.kms_key_arn == "" ? 0 : 1}"
+
+  source_json = "${data.aws_iam_policy_document.lambda_basic.json}"
 
   statement {
-    sid = "${var.kms_key_arn == "" ? "This statement has no effect" : "AllowKMSDecrypt"}"
+    sid = "AllowKMSDecrypt"
 
     effect = "Allow"
 
-    actions = ["${var.kms_key_arn == "" ? "" : "kms:Decrypt"}"]
+    actions = ["kms:Decrypt"]
 
     resources = ["${var.kms_key_arn}"]
   }
@@ -46,5 +52,5 @@ resource "aws_iam_role_policy" "lambda" {
   name_prefix = "lambda-policy-"
   role        = "${aws_iam_role.lambda.id}"
 
-  policy = "${data.aws_iam_policy_document.lambda.json}"
+  policy = "${element(compact(concat(data.aws_iam_policy_document.lambda.*.json, data.aws_iam_policy_document.lambda_basic.*.json)), 0)}"
 }
