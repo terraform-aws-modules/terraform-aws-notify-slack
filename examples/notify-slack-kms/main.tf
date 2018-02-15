@@ -22,10 +22,11 @@ module "notify_slack" {
   slack_username    = "reporter"
 
   # Option 1
-//   kms_key_arn = "${aws_kms_key.this.arn}"
+  //   kms_key_arn = "${aws_kms_key.this.arn}"
+
 
   # Option 2
-//  kms_key_arn = "${data.aws_kms_alias.this.target_key_arn}"
+  //  kms_key_arn = "${data.aws_kms_alias.this.target_key_arn}"
 
   # Option 3
   kms_key_arn = "${var.kms_key_arn}"

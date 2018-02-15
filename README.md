@@ -7,12 +7,12 @@ Start by setting up an [incoming webhook integration](https://my.slack.com/servi
 ## Features
 
 - [x] AWS Lambda runtime Python 3.6
-- [?] Most of Slack options are customizable (channel, username, text, color)
 - [x] Create new SNS topic or use existing one
-- [x] Support plaintext and encrypted version of webhook URL
-- [?] Support different types of SNS messages:
+- [x] Support plaintext and encrypted version of Slack webhook URL
+- [x] Most of Slack message options are customizable
+- [x] Support different types of SNS messages:
   - [x] AWS Cloudwatch
-  - ...
+  - [ ] [Send pull-request to add support of other message types](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/pulls)
 
 ## Usage
 
@@ -36,7 +36,7 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 
 * [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/modules/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
 * [notify-slack-kms](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/modules/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel (using KMS to encrypt Slack webhook URL).
-* [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/modules/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel.
+* [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/modules/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
 
 ## Authors
 
