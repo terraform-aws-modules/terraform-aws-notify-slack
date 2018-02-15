@@ -29,7 +29,7 @@ def cloudwatch_notification(message, region):
                 { "title": "Current State", "value": message['OldStateValue'], "short": True },
                 {
                     "title": "Link to Alarm",
-                    "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + message['AlarmName'],
+                    "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.urlencode(message['AlarmName']),
                     "short": False
                 }
             ]
@@ -58,7 +58,7 @@ def notify_slack(message, region):
         "attachments": []
     }
     if "AlarmName" in message:
-        payload['text'] = "AWS CloudWatching notification"
+        payload['text'] = "AWS CloudWatch notification"
         payload['attachments'].append(cloudwatch_notification(message, region))
     else:
         payload['text'] = "AWS notification"
