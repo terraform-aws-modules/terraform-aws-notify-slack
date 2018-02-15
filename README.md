@@ -23,6 +23,8 @@ module "notify_slack" {
 
   slack_channel = "aws-notification"
 
+  slack_username = "Cloudwatch"
+
   kms_key_arn = "arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
 }
 ```

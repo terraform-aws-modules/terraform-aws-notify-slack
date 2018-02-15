@@ -15,6 +15,10 @@ variable "slack_channel" {
   description = "The name of the channel in Slack for notifications"
 }
 
+variable "slack_username" {
+  description = "The username that will appear on Slack on messages"
+}
+
 variable "kms_key_arn" {
   description = "ARN of the KMS key used for decrypting slack webhook url"
   default     = ""

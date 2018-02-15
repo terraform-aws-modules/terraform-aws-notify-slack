@@ -23,6 +23,8 @@ module "notify_slack" {
 
   slack_channel = "aws-notification"
 
+  slack_username = "Cloudwatch"
+
   # Option 1
 //   kms_key_arn = "${aws_kms_key.this.arn}"
 

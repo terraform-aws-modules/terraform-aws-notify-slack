@@ -39,12 +39,12 @@ data "aws_iam_policy_document" "lambda" {
 
     actions = ["kms:Decrypt"]
 
-    resources = ["${var.kms_key_arn}"]
+    resources = ["${var.kms_key_arn == "" ? "" : var.kms_key_arn}"]
   }
 }
 
 resource "aws_iam_role" "lambda" {
-  name_prefix        = "lambda-"
+  name_prefix        = "lambda"
   assume_role_policy = "${data.aws_iam_policy_document.assume_role.json}"
 }
 

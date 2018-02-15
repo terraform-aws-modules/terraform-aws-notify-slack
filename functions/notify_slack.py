@@ -15,7 +15,33 @@ def decrypt(encrypted_url):
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
 
-def notify_slack(message):
+def cloudwatch_notification(message, region): 
+    states = {'OK' : 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
+
+    return {
+            "color": states[message['NewStateValue']],
+            "fallback": "Alarm {} triggered".format(message['AlarmName']),
+            "fields": [
+                { "title": "Alarm Name", "value": message['AlarmName'], "short": True },
+                { "title": "Alarm Description", "value": message['AlarmDescription'], "short": False},
+                { "title": "Alarm reason", "value": message['NewStateReason'], "short": False},
+                { "title": "Old State", "value": message['NewStateValue'], "short": True },
+                { "title": "Current State", "value": message['OldStateValue'], "short": True },
+                {
+                    "title": "Link to Alarm",
+                    "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + message['AlarmName'],
+                    "short": False
+                }
+            ]
+        }
+
+def default_notification(message): 
+    return {
+            "fallback": "A new message",
+            "fields": [ { "title": "Message", "value": json.dumps(message), "short": False }]
+        }
+
+def notify_slack(message, region):
     """
     Send a message to a slack channel
     """
@@ -24,16 +50,19 @@ def notify_slack(message):
         slack_url = decrypt(slack_url)
 
     slack_channel = os.environ['SLACK_CHANNEL']
-
-    text = message['AlarmName']
-    states = {'OK' : 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
+    slack_username = os.environ['SLACK_USERNAME']
 
     payload = {
         "channel": slack_channel,
-        "username": "AWS Cloudwatch",
-        "text": text,
-        "color": states[message['NewStateValue']]
+        "username": slack_username,
+        "attachments": []
     }
+    if "AlarmName" in message:
+        payload['text'] = "AWS CloudWatching notification"
+        payload['attachments'].append(cloudwatch_notification(message, region))
+    else:
+        payload['text'] = "AWS notification"
+        payload['attachments'].append(default_notification(message))
 
     data = urllib.parse.urlencode({"payload":json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
@@ -41,7 +70,8 @@ def notify_slack(message):
 
 def lambda_handler(event, context):
     message = json.loads(event['Records'][0]['Sns']['Message'])
-    notify_slack(message)
+    region = event['Records'][0]['Sns']['TopicArn'].split(":")[3]
+    notify_slack(message, region)
     return message
 
-# notify_slack({'AlarmName': "Hello", "NewStateValue": "OK"})
+#notify_slack({"AlarmName":"Example","AlarmDescription":"Example alarm description.","AWSAccountId":"000000000000","NewStateValue":"ALARM","NewStateReason":"Threshold Crossed","StateChangeTime":"2017-01-12T16:30:42.236+0000","Region":"EU - Ireland","OldStateValue":"OK"}, "eu-west-1")
