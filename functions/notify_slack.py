@@ -29,7 +29,7 @@ def cloudwatch_notification(message, region):
                 { "title": "Current State", "value": message['OldStateValue'], "short": True },
                 {
                     "title": "Link to Alarm",
-                    "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.urlencode(message['AlarmName']),
+                    "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote_plus(message['AlarmName']),
                     "short": False
                 }
             ]
