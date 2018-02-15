@@ -22,6 +22,11 @@ output "notify_slack_lambda_function_arn" {
   value       = "${aws_lambda_function.notify_slack.arn}"
 }
 
+output "notify_slack_lambda_function_name" {
+  description = "The name of the Lambda function"
+  value       = "${aws_lambda_function.notify_slack.function_name}"
+}
+
 output "notify_slack_lambda_function_invoke_arn" {
   description = "The ARN to be used for invoking Lambda function from API Gateway"
   value       = "${aws_lambda_function.notify_slack.invoke_arn}"

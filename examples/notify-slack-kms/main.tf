@@ -3,12 +3,13 @@ provider "aws" {
 }
 
 variable "kms_key_arn" {
-  default = "arn:aws:kms:eu-west-1:835367859851:key/054b4846-95fe-4537-94f2-1dfd255238cf"
+  default = "arn:aws:kms:eu-west-1:386714191260:key/66db1c5d-d42b-4e28-8efb-07a9cf607a73"
 }
 
 # Encrypt the URL, this is an example, in practice encryption should not be done here as it will be shown in logs and end up in Terraform state file
 data "aws_kms_ciphertext" "slack_url" {
-  plaintext = "https://hooks.slack.com/services/AAA/BBB/CCC"
+  plaintext = "https://hooks.slack.com/services/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"
+  #plaintext = "https://hooks.slack.com/services/AAA/BBB/CCC"
   key_id    = "${var.kms_key_arn}"
 }
 
@@ -18,7 +19,8 @@ module "notify_slack" {
   sns_topic_name = "slack-topic"
 
   slack_webhook_url = "${data.aws_kms_ciphertext.slack_url.ciphertext_blob}"
-  slack_channel     = "aws-notification"
+  # slack_channel     = "aws-notification"
+  slack_channel     = "telia-am-notification"
   slack_username    = "reporter"
 
   # Option 1
@@ -29,4 +31,22 @@ module "notify_slack" {
 
   # Option 3
   kms_key_arn = "${var.kms_key_arn}"
+}
+
+resource "aws_cloudwatch_metric_alarm" "LambdaDuration" {
+  alarm_name          = "NotifySlackDuration"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "Duration"
+  namespace           = "AWS/Lambda"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "5000"
+  alarm_description   = "Duration of notifying slack exceeds threshold"
+
+  alarm_actions = ["${module.notify_slack.this_slack_topic_arn}"]
+
+  dimensions {
+    FunctionName = "${module.notify_slack.notify_slack_lambda_function_name}"
+  }
 }
