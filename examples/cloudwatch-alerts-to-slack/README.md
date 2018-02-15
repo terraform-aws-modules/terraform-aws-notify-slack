@@ -1,6 +1,6 @@
-# Slack notification with KMS encrypted webhook URL
+# CloudWatch alerts to Slack
 
-Configuration in this directory creates an SNS topic that sends messages to a Slack channel with Slack webhook URL encrypted using KMS.
+Configuration in this directory creates an SNS topic that sends messages to a Slack channel with Slack webhook URL encrypted using KMS and a CloudWatch Alarm that monitors the duration of lambda execution.
 
 ## KMS keys
 
