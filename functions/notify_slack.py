@@ -3,6 +3,7 @@ import os, boto3, json, base64
 import urllib.request, urllib.parse
 import logging
 
+
 def decrypt(encrypted_url):
     """
     Decrypt encrypted URL with KMS
@@ -15,8 +16,9 @@ def decrypt(encrypted_url):
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
 
-def cloudwatch_notification(message, region): 
-    states = {'OK' : 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
+
+def cloudwatch_notification(message, region):
+    states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
 
     return {
             "color": states[message['NewStateValue']],
@@ -35,11 +37,13 @@ def cloudwatch_notification(message, region):
             ]
         }
 
-def default_notification(message): 
+
+def default_notification(message):
     return {
             "fallback": "A new message",
-            "fields": [ { "title": "Message", "value": json.dumps(message), "short": False }]
+            "fields": [{"title": "Message", "value": json.dumps(message), "short": False}]
         }
+
 
 def notify_slack(message, region):
     """
@@ -67,6 +71,7 @@ def notify_slack(message, region):
     data = urllib.parse.urlencode({"payload":json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
     urllib.request.urlopen(req, data)
+
 
 def lambda_handler(event, context):
     message = json.loads(event['Records'][0]['Sns']['Message'])
