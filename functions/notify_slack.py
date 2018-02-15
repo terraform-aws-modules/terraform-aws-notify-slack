@@ -4,10 +4,8 @@ import urllib.request, urllib.parse
 import logging
 
 
+# Decrypt encrypted URL with KMS
 def decrypt(encrypted_url):
-    """
-    Decrypt encrypted URL with KMS
-    """
     region = os.environ['AWS_REGION']
     try:
         kms = boto3.client('kms', region_name=region)
@@ -45,10 +43,8 @@ def default_notification(message):
         }
 
 
+# Send a message to a slack channel
 def notify_slack(message, region):
-    """
-    Send a message to a slack channel
-    """
     slack_url = os.environ['SLACK_WEBHOOK_URL']
     if not slack_url.startswith("http"):
         slack_url = decrypt(slack_url)
@@ -68,7 +64,7 @@ def notify_slack(message, region):
         payload['text'] = "AWS notification"
         payload['attachments'].append(default_notification(message))
 
-    data = urllib.parse.urlencode({"payload":json.dumps(payload)}).encode("utf-8")
+    data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
     urllib.request.urlopen(req, data)
 
@@ -77,6 +73,7 @@ def lambda_handler(event, context):
     message = json.loads(event['Records'][0]['Sns']['Message'])
     region = event['Records'][0]['Sns']['TopicArn'].split(":")[3]
     notify_slack(message, region)
+
     return message
 
 #notify_slack({"AlarmName":"Example","AlarmDescription":"Example alarm description.","AWSAccountId":"000000000000","NewStateValue":"ALARM","NewStateReason":"Threshold Crossed","StateChangeTime":"2017-01-12T16:30:42.236+0000","Region":"EU - Ireland","OldStateValue":"OK"}, "eu-west-1")

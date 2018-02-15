@@ -31,7 +31,7 @@ resource "aws_lambda_permission" "sns_notify_slack" {
 data "archive_file" "notify_slack" {
   type        = "zip"
   source_file = "${path.module}/functions/notify_slack.py"
-  output_path = "${path.module}/files/notify_slack.zip"
+  output_path = "${path.module}/functions/notify_slack.zip"
 }
 
 resource "aws_lambda_function" "notify_slack" {

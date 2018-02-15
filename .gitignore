@@ -2,4 +2,4 @@
 terraform.tfstate
 *.tfstate*
 terraform.tfvars
-files/*.zip
+functions/*.zip
