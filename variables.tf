@@ -3,6 +3,11 @@ variable "create_sns_topic" {
   default     = true
 }
 
+variable "lambda_function_name" {
+  description = "The name of the Lambda function to create"
+  default     = "notify_slack"
+}
+
 variable "sns_topic_name" {
   description = "The name of the SNS topic to create"
 }
