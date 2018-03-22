@@ -36,7 +36,7 @@ data "archive_file" "notify_slack" {
 
 resource "aws_lambda_function" "notify_slack" {
   filename         = "${data.archive_file.notify_slack.output_path}"
-  function_name    = "notify_slack"
+  function_name    = "${var.lambda_function_name}"
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "notify_slack.lambda_handler"
   source_code_hash = "${data.archive_file.notify_slack.output_base64sha256}"
