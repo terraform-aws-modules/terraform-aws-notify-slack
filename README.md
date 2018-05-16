@@ -38,6 +38,35 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 * [notify-slack-kms](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel (using KMS to encrypt Slack webhook URL).
 * [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| create_sns_topic | Whether to create new SNS topic | string | `true` | no |
+| kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
+| lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
+| slack_channel | The name of the channel in Slack for notifications | string | - | yes |
+| slack_username | The username that will appear on Slack on messages | string | - | yes |
+| slack_webhook_url | The URL of Slack webhook | string | - | yes |
+| sns_topic_name | The name of the SNS topic to create | string | - | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| lambda_iam_role_arn | The ARN of the IAM role used by Lambda function |
+| lambda_iam_role_name | The name of the IAM role used by Lambda function |
+| notify_slack_lambda_function_arn | The ARN of the Lambda function |
+| notify_slack_lambda_function_invoke_arn | The ARN to be used for invoking Lambda function from API Gateway |
+| notify_slack_lambda_function_last_modified | The date Lambda function was last modified |
+| notify_slack_lambda_function_name | The name of the Lambda function |
+| notify_slack_lambda_function_version | Latest published version of your Lambda function |
+| this_slack_topic_arn | The ARN of the SNS topic from which messages will be sent to Slack |
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 ## Authors
 
 Module managed by [Anton Babenko](https://github.com/antonbabenko).
