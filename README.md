@@ -19,7 +19,7 @@ Start by setting up an [incoming webhook integration](https://my.slack.com/servi
 ```hcl
 module "notify_slack" {
   source = "terraform-aws-modules/notify-slack/aws"
-  
+
   sns_topic_name = "slack-topic"
 
   slack_webhook_url = "https://hooks.slack.com/services/AAA/BBB/CCC"

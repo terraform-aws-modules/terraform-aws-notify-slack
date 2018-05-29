@@ -51,4 +51,8 @@ resource "aws_lambda_function" "notify_slack" {
       SLACK_USERNAME    = "${var.slack_username}"
     }
   }
+
+  lifecycle {
+    ignore_changes = ["filename"]
+  }
 }
