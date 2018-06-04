@@ -11,6 +11,8 @@ There are 3 ways to define KMS key which should be used by Lambda function:
 1. Hard-code the ARN of KMS key
 
 ### Option 1:
+
+```hcl
 resource "aws_kms_key" "this" {
   description = "KMS key for notify-slack test"
 }
@@ -21,21 +23,27 @@ resource "aws_kms_alias" "this" {
 }
 
 // kms_key_arn = "${aws_kms_key.this.arn}"
+```
 
 ### Option 2:
+
+```
 data "aws_kms_alias" "this" {
  name = "alias/kms-test-key"
 }
 
 // kms_key_arn = "${data.aws_kms_alias.this.target_key_arn}"
+```
 
 ### Option 3:
+
+```
 variable "kms_key_arn" {
   default = "arn:aws:kms:eu-west-1:835367859851:key/054b4846-95fe-4537-94f2-1dfd255238cf"
 }
 
 // kms_key_arn = "${var.kms_key_arn}"
-
+```
 
 ## Usage
 
