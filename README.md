@@ -48,6 +48,7 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 | kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
 | lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
 | slack_channel | The name of the channel in Slack for notifications | string | - | yes |
+| slack_emoji | The name of the slack emoji you want to use | string | `:aws:` | no |
 | slack_username | The username that will appear on Slack on messages | string | - | yes |
 | slack_webhook_url | The URL of Slack webhook | string | - | yes |
 | sns_topic_name | The name of the SNS topic to create | string | - | yes |
