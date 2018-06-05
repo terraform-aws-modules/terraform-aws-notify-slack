@@ -25,7 +25,7 @@ variable "slack_username" {
 }
 
 variable "slack_emoji" {
-  default = ":aws:"
+  default     = ":aws:"
   description = "A custom emoji that will appear on slack messages"
 }
 
