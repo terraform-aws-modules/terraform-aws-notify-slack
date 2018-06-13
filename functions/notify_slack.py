@@ -60,8 +60,9 @@ def notify_slack(message, region):
         "attachments": []
     }
     if "AlarmName" in message:
-        payload['text'] = "AWS CloudWatch notification"
-        payload['attachments'].append(cloudwatch_notification(message, region))
+        notification = cloudwatch_notification(message, region)
+        payload['text'] = "AWS CloudWatch notification - " + notification['fields'][0]['value']
+        payload['attachments'].append(notification)
     else:
         payload['text'] = "AWS notification"
         payload['attachments'].append(default_notification(message))
