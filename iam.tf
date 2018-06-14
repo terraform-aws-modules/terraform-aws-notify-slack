@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "assume_role" {
+  count = "${var.enable}"
+
   statement {
     effect = "Allow"
 
@@ -12,6 +14,8 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 data "aws_iam_policy_document" "lambda_basic" {
+  count = "${var.enable}"
+
   statement {
     sid = "AllowWriteToCloudwatchLogs"
 
@@ -28,9 +32,9 @@ data "aws_iam_policy_document" "lambda_basic" {
 }
 
 data "aws_iam_policy_document" "lambda" {
-  count = "${var.kms_key_arn == "" ? 0 : 1}"
+  count = "${(var.kms_key_arn == "" ? 0 : 1) * var.enable}"
 
-  source_json = "${data.aws_iam_policy_document.lambda_basic.json}"
+  source_json = "${data.aws_iam_policy_document.lambda_basic.0.json}"
 
   statement {
     sid = "AllowKMSDecrypt"
@@ -44,13 +48,17 @@ data "aws_iam_policy_document" "lambda" {
 }
 
 resource "aws_iam_role" "lambda" {
+  count = "${var.enable}"
+
   name_prefix        = "lambda"
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_role.0.json}"
 }
 
 resource "aws_iam_role_policy" "lambda" {
+  count = "${var.enable}"
+
   name_prefix = "lambda-policy-"
-  role        = "${aws_iam_role.lambda.id}"
+  role        = "${aws_iam_role.lambda.0.id}"
 
   policy = "${element(compact(concat(data.aws_iam_policy_document.lambda.*.json, data.aws_iam_policy_document.lambda_basic.*.json)), 0)}"
 }
