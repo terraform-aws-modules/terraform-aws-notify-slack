@@ -21,12 +21,12 @@ variable "slack_channel" {
 }
 
 variable "slack_username" {
-  description = "The username that will appear on Slack on messages"
+  description = "The username that will appear on Slack messages"
 }
 
 variable "slack_emoji" {
+  description = "A custom emoji that will appear on Slack messages"
   default     = ":aws:"
-  description = "A custom emoji that will appear on slack messages"
 }
 
 variable "kms_key_arn" {
