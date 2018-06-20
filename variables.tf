@@ -1,3 +1,8 @@
+variable "create" {
+  description = "Whether to create all resources"
+  default     = true
+}
+
 variable "create_sns_topic" {
   description = "Whether to create new SNS topic"
   default     = true
@@ -32,9 +37,4 @@ variable "slack_emoji" {
 variable "kms_key_arn" {
   description = "ARN of the KMS key used for decrypting slack webhook url"
   default     = ""
-}
-
-variable "enable" {
-  description = "Bool to enable or disable the creation of resources."
-  default     = "1"
 }

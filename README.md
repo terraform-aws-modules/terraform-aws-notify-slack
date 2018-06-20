@@ -44,6 +44,7 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| create | Whether to create all resources | string | `true` | no |
 | create_sns_topic | Whether to create new SNS topic | string | `true` | no |
 | kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
 | lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
