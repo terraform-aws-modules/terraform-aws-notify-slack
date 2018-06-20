@@ -33,3 +33,8 @@ variable "kms_key_arn" {
   description = "ARN of the KMS key used for decrypting slack webhook url"
   default     = ""
 }
+
+variable "enable" {
+  description = "Bool to enable or disable the creation of resources."
+  default     = "1"
+}
