@@ -8,6 +8,11 @@ variable "create_sns_topic" {
   default     = true
 }
 
+variable "create_with_kms_key" {
+  description = "Whether to create resources with KMS encryption"
+  default     = false
+}
+
 variable "lambda_function_name" {
   description = "The name of the Lambda function to create"
   default     = "notify_slack"

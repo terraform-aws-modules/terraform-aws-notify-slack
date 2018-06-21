@@ -30,5 +30,6 @@ module "notify_slack" {
   //  kms_key_arn = "${data.aws_kms_alias.this.target_key_arn}"
 
   # Option 3
-  kms_key_arn = "${var.kms_key_arn}"
+  kms_key_arn         = "${var.kms_key_arn}"
+  create_with_kms_key = true
 }

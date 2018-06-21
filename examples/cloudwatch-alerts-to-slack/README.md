@@ -10,6 +10,8 @@ There are 3 ways to define KMS key which should be used by Lambda function:
 1. Use [aws_kms_alias data-source](https://www.terraform.io/docs/providers/aws/d/kms_alias.html) to get an existing KMS key alias and put ARN of it as `kms_key_arn` argument to this module
 1. Hard-code the ARN of KMS key
 
+Note: Set `create_with_kms_key = true` when providing value of `kms_key_arn` to create required IAM policy which allows to decrypt using specified KMS key.
+
 ### Option 1:
 
 ```hcl
@@ -23,6 +25,7 @@ resource "aws_kms_alias" "this" {
 }
 
 // kms_key_arn = "${aws_kms_key.this.arn}"
+// create_with_kms_key = true
 ```
 
 ### Option 2:
@@ -33,6 +36,7 @@ data "aws_kms_alias" "this" {
 }
 
 // kms_key_arn = "${data.aws_kms_alias.this.target_key_arn}"
+// create_with_kms_key = true
 ```
 
 ### Option 3:
@@ -43,6 +47,7 @@ variable "kms_key_arn" {
 }
 
 // kms_key_arn = "${var.kms_key_arn}"
+// create_with_kms_key = true
 ```
 
 ## Usage
