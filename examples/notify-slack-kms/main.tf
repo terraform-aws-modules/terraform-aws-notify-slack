@@ -31,4 +31,6 @@ module "notify_slack" {
 
   # Option 3
   kms_key_arn = "${var.kms_key_arn}"
+
+  create_with_kms_key = true
 }
