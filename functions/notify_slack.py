@@ -59,7 +59,8 @@ def notify_slack(message, region):
         "icon_emoji": slack_emoji,
         "attachments": []
     }
-    if "AlarmName" in message:
+    if "AlarmName" in message: # Incoming event is from Cloudwatch
+        message = json.loads(message)
         notification = cloudwatch_notification(message, region)
         payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
         payload['attachments'].append(notification)
