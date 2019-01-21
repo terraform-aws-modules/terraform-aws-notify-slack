@@ -43,3 +43,8 @@ variable "kms_key_arn" {
   description = "ARN of the KMS key used for decrypting slack webhook url"
   default     = ""
 }
+
+variable "use_source_hash" {
+  description = "Turn on/off zip file hash check - Issue 21"
+  default     = true
+}
