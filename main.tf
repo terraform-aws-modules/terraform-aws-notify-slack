@@ -32,24 +32,12 @@ resource "aws_lambda_permission" "sns_notify_slack" {
   source_arn    = "${local.sns_topic_arn}"
 }
 
-data "null_data_source" "lambda_file" {
-  inputs {
-    filename = "${substr("${path.module}/functions/notify_slack.py", length(path.cwd) + 1, -1)}"
-  }
-}
-
-data "null_data_source" "lambda_archive" {
-  inputs {
-    filename = "${substr("${path.module}/functions/notify_slack.zip", length(path.cwd) + 1, -1)}"
-  }
-}
-
 data "archive_file" "notify_slack" {
   count = "${var.create}"
 
   type        = "zip"
-  source_file = "${data.null_data_source.lambda_file.outputs.filename}"
-  output_path = "${data.null_data_source.lambda_archive.outputs.filename}"
+  source_file = "${local.module_relpath}/functions/notify_slack.py"
+  output_path = "${local.module_relpath}/functions/notify_slack.zip"
 }
 
 resource "aws_lambda_function" "notify_slack" {
