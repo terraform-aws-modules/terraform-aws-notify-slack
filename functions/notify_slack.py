@@ -3,7 +3,6 @@ import os, boto3, json, base64
 import urllib.request, urllib.parse
 import logging
 
-
 # Decrypt encrypted URL with KMS
 def decrypt(encrypted_url):
     region = os.environ['AWS_REGION']
@@ -35,6 +34,16 @@ def cloudwatch_notification(message, region):
             ]
         }
 
+def asg_notification(message):
+    return {
+            "fallback": "ASG Notification triggered",
+            "fields": [
+              {"title": "Event", "value": message['Event'], "short": True },
+              {"title": "Status", "value": message['StatusCode'], "short": True },
+              {"title": "Cause", "value": message['Cause'], "short": False },
+            ]
+        }
+
 
 def default_notification(message):
     return {
@@ -63,6 +72,10 @@ def notify_slack(message, region):
         notification = cloudwatch_notification(message, region)
         payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
         payload['attachments'].append(notification)
+    elif "AutoScalingGroupARN" in message:
+        message = json.loads(message)
+        payload['text'] = "*{0}*: {1}".format(message["AutoScalingGroupName"], message["Description"])
+        payload['attachments'].append(asg_notification(message))
     else:
         payload['text'] = "AWS notification"
         payload['attachments'].append(default_notification(message))
