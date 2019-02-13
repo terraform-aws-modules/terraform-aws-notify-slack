@@ -1,6 +1,6 @@
 # AWS Notify Slack Terraform module
 
-This module creates SNS topic (or use existing one) and a AWS Lambda function which sends notifications to Slack using [incoming webhooks API](https://api.slack.com/incoming-webhooks).
+This module creates an SNS topic (or uses an existing one) and an AWS Lambda function that sends notifications to Slack using the [incoming webhooks API](https://api.slack.com/incoming-webhooks).
 
 Start by setting up an [incoming webhook integration](https://my.slack.com/services/new/incoming-webhook/) in your Slack workspace.
 
@@ -11,8 +11,10 @@ Start by setting up an [incoming webhook integration](https://my.slack.com/servi
 - [x] Support plaintext and encrypted version of Slack webhook URL
 - [x] Most of Slack message options are customizable
 - [x] Support different types of SNS messages:
-  - [x] AWS Cloudwatch
+  - [x] AWS CloudWatch Alarms
+  - [x] AWS CloudWatch LogMetrics Alarms
   - [ ] [Send pull-request to add support of other message types](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/pulls)
+- [x] Local pytest driven testing of the lambda to a Slack sandbox channel
 
 ## Usage
 
@@ -30,13 +32,26 @@ module "notify_slack" {
 
 ## Use existing SNS topic or create new
 
-If you want to subscribe AWS Lambda Function created by this module to an existing SNS topic you should specify `create_sns_topic = false` as argument and specify name of existing SNS topic name in `sns_topic_name`.
+If you want to subscribe the AWS Lambda Function created by this module to an existing SNS topic you should specify `create_sns_topic = false` as an argument and specify the name of existing SNS topic name in `sns_topic_name`.
 
 ## Examples
 
 * [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
 * [notify-slack-kms](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel (using KMS to encrypt Slack webhook URL).
 * [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
+
+## Testing with pytest
+
+To run the tests:
+
+1. Set up a dedicated slack channel as a test sandbox with it's own webhook.  See [Slack Incoming Webhooks docs](https://api.slack.com/incoming-webhooks) for details.
+2. Make a copy of the sample pytest configuration and edit as needed.
+
+        cp functions/pytest.ini.sample functions/pytest.ini
+
+3. Run the tests:
+
+        pytest functions/notify_slack_test.py
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
@@ -47,13 +62,14 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 | create | Whether to create all resources | string | `true` | no |
 | create_sns_topic | Whether to create new SNS topic | string | `true` | no |
 | create_with_kms_key | Whether to create resources with KMS encryption | string | `false` | no |
-| kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
+| kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | -| no |
 | lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
 | slack_channel | The name of the channel in Slack for notifications | string | - | yes |
 | slack_emoji | A custom emoji that will appear on Slack messages | string | `:aws:` | no |
 | slack_username | The username that will appear on Slack messages | string | - | yes |
 | slack_webhook_url | The URL of Slack webhook | string | - | yes |
 | sns_topic_name | The name of the SNS topic to create | string | - | yes |
+| log_events | Boolean flag to enabled/disable logging of incoming events | bool | `false` | no |
 
 ## Outputs
 

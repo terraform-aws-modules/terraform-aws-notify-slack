@@ -44,6 +44,11 @@ variable "kms_key_arn" {
   default     = ""
 }
 
+variable "log_events" {
+  description = "Boolean flag to enabled/disable logging of incoming events"
+  default     = false
+}
+
 locals {
   module_relpath = "${substr(path.module, length(path.cwd) + 1, -1)}"
 }

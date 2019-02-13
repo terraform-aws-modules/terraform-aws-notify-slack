@@ -1,4 +1,5 @@
 from __future__ import print_function
+from urllib.error import HTTPError
 import os, boto3, json, base64
 import urllib.request, urllib.parse
 import logging
@@ -59,6 +60,11 @@ def notify_slack(message, region):
         "icon_emoji": slack_emoji,
         "attachments": []
     }
+
+    if isinstance(message, str):
+        logging.info("message is a string, assuming it's JSON and decoding")
+        message = json.loads(message)
+
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
         payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
@@ -69,14 +75,25 @@ def notify_slack(message, region):
 
     data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
-    urllib.request.urlopen(req, data)
+
+    try:
+        result = urllib.request.urlopen(req, data)
+        return json.dumps({"code": result.getcode(), "info": result.info().as_string()})
+
+    except HTTPError as e:
+        logging.error("{}: result".format(e))
+        return json.dumps({"code": e.getcode(), "info": e.info().as_string()})
 
 
 def lambda_handler(event, context):
+    if 'LOG_EVENTS' in os.environ and os.environ['LOG_EVENTS'] == 'True':
+        logging.warning('Event logging enabled: `{}`'.format(json.dumps(event)))
+
     message = event['Records'][0]['Sns']['Message']
     region = event['Records'][0]['Sns']['TopicArn'].split(":")[3]
-    notify_slack(message, region)
+    response = notify_slack(message, region)
 
-    return message
+    if json.loads(response)["code"] != 200:
+        logging.error("Error: received status `{}` using event `{}` and context `{}`".format(info, event, context))
 
-#notify_slack({"AlarmName":"Example","AlarmDescription":"Example alarm description.","AWSAccountId":"000000000000","NewStateValue":"ALARM","NewStateReason":"Threshold Crossed","StateChangeTime":"2017-01-12T16:30:42.236+0000","Region":"EU - Ireland","OldStateValue":"OK"}, "eu-west-1")
+    return response
