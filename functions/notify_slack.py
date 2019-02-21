@@ -36,15 +36,15 @@ def cloudwatch_notification(message, region):
         }
 
 
-def default_notification(message):
+def default_notification(subject, message):
     return {
             "fallback": "A new message",
-            "fields": [{"title": "Message", "value": json.dumps(message), "short": False}]
+            "fields": [{"title": subject if subject else "Message", "value": json.dumps(message), "short": False}]
         }
 
 
 # Send a message to a slack channel
-def notify_slack(message, region):
+def notify_slack(subject, message, region):
     slack_url = os.environ['SLACK_WEBHOOK_URL']
     if not slack_url.startswith("http"):
         slack_url = decrypt(slack_url)
@@ -65,7 +65,7 @@ def notify_slack(message, region):
         payload['attachments'].append(notification)
     else:
         payload['text'] = "AWS notification"
-        payload['attachments'].append(default_notification(message))
+        payload['attachments'].append(default_notification(subject, message))
 
     data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
@@ -73,9 +73,10 @@ def notify_slack(message, region):
 
 
 def lambda_handler(event, context):
+    subject = event['Records'][0]['Sns']['Subject']
     message = event['Records'][0]['Sns']['Message']
     region = event['Records'][0]['Sns']['TopicArn'].split(":")[3]
-    notify_slack(message, region)
+    notify_slack(subject, message, region)
 
     return message
 
