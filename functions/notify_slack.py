@@ -73,7 +73,7 @@ def notify_slack(message, region):
 
 
 def lambda_handler(event, context):
-    message = event['Records'][0]['Sns']['Message']
+    message = json.loads(event['Records'][0]['Sns']['Message'])
     region = event['Records'][0]['Sns']['TopicArn'].split(":")[3]
     notify_slack(message, region)
 
