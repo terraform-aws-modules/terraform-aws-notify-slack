@@ -59,6 +59,11 @@ def notify_slack(subject, message, region):
         "icon_emoji": slack_emoji,
         "attachments": []
     }
+    if type(message) is str:
+        try:
+            message = json.loads(message)
+        except json.JSONDecodeError as err:
+            logging.exception(f'JSON decode error: {err}')
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
         payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
