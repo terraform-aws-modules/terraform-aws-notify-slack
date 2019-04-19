@@ -30,6 +30,7 @@ data "aws_iam_policy_document" "lambda_basic" {
     resources = ["arn:aws:logs:*:*:*"]
   }
 }
+
 data "aws_iam_policy_document" "log_url" {
   count = "${var.create}"
 
@@ -46,11 +47,11 @@ data "aws_iam_policy_document" "log_url" {
   }
 
   statement {
-    sid = "AllowDescribeMetricFilters"
+    sid    = "AllowDescribeMetricFilters"
     effect = "Allow"
 
     actions = [
-        "logs:DescribeMetricFilters",
+      "logs:DescribeMetricFilters",
     ]
 
     resources = ["arn:aws:logs:*"]
@@ -80,11 +81,20 @@ resource "aws_iam_role" "lambda" {
   assume_role_policy = "${data.aws_iam_policy_document.assume_role.0.json}"
 }
 
-resource "aws_iam_role_policy" "lambda" {
+resource "aws_iam_role_policy" "lambda_basic" {
   count = "${var.create}"
 
   name_prefix = "lambda-policy-"
   role        = "${aws_iam_role.lambda.0.id}"
 
-  policy = "${element(compact(concat(data.aws_iam_policy_document.lambda.*.json, data.aws_iam_policy_document.lambda_basic.*.json, data.aws_iam_policy_document.log_url.*.json)), 0)}"
+  policy = "${element(compact(concat(data.aws_iam_policy_document.lambda_basic.*.json)), 0)}"
+}
+
+resource "aws_iam_role_policy" "log_url" {
+  count = "${var.create}"
+
+  name_prefix = "lambda-policy-"
+  role        = "${aws_iam_role.lambda.0.id}"
+
+  policy = "${element(compact(concat(data.aws_iam_policy_document.log_url.*.json)), 0)}"
 }
