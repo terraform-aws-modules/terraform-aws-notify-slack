@@ -1,5 +1,5 @@
 from __future__ import print_function
-import os, boto3, json, base64
+import os, boto3, json, base64, datetime
 import urllib.request, urllib.parse
 import logging
 
@@ -12,13 +12,40 @@ def decrypt(encrypted_url):
         plaintext = kms.decrypt(CiphertextBlob=base64.b64decode(encrypted_url))['Plaintext']
         return plaintext.decode()
     except Exception:
-        logging.exception("Failed to decrypt URL with KMS")
+        logging.exception("Error: failed to decrypt URL with KMS")
 
+def format_log_url(region, logGroupName, Period, EvaluationPeriods):
+    end = datetime.datetime.utcnow().replace(microsecond=0)
+    start = end - datetime.timedelta(seconds=Period*EvaluationPeriods)
+    return f"https://console.aws.amazon.com/cloudwatch/home?region={region}#logEventViewer:group={urllib.parse.quote_plus(logGroupName)};start={start.isoformat()}Z;end={end.isoformat()}Z"
+
+def try_get_log_url(region, AlarmName):
+    try:
+        cloudwatch = boto3.client("cloudwatch")
+        logs = boto3.client("logs")
+        
+        alarm = cloudwatch.describe_alarms(AlarmNames=[AlarmName])
+        MetricName = alarm["MetricAlarms"][0]["MetricName"]
+        Namespace = alarm["MetricAlarms"][0]["Namespace"]
+        Period = alarm["MetricAlarms"][0]["Period"]
+        EvaluationPeriods = alarm["MetricAlarms"][0]["EvaluationPeriods"]
+        
+        metric_filter = logs.describe_metric_filters(metricName=MetricName, metricNamespace=Namespace)
+        try:
+            logGroupName = metric_filter["metricFilters"][0]["logGroupName"]
+        except KeyError:
+            return None
+        if len(logGroupName) == 0:
+            return None
+        return format_log_url(region, logGroupName, Period, EvaluationPeriods)
+    except Exception:
+        logging.exception("Error: try_get_log_url failed")
+        return None
 
 def cloudwatch_notification(message, region):
     states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
 
-    return {
+    result = {
             "color": states[message['NewStateValue']],
             "fallback": "Alarm {} triggered".format(message['AlarmName']),
             "fields": [
@@ -34,6 +61,15 @@ def cloudwatch_notification(message, region):
                 }
             ]
         }
+    log_url = try_get_log_url(region, message['AlarmName'])
+    # Attach log url for convenient log look up if log exists for the alarm
+    if log_url:
+        result["fields"].append({
+            "title": "Link to Log",
+            "value": log_url,
+            "short": False
+        })
+    return result
 
 
 def default_notification(subject, message):
