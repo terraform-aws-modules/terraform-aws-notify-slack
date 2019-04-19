@@ -30,6 +30,22 @@ data "aws_iam_policy_document" "lambda_basic" {
     resources = ["arn:aws:logs:*:*:*"]
   }
 }
+data "aws_iam_policy_document" "log_url" {
+  count = "${var.create}"
+
+  statement {
+    sid = "AllowGetAlarmInfo"
+
+    effect = "Allow"
+
+    actions = [
+      "cloudwatch:DescribeAlarms",
+      "logs:DescribeMetricFilters",
+    ]
+
+    resources = ["arn:aws:cloudwatch:*", "arn:aws:logs:*"]
+  }
+}
 
 data "aws_iam_policy_document" "lambda" {
   count = "${(var.create_with_kms_key == 1 ? 1 : 0) * var.create}"
@@ -60,5 +76,5 @@ resource "aws_iam_role_policy" "lambda" {
   name_prefix = "lambda-policy-"
   role        = "${aws_iam_role.lambda.0.id}"
 
-  policy = "${element(compact(concat(data.aws_iam_policy_document.lambda.*.json, data.aws_iam_policy_document.lambda_basic.*.json)), 0)}"
+  policy = "${element(compact(concat(data.aws_iam_policy_document.lambda.*.json, data.aws_iam_policy_document.lambda_basic.*.json, data.aws_iam_policy_document.log_url.*.json)), 0)}"
 }
