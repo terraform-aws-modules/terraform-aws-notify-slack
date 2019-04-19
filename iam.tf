@@ -34,16 +34,26 @@ data "aws_iam_policy_document" "log_url" {
   count = "${var.create}"
 
   statement {
-    sid = "AllowGetAlarmInfo"
+    sid = "AllowDescribeAlarms"
 
     effect = "Allow"
 
     actions = [
       "cloudwatch:DescribeAlarms",
-      "logs:DescribeMetricFilters",
     ]
 
-    resources = ["arn:aws:cloudwatch:*", "arn:aws:logs:*"]
+    resources = ["arn:aws:cloudwatch:*"]
+  }
+
+  statement {
+    sid = "AllowDescribeMetricFilters"
+    effect = "Allow"
+
+    actions = [
+        "logs:DescribeMetricFilters",
+    ]
+
+    resources = ["arn:aws:logs:*"]
   }
 }
 
