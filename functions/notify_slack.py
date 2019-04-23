@@ -37,15 +37,15 @@ def cloudwatch_notification(message, region):
         }
 
 
-def default_notification(message):
+def default_notification(subject, message):
     return {
             "fallback": "A new message",
-            "fields": [{"title": "Message", "value": json.dumps(message), "short": False}]
+            "fields": [{"title": subject if subject else "Message", "value": json.dumps(message), "short": False}]
         }
 
 
 # Send a message to a slack channel
-def notify_slack(message, region):
+def notify_slack(subject, message, region):
     slack_url = os.environ['SLACK_WEBHOOK_URL']
     if not slack_url.startswith("http"):
         slack_url = decrypt(slack_url)
@@ -61,9 +61,11 @@ def notify_slack(message, region):
         "attachments": []
     }
 
-    if isinstance(message, str):
-        logging.info("message is a string, assuming it's JSON and decoding")
-        message = json.loads(message)
+    if type(message) is str:
+        try:
+            message = json.loads(message)
+        except json.JSONDecodeError as err:
+            logging.exception(f'JSON decode error: {err}')
 
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
@@ -71,7 +73,7 @@ def notify_slack(message, region):
         payload['attachments'].append(notification)
     else:
         payload['text'] = "AWS notification"
-        payload['attachments'].append(default_notification(message))
+        payload['attachments'].append(default_notification(subject, message))
 
     data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
@@ -89,9 +91,10 @@ def lambda_handler(event, context):
     if 'LOG_EVENTS' in os.environ and os.environ['LOG_EVENTS'] == 'True':
         logging.warning('Event logging enabled: `{}`'.format(json.dumps(event)))
 
+    subject = event['Records'][0]['Sns']['Subject']  
     message = event['Records'][0]['Sns']['Message']
     region = event['Records'][0]['Sns']['TopicArn'].split(":")[3]
-    response = notify_slack(message, region)
+    response = notify_slack(subject, message, region)
 
     if json.loads(response)["code"] != 200:
         logging.error("Error: received status `{}` using event `{}` and context `{}`".format(info, event, context))
