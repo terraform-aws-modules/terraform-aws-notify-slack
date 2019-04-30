@@ -42,7 +42,7 @@ def try_get_log_url(region, AlarmName):
             metricName=MetricName, metricNamespace=Namespace)
         try:
             logGroupName = metric_filter["metricFilters"][0]["logGroupName"]
-        except KeyError, IndexError:
+        except (KeyError, IndexError) as _:
             return None
         if len(logGroupName) == 0:
             return None
