@@ -1,6 +1,11 @@
 from __future__ import print_function
-import os, boto3, json, base64, datetime
-import urllib.request, urllib.parse
+import os
+import boto3
+import json
+import base64
+import datetime
+import urllib.request
+import urllib.parse
 import logging
 
 
@@ -9,28 +14,32 @@ def decrypt(encrypted_url):
     region = os.environ['AWS_REGION']
     try:
         kms = boto3.client('kms', region_name=region)
-        plaintext = kms.decrypt(CiphertextBlob=base64.b64decode(encrypted_url))['Plaintext']
+        plaintext = kms.decrypt(CiphertextBlob=base64.b64decode(encrypted_url))[
+            'Plaintext']
         return plaintext.decode()
     except Exception:
         logging.exception("Error: failed to decrypt URL with KMS")
+
 
 def format_log_url(region, logGroupName, Period, EvaluationPeriods):
     end = datetime.datetime.utcnow().replace(microsecond=0)
     start = end - datetime.timedelta(seconds=Period*EvaluationPeriods)
     return f"https://console.aws.amazon.com/cloudwatch/home?region={region}#logEventViewer:group={urllib.parse.quote_plus(logGroupName)};start={start.isoformat()}Z;end={end.isoformat()}Z"
 
+
 def try_get_log_url(region, AlarmName):
     try:
         cloudwatch = boto3.client("cloudwatch")
         logs = boto3.client("logs")
-        
+
         alarm = cloudwatch.describe_alarms(AlarmNames=[AlarmName])
         MetricName = alarm["MetricAlarms"][0]["MetricName"]
         Namespace = alarm["MetricAlarms"][0]["Namespace"]
         Period = alarm["MetricAlarms"][0]["Period"]
         EvaluationPeriods = alarm["MetricAlarms"][0]["EvaluationPeriods"]
-        
-        metric_filter = logs.describe_metric_filters(metricName=MetricName, metricNamespace=Namespace)
+
+        metric_filter = logs.describe_metric_filters(
+            metricName=MetricName, metricNamespace=Namespace)
         try:
             logGroupName = metric_filter["metricFilters"][0]["logGroupName"]
         except KeyError, IndexError:
@@ -42,25 +51,31 @@ def try_get_log_url(region, AlarmName):
         logging.exception("Error: try_get_log_url failed")
         return None
 
+
 def cloudwatch_notification(message, region):
     states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
 
     result = {
-            "color": states[message['NewStateValue']],
-            "fallback": "Alarm {} triggered".format(message['AlarmName']),
-            "fields": [
-                { "title": "Alarm Name", "value": message['AlarmName'], "short": True },
-                { "title": "Alarm Description", "value": message['AlarmDescription'], "short": False},
-                { "title": "Alarm reason", "value": message['NewStateReason'], "short": False},
-                { "title": "Old State", "value": message['OldStateValue'], "short": True },
-                { "title": "Current State", "value": message['NewStateValue'], "short": True },
-                {
-                    "title": "Link to Alarm",
-                    "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote_plus(message['AlarmName']),
-                    "short": False
-                }
-            ]
-        }
+        "color": states[message['NewStateValue']],
+        "fallback": "Alarm {} triggered".format(message['AlarmName']),
+        "fields": [
+            {"title": "Alarm Name",
+                    "value": message['AlarmName'], "short": True},
+            {"title": "Alarm Description",
+             "value": message['AlarmDescription'], "short": False},
+            {"title": "Alarm reason",
+             "value": message['NewStateReason'], "short": False},
+            {"title": "Old State",
+             "value": message['OldStateValue'], "short": True},
+            {"title": "Current State",
+             "value": message['NewStateValue'], "short": True},
+            {
+                "title": "Link to Alarm",
+                "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote_plus(message['AlarmName']),
+                "short": False
+            }
+        ]
+    }
     log_url = try_get_log_url(region, message['AlarmName'])
     # Attach log url for convenient log look up if log exists for the alarm
     if log_url:
@@ -74,9 +89,9 @@ def cloudwatch_notification(message, region):
 
 def default_notification(subject, message):
     return {
-            "fallback": "A new message",
-            "fields": [{"title": subject if subject else "Message", "value": json.dumps(message), "short": False}]
-        }
+        "fallback": "A new message",
+        "fields": [{"title": subject if subject else "Message", "value": json.dumps(message), "short": False}]
+    }
 
 
 # Send a message to a slack channel
@@ -102,13 +117,15 @@ def notify_slack(subject, message, region):
             logging.exception(f'JSON decode error: {err}')
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
-        payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
+        payload['text'] = "AWS CloudWatch notification - " + \
+            message["AlarmName"]
         payload['attachments'].append(notification)
     else:
         payload['text'] = "AWS notification"
         payload['attachments'].append(default_notification(subject, message))
 
-    data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
+    data = urllib.parse.urlencode(
+        {"payload": json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
     urllib.request.urlopen(req, data)
 
