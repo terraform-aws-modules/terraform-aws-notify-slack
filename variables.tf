@@ -1,16 +1,19 @@
 variable "create" {
   description = "Whether to create all resources"
   default     = true
+  type        = bool
 }
 
 variable "create_sns_topic" {
   description = "Whether to create new SNS topic"
   default     = true
+  type        = bool
 }
 
 variable "create_with_kms_key" {
   description = "Whether to create resources with KMS encryption"
   default     = false
+  type        = bool
 }
 
 variable "lambda_function_name" {
@@ -43,3 +46,4 @@ variable "kms_key_arn" {
   description = "ARN of the KMS key used for decrypting slack webhook url"
   default     = ""
 }
+
