@@ -4,6 +4,12 @@ This module creates SNS topic (or use existing one) and a AWS Lambda function wh
 
 Start by setting up an [incoming webhook integration](https://my.slack.com/services/new/incoming-webhook/) in your Slack workspace.
 
+## Terraform versions
+
+Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+
+Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+
 ## Features
 
 - [x] AWS Lambda runtime Python 3.6
@@ -18,7 +24,8 @@ Start by setting up an [incoming webhook integration](https://my.slack.com/servi
 
 ```hcl
 module "notify_slack" {
-  source = "terraform-aws-modules/notify-slack/aws"
+  source  = "terraform-aws-modules/notify-slack/aws"
+  version = "~> 2.0"
 
   sns_topic_name = "slack-topic"
 
@@ -35,7 +42,6 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 ## Examples
 
 * [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
-* [notify-slack-kms](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel (using KMS to encrypt Slack webhook URL).
 * [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
@@ -46,7 +52,6 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 |------|-------------|:----:|:-----:|:-----:|
 | create | Whether to create all resources | string | `true` | no |
 | create_sns_topic | Whether to create new SNS topic | string | `true` | no |
-| create_with_kms_key | Whether to create resources with KMS encryption | string | `false` | no |
 | kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
 | lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
 | slack_channel | The name of the channel in Slack for notifications | string | - | yes |
