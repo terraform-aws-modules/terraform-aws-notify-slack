@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "lambda_basic" {
 }
 
 data "aws_iam_policy_document" "lambda" {
-  count = var.create_with_kms_key && var.create ? 1 : 0
+  count = var.kms_key_arn != "" && var.create ? 1 : 0
 
   source_json = data.aws_iam_policy_document.lambda_basic[0].json
 
@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "lambda" {
 
     actions = ["kms:Decrypt"]
 
-    resources = [var.kms_key_arn == "" ? "" : var.kms_key_arn]
+    resources = [var.kms_key_arn]
   }
 }
 
@@ -61,11 +61,9 @@ resource "aws_iam_role_policy" "lambda" {
   role        = aws_iam_role.lambda[0].id
 
   policy = element(
-    compact(
-      concat(
-        data.aws_iam_policy_document.lambda.*.json,
-        data.aws_iam_policy_document.lambda_basic.*.json,
-      ),
+    concat(
+      data.aws_iam_policy_document.lambda.*.json,
+      data.aws_iam_policy_document.lambda_basic.*.json,
     ),
     0,
   )

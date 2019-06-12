@@ -1,5 +1,5 @@
 data "aws_sns_topic" "this" {
-  count = var.create_sns_topic && var.create ? 0 : 1
+  count = false == var.create_sns_topic && var.create ? 1 : 0
 
   name = var.sns_topic_name
 }
@@ -48,7 +48,6 @@ data "null_data_source" "lambda_file" {
 data "null_data_source" "lambda_archive" {
   inputs = {
     filename = "${path.module}/functions/notify_slack.zip"
-
   }
 }
 

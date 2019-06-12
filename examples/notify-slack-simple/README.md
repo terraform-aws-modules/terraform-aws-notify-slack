@@ -3,6 +3,8 @@ Basic Slack notification
 
 Configuration in this directory creates an SNS topic that sends messages to a Slack channel.
 
+Note, this example does not use KMS key.
+
 Usage
 =====
 
