@@ -4,11 +4,9 @@
 
 
 <a name="v2.0.0"></a>
-## [v2.0.0] - 2019-06-02
+## [v2.0.0] - 2019-06-12
 
-- fixed logic when determining whether to add kms policy statement
-- path ref was not behaving the same in 0.12 but did not seem to need to be this complicated anyway
-- Ran upgrade, manually tweaked some gaps and did basic testing
+- Upgraded module to support Terraform 0.12 ([#36](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/36))
 
 
 <a name="v1.13.0"></a>
