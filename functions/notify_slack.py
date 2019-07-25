@@ -34,7 +34,62 @@ def cloudwatch_notification(message, region):
                 }
             ]
         }
+    
+def ecs_notification(message, region):
+    states = {'RUNNING': 'good', 'PENDING': 'warning', 'PROVISIONING': 'warning', 'DEPROVISIONING': 'warning', 'ACTIVATING': 'warning', 'DEACTIVATING': 'warning', 'STOPPING': 'danger', 'STOPPED': 'danger'}
 
+    return {
+            "color": states[message['detail']['lastStatus']],
+            "fallback": "ECS {} triggered".format(message['detail']),
+            "fields": [
+                { "title": "lastStatus", "value": message['detail']['lastStatus'], "short": True },
+                { "title": "desiredStatus", "value": message['detail']['desiredStatus'], "short": True },
+                { "title": "taskDefinitionArn", "value": message['detail']['taskDefinitionArn'], "short": False },
+                { "title": "group", "value": message['detail']['group'], "short": True },
+                { "title": "time", "value": message['time'], "short": True}
+            ]
+        }
+        
+def ectwo_notification(message, region):
+    return {
+            "color": 'good',
+            "fallback": "EC2 {} event".format(message['detail']),
+            "fields": [
+                { "title": "account", "value": message['account'], "short": True },
+                { "title": "region", "value": message['region'], "short": True },
+                { "title": "user", "value": message['detail']['userIdentity']['principalId'], "short": True },
+                { "title": "event", "value": message['detail']['eventName'], "short": True },
+                { "title": "ip", "value": message['detail']['sourceIPAddress'], "short": True },
+                { "title": "time", "value": message['time'], "short": True}
+            ]
+        }
+
+def rds_notification(message, region):
+    return {
+            "color": 'good',
+            "fallback": "RDS {} event".format(message['detail']),
+            "fields": [
+                { "title": "account", "value": message['account'], "short": True },
+                { "title": "region", "value": message['region'], "short": True },
+                { "title": "resources", "value": message['resources'][0], "short": False },
+                { "title": "message", "value": message['detail']['Message'], "short": True },
+                { "title": "time", "value": message['time'], "short": True}
+            ]
+        }
+        
+def iam_notification(message, region):
+    return {
+            "color": 'good',
+            "fallback": "IAM {} event".format(message['detail']),
+            "fields": [
+                { "title": "account", "value": message['account'], "short": True },
+                { "title": "region", "value": message['region'], "short": True },
+                { "title": "user", "value": message['detail']['userIdentity']['principalId'], "short": False },
+                { "title": "message", "value": message['detail']['eventName'], "short": True },
+                { "title": "ip", "value": message['detail']['sourceIPAddress'], "short": True },
+                { "title": "time", "value": message['time'], "short": True}
+            ]
+        }
 
 def default_notification(subject, message):
     return {
@@ -66,7 +121,23 @@ def notify_slack(subject, message, region):
             logging.exception(f'JSON decode error: {err}')
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
-        payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
+        payload['text'] = "AWS CloudWatch notification - " + message['AlarmName']
+        payload['attachments'].append(notification)
+    elif ("source" in message and message['source'] == "aws.ecs"):
+        notification = ecs_notification(message, region)
+        payload['text'] = "AWS ECS notification - " + message["detail-type"]
+        payload['attachments'].append(notification)
+    elif ("source" in message and message['source'] == "aws.ec2"):
+        notification = ectwo_notification(message, region)
+        payload['text'] = "AWS EC2 notification - " + message["detail-type"]
+        payload['attachments'].append(notification)
+    elif ("source" in message and message['source'] == "aws.rds"):
+        notification = rds_notification(message, region)
+        payload['text'] = "AWS RDS notification - " + message["detail-type"]
+        payload['attachments'].append(notification)
+    elif ("source" in message and message['source'] == "aws.iam"):
+        notification = iam_notification(message, region)
+        payload['text'] = "AWS IAM notification - " + message["detail-type"]
         payload['attachments'].append(notification)
     else:
         payload['text'] = "AWS notification"
