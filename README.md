@@ -54,6 +54,7 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 | create_sns_topic | Whether to create new SNS topic | string | `true` | no |
 | kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
 | lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
+| lambda_reserved_concurrency | The number of reserved concurrent Lambda executions | `-1` | no |
 | slack_channel | The name of the channel in Slack for notifications | string | - | yes |
 | slack_emoji | A custom emoji that will appear on Slack messages | string | `:aws:` | no |
 | slack_username | The username that will appear on Slack messages | string | - | yes |

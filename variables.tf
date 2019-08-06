@@ -16,6 +16,12 @@ variable "lambda_function_name" {
   default     = "notify_slack"
 }
 
+variable "lambda_reserved_concurrency" {
+  description = "The number of reserved concurrent Lambda executions"
+  type        = number
+  default     = -1
+}
+
 variable "sns_topic_name" {
   description = "The name of the SNS topic to create"
   type        = string
