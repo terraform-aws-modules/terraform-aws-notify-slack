@@ -98,10 +98,10 @@ def default_notification(subject, message):
         }
 
 def filter_message_from_slack(message):
-    if(message['source'] == "aws.iam" &&  message['detail']['eventName'] == 'GenerateCredentialReport'):
-        true
-    else: 
-        false
+    if(message['source'] == "aws.iam" and message['detail']['eventName'] == "GenerateCredentialReport"):
+        return True
+    else:
+        return False
 
 # Send a message to a slack channel
 def notify_slack(subject, message, region):
@@ -120,7 +120,7 @@ def notify_slack(subject, message, region):
         "attachments": []
     }
     if filter_message_from_slack(message):
-        puts "filtering message, not posting to slack"
+        print("filtering message, not posting to slack")
         return
     
     if type(message) is str:
