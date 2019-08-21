@@ -97,6 +97,11 @@ def default_notification(subject, message):
             "fields": [{"title": subject if subject else "Message", "value": json.dumps(message), "short": False}]
         }
 
+def filter_message_from_slack(message):
+    if(message['source'] == "aws.iam" &&  message['detail']['eventName'] == 'GenerateCredentialReport'):
+        true
+    else: 
+        false
 
 # Send a message to a slack channel
 def notify_slack(subject, message, region):
@@ -114,6 +119,10 @@ def notify_slack(subject, message, region):
         "icon_emoji": slack_emoji,
         "attachments": []
     }
+    if filter_message_from_slack(message):
+        puts "filtering message, not posting to slack"
+        return
+    
     if type(message) is str:
         try:
             message = json.loads(message)
