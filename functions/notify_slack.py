@@ -2,6 +2,7 @@ from __future__ import print_function
 import os, boto3, json, base64
 import urllib.request, urllib.parse
 import logging
+import pprint
 
 
 # Decrypt encrypted URL with KMS
@@ -63,6 +64,26 @@ def ectwo_notification(message, region):
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
+        
+def deployment_notification(message, region):
+    color = 'good'
+    if(message['status'].startswith("Error")):
+        color = 'danger'
+    elif(message['status'].startswith("Warning")):
+        color = 'warning'
+    
+    return {
+            "color": color,
+            "fallback": "Deployment {} event".format(message['detail']),
+            "fields": [
+                { "title": "account", "value": message['account'], "short": True },
+                { "title": "version", "value": message['detail']['version'], "short": True },
+                { "title": "region", "value": message['region'], "short": True },
+                { "title": "user", "value": message['detail']['userIdentity']['principalId'], "short": True },
+                { "title": "requested from", "value": message['detail']['sourceIPAddress'], "short": True },
+                { "title": "time", "value": message['time'], "short": True}
+            ]
+        }
 
 def rds_notification(message, region):
     return {
@@ -98,7 +119,7 @@ def default_notification(subject, message):
         }
 
 def filter_message_from_slack(message):
-    if(message['source'] == "aws.iam" and message['detail']['eventName'] == "GenerateCredentialReport"):
+    if(message['source'] == "aws.iam" and type(message['detail']) is dict  and message['detail']['eventName'] == "GenerateCredentialReport"):
         return True
     else:
         return False
@@ -119,15 +140,18 @@ def notify_slack(subject, message, region):
         "icon_emoji": slack_emoji,
         "attachments": []
     }
-    if filter_message_from_slack(message):
-        print("filtering message, not posting to slack")
-        return
-    
+
     if type(message) is str:
         try:
             message = json.loads(message)
         except json.JSONDecodeError as err:
             logging.exception(f'JSON decode error: {err}')
+            
+    if filter_message_from_slack(message):
+        print("filtering message, not posting to slack")
+        return
+    
+    # pprint.pprint(message)
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
         payload['text'] = "AWS CloudWatch notification - " + message['AlarmName']
@@ -147,6 +171,10 @@ def notify_slack(subject, message, region):
     elif ("source" in message and message['source'] == "aws.iam"):
         notification = iam_notification(message, region)
         payload['text'] = "AWS IAM notification - " + message["detail-type"]
+        payload['attachments'].append(notification)
+    elif ("source" in message and message['source'] == "deployment"):
+        notification = deployment_notification(message, region)
+        payload['text'] = "AWS Deployment - " + message["detail-type"]
         payload['attachments'].append(notification)
     else:
         payload['text'] = "AWS notification"
