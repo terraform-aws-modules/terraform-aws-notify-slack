@@ -20,7 +20,7 @@ def cloudwatch_notification(message, region):
     states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
 
     return {
-            "color": states[message['NewStateValue']],
+            "color": states.get(message['NewStateValue'], "danger"),
             "fallback": "Alarm {} triggered".format(message['AlarmName']),
             "fields": [
                 { "title": "Alarm Name", "value": message['AlarmName'], "short": True },
@@ -40,13 +40,13 @@ def ecs_notification(message, region):
     states = {'RUNNING': 'good', 'PENDING': 'warning', 'PROVISIONING': 'warning', 'DEPROVISIONING': 'warning', 'ACTIVATING': 'warning', 'DEACTIVATING': 'warning', 'STOPPING': 'danger', 'STOPPED': 'danger'}
 
     return {
-            "color": states[message['detail']['lastStatus']],
+            "color": states.get(message.get('detail', {}).get('lastStatus', ""), "danger"),
             "fallback": "ECS {} triggered".format(message['detail']),
             "fields": [
-                { "title": "lastStatus", "value": message['detail']['lastStatus'], "short": True },
-                { "title": "desiredStatus", "value": message['detail']['desiredStatus'], "short": True },
-                { "title": "taskDefinitionArn", "value": message['detail']['taskDefinitionArn'], "short": False },
-                { "title": "group", "value": message['detail']['group'], "short": True },
+                { "title": "lastStatus", "value": message.get('detail', {}).get('lastStatus', ""), "short": True },
+                { "title": "desiredStatus", "value": message.get('detail', {}).get('desiredStatus', ""), "short": True },
+                { "title": "taskDefinitionArn", "value": message.get('detail', {}).get('taskDefinitionArn', ""), "short": False },
+                { "title": "group", "value": message.get('detail', {}).get('group', ""), "short": True },
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
@@ -58,9 +58,9 @@ def ectwo_notification(message, region):
             "fields": [
                 { "title": "account", "value": message['account'], "short": True },
                 { "title": "region", "value": message['region'], "short": True },
-                { "title": "user", "value": message['detail']['userIdentity']['principalId'], "short": True },
-                { "title": "event", "value": message['detail']['eventName'], "short": True },
-                { "title": "ip", "value": message['detail']['sourceIPAddress'], "short": True },
+                { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True },
+                { "title": "event", "value": message.get('detail', {}).get('eventName', ""), "short": True },
+                { "title": "ip", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True },
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
@@ -77,10 +77,10 @@ def deployment_notification(message, region):
             "fallback": "Deployment {} event".format(message['detail']),
             "fields": [
                 { "title": "account", "value": message['account'], "short": True },
-                { "title": "version", "value": message['detail']['version'], "short": True },
+                { "title": "version", "value": message.get('detail', {}).get('version', ""), "short": True },
                 { "title": "region", "value": message['region'], "short": True },
-                { "title": "user", "value": message['detail']['userIdentity']['principalId'], "short": True },
-                { "title": "requested from", "value": message['detail']['sourceIPAddress'], "short": True },
+                { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True },
+                { "title": "requested from", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True },
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
@@ -93,7 +93,7 @@ def rds_notification(message, region):
                 { "title": "account", "value": message['account'], "short": True },
                 { "title": "region", "value": message['region'], "short": True },
                 { "title": "resources", "value": message['resources'][0], "short": False },
-                { "title": "message", "value": message['detail']['Message'], "short": True },
+                { "title": "message", "value": message.get('detail', {}).get('Message', ""), "short": True },
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
@@ -105,9 +105,9 @@ def iam_notification(message, region):
             "fields": [
                 { "title": "account", "value": message['account'], "short": True },
                 { "title": "region", "value": message['region'], "short": True },
-                { "title": "user", "value": message['detail']['userIdentity']['principalId'], "short": False },
-                { "title": "message", "value": message['detail']['eventName'], "short": True },
-                { "title": "ip", "value": message['detail']['sourceIPAddress'], "short": True },
+                { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True },
+                { "title": "message", "value": message.get('detail', {}).get('eventName', ""), "short": True },
+                { "title": "ip", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True },
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
