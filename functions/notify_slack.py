@@ -35,7 +35,7 @@ def cloudwatch_notification(message, region):
                 }
             ]
         }
-    
+
 def ecs_notification(message, region):
     states = {'RUNNING': 'good', 'PENDING': 'warning', 'PROVISIONING': 'warning', 'DEPROVISIONING': 'warning', 'ACTIVATING': 'warning', 'DEACTIVATING': 'warning', 'STOPPING': 'danger', 'STOPPED': 'danger'}
 
@@ -50,7 +50,7 @@ def ecs_notification(message, region):
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
-        
+
 def ectwo_notification(message, region):
     return {
             "color": 'good',
@@ -64,14 +64,14 @@ def ectwo_notification(message, region):
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
-        
+
 def deployment_notification(message, region):
     color = 'good'
     if(message['status'].startswith("Error")):
         color = 'danger'
     elif(message['status'].startswith("Warning")):
         color = 'warning'
-    
+
     return {
             "color": color,
             "fallback": "Deployment {} event".format(message['detail']),
@@ -97,7 +97,7 @@ def rds_notification(message, region):
                 { "title": "time", "value": message['time'], "short": True}
             ]
         }
-        
+
 def iam_notification(message, region):
     return {
             "color": 'good',
@@ -146,11 +146,11 @@ def notify_slack(subject, message, region):
             message = json.loads(message)
         except json.JSONDecodeError as err:
             logging.exception(f'JSON decode error: {err}')
-            
-    if filter_message_from_slack(message):
+
+    if "source" in message and filter_message_from_slack(message):
         print("filtering message, not posting to slack")
         return
-    
+
     # pprint.pprint(message)
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
