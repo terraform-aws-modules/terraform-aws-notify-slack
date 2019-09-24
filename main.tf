@@ -21,6 +21,11 @@ locals {
   )
 }
 
+resource "aws_cloudwatch_log_group" "lambda" {
+  name              = "/aws/lambda/${var.lambda_function_name}"
+  retention_in_days = var.lambda_log_retention
+}
+
 resource "aws_sns_topic_subscription" "sns_notify_slack" {
   count = var.create ? 1 : 0
 
@@ -88,5 +93,6 @@ resource "aws_lambda_function" "notify_slack" {
       last_modified,
     ]
   }
-}
 
+  depends_on = ["aws_cloudwatch_log_group.lambda"]
+}

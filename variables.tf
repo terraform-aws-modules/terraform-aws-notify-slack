@@ -48,3 +48,8 @@ variable "kms_key_arn" {
   default     = ""
 }
 
+variable "lambda_log_retention" {
+  description = "Number of days to retain logs in Cloudwatch"
+  type        = number
+  default     = 30
+}

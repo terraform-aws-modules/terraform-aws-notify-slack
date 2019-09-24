@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "lambda_basic" {
       "logs:PutLogEvents",
     ]
 
-    resources = ["arn:aws:logs:*:*:*"]
+    resources = ["${aws_cloudwatch_log_group.lambda.arn}"]
   }
 }
 
@@ -68,4 +68,3 @@ resource "aws_iam_role_policy" "lambda" {
     0,
   )
 }
-
