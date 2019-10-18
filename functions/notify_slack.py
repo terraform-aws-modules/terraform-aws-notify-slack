@@ -119,9 +119,7 @@ def default_notification(subject, message):
         }
 
 def filter_message_from_slack(message):
-    if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') == "GenerateCredentialReport":
-      return True
-    if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') == "GenerateServiceLastAccessedDetails":
+    if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') in ["GenerateCredentialReport", "GenerateServiceLastAccessedDetails"]:
       return True
     else:
       return False
