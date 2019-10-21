@@ -56,29 +56,29 @@ def ectwo_notification(message, region):
             "color": 'good',
             "fallback": "EC2 {} event".format(message['detail']),
             "fields": [
-                { "title": "account", "value": message['account'], "short": True },
-                { "title": "region", "value": message['region'], "short": True },
+                { "title": "account", "value": message.get('account', ""), "short": True },
+                { "title": "region", "value": message.get('region', ""), "short": True },
                 { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True },
                 { "title": "event", "value": message.get('detail', {}).get('eventName', ""), "short": True },
                 { "title": "ip", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True },
-                { "title": "time", "value": message['time'], "short": True}
+                { "title": "time", "value": message.get('time', ""), "short": True}
             ]
         }
 
 def deployment_notification(message, region):
     color = 'good'
-    if(message['status'].startswith("Error")):
+    if(message.get('status', "").startswith("Error")):
         color = 'danger'
-    elif(message['status'].startswith("Warning")):
+    elif(message.get('status', "").startswith("Warning")):
         color = 'warning'
 
     return {
             "color": color,
             "fallback": "Deployment {} event".format(message['detail']),
             "fields": [
-                { "title": "account", "value": message['account'], "short": True },
+                { "title": "account", "value": message.get('account', ""), "short": True },
                 { "title": "version", "value": message.get('detail', {}).get('version', ""), "short": True },
-                { "title": "region", "value": message['region'], "short": True },
+                { "title": "region", "value": message.get('region', ""), "short": True },
                 { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True },
                 { "title": "requested from", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True },
                 { "title": "time", "value": message['time'], "short": True}
@@ -90,8 +90,8 @@ def rds_notification(message, region):
             "color": 'good',
             "fallback": "RDS {} event".format(message['detail']),
             "fields": [
-                { "title": "account", "value": message['account'], "short": True },
-                { "title": "region", "value": message['region'], "short": True },
+                { "title": "account", "value": message.get('account', ""), "short": True },
+                { "title": "region", "value": message.get('region', ""), "short": True },
                 { "title": "resources", "value": message['resources'][0], "short": False },
                 { "title": "message", "value": message.get('detail', {}).get('Message', ""), "short": True },
                 { "title": "time", "value": message['time'], "short": True}
@@ -103,8 +103,8 @@ def iam_notification(message, region):
             "color": 'good',
             "fallback": "IAM {} event".format(message['detail']),
             "fields": [
-                { "title": "account", "value": message['account'], "short": True },
-                { "title": "region", "value": message['region'], "short": True },
+                { "title": "account", "value": message.get('account', ""), "short": True },
+                { "title": "region", "value": message.get('region', ""), "short": True },
                 { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True },
                 { "title": "message", "value": message.get('detail', {}).get('eventName', ""), "short": True },
                 { "title": "ip", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True },
@@ -119,10 +119,10 @@ def default_notification(subject, message):
         }
 
 def filter_message_from_slack(message):
-    if(message['source'] == "aws.iam" and type(message['detail']) is dict  and message['detail']['eventName'] == "GenerateCredentialReport"):
-        return True
+    if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') in ["GenerateCredentialReport", "GenerateServiceLastAccessedDetails"]:
+      return True
     else:
-        return False
+      return False
 
 # Send a message to a slack channel
 def notify_slack(subject, message, region):
