@@ -39,16 +39,29 @@ def cloudwatch_notification(message, region):
 def ecs_notification(message, region):
     states = {'RUNNING': 'good', 'PENDING': 'warning', 'PROVISIONING': 'warning', 'DEPROVISIONING': 'warning', 'ACTIVATING': 'warning', 'DEACTIVATING': 'warning', 'STOPPING': 'danger', 'STOPPED': 'danger'}
 
+    # { "title": "group", "value": message.get('detail', {}).get('group', ""), "short": True },
+    fields = []
+
+    if message.get("detail", {}).get('stoppedReason', 'NOTFOUND') != 'NOTFOUND':
+      fields.append( { "title": "stoppedReason", "value": message.get('detail', {}).get('stoppedReason', ""), "short": True })
+
+    if message.get("detail", {}).get('stopCode', 'NOTFOUND') != 'NOTFOUND':
+      fields.append( { "title": "stopCode", "value": message.get('detail', {}).get('stopCode', ""), "short": True })
+
+    if message.get("detail", {}).get('eventName', 'NOTFOUND') == 'UpdateService':
+      fields.append( { "title": "eventName", "value": "UpdateService", "short": True })
+      fields.append( { "title": "principalId", "value":  message.get("detail", {}).get('userIdentity', {}).get('principalId', "???"), "short": True })
+    else:
+      fields.append({ "title": "lastStatus", "value": message.get('detail', {}).get('lastStatus', ""), "short": True })
+      fields.append({ "title": "desiredStatus", "value": message.get('detail', {}).get('desiredStatus', ""), "short": True })
+
+    fields.append({ "title": "taskDefinitionArn", "value": message.get('detail', {}).get('taskDefinitionArn', ""), "short": False })
+    fields.append({ "title": "time", "value": message['time'], "short": True})
+
     return {
             "color": states.get(message.get('detail', {}).get('lastStatus', ""), "danger"),
             "fallback": "ECS {} triggered".format(message['detail']),
-            "fields": [
-                { "title": "lastStatus", "value": message.get('detail', {}).get('lastStatus', ""), "short": True },
-                { "title": "desiredStatus", "value": message.get('detail', {}).get('desiredStatus', ""), "short": True },
-                { "title": "taskDefinitionArn", "value": message.get('detail', {}).get('taskDefinitionArn', ""), "short": False },
-                { "title": "group", "value": message.get('detail', {}).get('group', ""), "short": True },
-                { "title": "time", "value": message['time'], "short": True}
-            ]
+            "fields": fields
         }
 
 def ectwo_notification(message, region):
@@ -121,6 +134,20 @@ def default_notification(subject, message):
 def filter_message_from_slack(message):
     if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') in ["GenerateCredentialReport", "GenerateServiceLastAccessedDetails"]:
       return True
+    elif message.get('source', "") == "aws.rds":
+      if message.get('detail', {}).get('eventName', '').startswith("Snapshot succeeded"):
+        return True
+      elif message.get('detail', {}).get('eventName', '') in ["Finished DB Instance backup", "Backing up DB instance"]:
+        return True
+      else:
+        return False
+    elif message.get('source', "") == "aws.ecs":
+      if message.get('detail', {}).get('eventName', '') in ["DeregisterTaskDefinition"]:
+        return True
+      if message.get('detail', {}).get('desiredStatus', '') in ["STOPPED"]:
+        return True
+      if message.get('detail', {}).get('desiredStatus', '') in ["RUNNING"] and message.get('detail', {}).get('lastStatus', '') in ["PENDING", "PROVISIONING"]:
+        return True
     else:
       return False
 
