@@ -55,7 +55,9 @@ def ecs_notification(message, region):
       fields.append({ "title": "lastStatus", "value": message.get('detail', {}).get('lastStatus', ""), "short": True })
       fields.append({ "title": "desiredStatus", "value": message.get('detail', {}).get('desiredStatus', ""), "short": True })
 
-    fields.append({ "title": "taskDefinitionArn", "value": message.get('detail', {}).get('taskDefinitionArn', ""), "short": False })
+    if message.get("detail", {}).get('taskDefinitionArn', 'NOTFOUND') != 'NOTFOUND':
+      fields.append({ "title": "taskDefinitionArn", "value": message.get('detail', {}).get('taskDefinitionArn', ""), "short": False })
+
     fields.append({ "title": "time", "value": message['time'], "short": True})
 
     return {
