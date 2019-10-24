@@ -39,7 +39,6 @@ def cloudwatch_notification(message, region):
 def ecs_notification(message, region):
     states = {'RUNNING': 'good', 'PENDING': 'warning', 'PROVISIONING': 'warning', 'DEPROVISIONING': 'warning', 'ACTIVATING': 'warning', 'DEACTIVATING': 'warning', 'STOPPING': 'danger', 'STOPPED': 'danger'}
 
-    # { "title": "group", "value": message.get('detail', {}).get('group', ""), "short": True },
     fields = []
 
     if message.get("detail", {}).get('stoppedReason', 'NOTFOUND') != 'NOTFOUND':
@@ -127,6 +126,30 @@ def iam_notification(message, region):
             ]
         }
 
+
+def iot_notification(message, region):
+  fields = []
+  if message.get("account", 'NOTFOUND') != 'NOTFOUND':
+    fields.append( { "title": "account", "value": message.get('account', ""), "short": True })
+
+  if message.get("detail", {}).get('eventName', 'NOTFOUND') != 'NOTFOUND':
+    fields.append( { "title": "name", "value": message.get('detail', {}).get('eventName', ""), "short": True })
+
+  if message.get("detail", {}).get('requestParameters', {}).get('parameters', {}).get('AWS::IoT::Certificate::CommonName', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "name", "CommonName": message.get("detail", {}).get('requestParameters', {}).get('parameters', {}).get('AWS::IoT::Certificate::CommonName', ""), "short": True })
+
+  if message.get("detail", {}).get('requestParameters', {}).get('requestParameters', {}).get('thingName', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "ThingName", "CommonName": message.get("detail", {}).get('requestParameters', {}).get('requestParameters', {}).get('thingName', "NOTFOUND"), "short": True })
+
+  fields.append({ "title": "time", "value": message['time'], "short": True})
+
+  return {
+    "color": 'good',
+    "fallback": "IoT {} event ".format(message['detail']),
+    "fields": fields
+  }
+
+
 def default_notification(subject, message):
     return {
             "fallback": "A new message",
@@ -149,6 +172,9 @@ def filter_message_from_slack(message):
       if message.get('detail', {}).get('desiredStatus', '') in ["STOPPED"]:
         return True
       if message.get('detail', {}).get('desiredStatus', '') in ["RUNNING"] and message.get('detail', {}).get('lastStatus', '') in ["PENDING", "PROVISIONING"]:
+        return True
+    elif message.get('source', "") == "aws.iot":
+      if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate"]:
         return True
     else:
       return False
@@ -200,6 +226,10 @@ def notify_slack(subject, message, region):
     elif ("source" in message and message['source'] == "aws.iam"):
         notification = iam_notification(message, region)
         payload['text'] = "AWS IAM notification - " + message["detail-type"]
+        payload['attachments'].append(notification)
+    elif ("source" in message and message['source'] == "aws.iot"):
+        notification = iot_notification(message, region)
+        payload['text'] = "AWS Iot notification - " + message["detail-type"]
         payload['attachments'].append(notification)
     elif ("source" in message and message['source'] == "deployment"):
         notification = deployment_notification(message, region)
