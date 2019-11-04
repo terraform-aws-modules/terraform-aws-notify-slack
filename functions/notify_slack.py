@@ -166,6 +166,8 @@ def filter_message_from_slack(message):
         return True
       else:
         return False
+    elif message.get('source', "") == "aws.ec2"  and message.get('detail', {}).get('eventName', '') in ["DeleteNetworkInterface", "CreateNetworkInterface"]:
+      return True
     elif message.get('source', "") == "aws.ecs":
       if message.get('detail', {}).get('eventName', '') in ["DeregisterTaskDefinition"]:
         return True
