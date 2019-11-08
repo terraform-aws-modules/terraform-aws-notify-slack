@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "lambda_basic" {
       "logs:PutLogEvents",
     ]
 
-    resources = ["${aws_cloudwatch_log_group.lambda.arn}"]
+    resources = [aws_cloudwatch_log_group.lambda[0].arn]
   }
 }
 

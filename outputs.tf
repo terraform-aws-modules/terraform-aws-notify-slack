@@ -38,3 +38,7 @@ output "notify_slack_lambda_function_version" {
   value       = element(concat(aws_lambda_function.notify_slack.*.version, [""]), 0)
 }
 
+output "lambda_cloudwatch_log_group_arn" {
+  description = "The Amazon Resource Name (ARN) specifying the log group"
+  value       = element(concat(aws_cloudwatch_log_group.lambda.*.arn, [""]), 0)
+}
