@@ -52,13 +52,17 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 |------|-------------|:----:|:-----:|:-----:|
 | create | Whether to create all resources | string | `true` | no |
 | create_sns_topic | Whether to create new SNS topic | string | `true` | no |
+| iam_role_tags | Additional tags for the IAM role | map(string) | `{}` | no |
 | kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
 | lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
+| lambda_function_tags | Additional tags for the Lambda function | map(string) | `{}` | no |
 | slack_channel | The name of the channel in Slack for notifications | string | - | yes |
 | slack_emoji | A custom emoji that will appear on Slack messages | string | `:aws:` | no |
 | slack_username | The username that will appear on Slack messages | string | - | yes |
 | slack_webhook_url | The URL of Slack webhook | string | - | yes |
 | sns_topic_name | The name of the SNS topic to create | string | - | yes |
+| sns_topic_tags | Additional tags for the SNS topic | map(string) | `{}` | no |
+| tags | A map of tags to add to all resources | map(string) | `{}` | no |
 
 ## Outputs
 

@@ -8,6 +8,8 @@ resource "aws_sns_topic" "this" {
   count = var.create_sns_topic && var.create ? 1 : 0
 
   name = var.sns_topic_name
+
+  tags = merge(var.tags, var.sns_topic_tags)
 }
 
 locals {
@@ -88,5 +90,7 @@ resource "aws_lambda_function" "notify_slack" {
       last_modified,
     ]
   }
+
+  tags = merge(var.tags, var.lambda_function_tags)
 }
 
