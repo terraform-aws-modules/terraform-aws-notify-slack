@@ -55,6 +55,7 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 | kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | string | `""` | no |
 | lambda\_function\_name | The name of the Lambda function to create | string | `"notify_slack"` | no |
 | lambda\_function\_tags | Additional tags for the Lambda function | map(string) | `{}` | no |
+| reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | number | `"-1"` | no |
 | slack\_channel | The name of the channel in Slack for notifications | string | n/a | yes |
 | slack\_emoji | A custom emoji that will appear on Slack messages | string | `":aws:"` | no |
 | slack\_username | The username that will appear on Slack messages | string | n/a | yes |

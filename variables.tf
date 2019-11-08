@@ -48,6 +48,12 @@ variable "kms_key_arn" {
   default     = ""
 }
 
+variable "reserved_concurrent_executions" {
+  description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations"
+  type        = number
+  default     = -1
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)

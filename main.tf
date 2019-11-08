@@ -68,12 +68,13 @@ resource "aws_lambda_function" "notify_slack" {
 
   function_name = var.lambda_function_name
 
-  role             = aws_iam_role.lambda[0].arn
-  handler          = "notify_slack.lambda_handler"
-  source_code_hash = data.archive_file.notify_slack[0].output_base64sha256
-  runtime          = "python3.7"
-  timeout          = 30
-  kms_key_arn      = var.kms_key_arn
+  role                           = aws_iam_role.lambda[0].arn
+  handler                        = "notify_slack.lambda_handler"
+  source_code_hash               = data.archive_file.notify_slack[0].output_base64sha256
+  runtime                        = "python3.7"
+  timeout                        = 30
+  kms_key_arn                    = var.kms_key_arn
+  reserved_concurrent_executions = var.reserved_concurrent_executions
 
   environment {
     variables = {
