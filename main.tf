@@ -23,6 +23,16 @@ locals {
   )
 }
 
+resource "aws_cloudwatch_log_group" "lambda" {
+  count = var.create ? 1 : 0
+
+  name              = "/aws/lambda/${var.lambda_function_name}"
+  retention_in_days = var.cloudwatch_log_group_retention_in_days
+  kms_key_id        = var.cloudwatch_log_group_kms_key_id
+
+  tags = merge(var.tags, var.cloudwatch_log_group_tags)
+}
+
 resource "aws_sns_topic_subscription" "sns_notify_slack" {
   count = var.create ? 1 : 0
 
@@ -85,6 +95,8 @@ resource "aws_lambda_function" "notify_slack" {
     }
   }
 
+  tags = merge(var.tags, var.lambda_function_tags)
+
   lifecycle {
     ignore_changes = [
       filename,
@@ -92,6 +104,5 @@ resource "aws_lambda_function" "notify_slack" {
     ]
   }
 
-  tags = merge(var.tags, var.lambda_function_tags)
+  depends_on = ["aws_cloudwatch_log_group.lambda"]
 }
-

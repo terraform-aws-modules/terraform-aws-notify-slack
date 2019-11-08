@@ -39,6 +39,16 @@ module "notify_slack" {
 
 If you want to subscribe AWS Lambda Function created by this module to an existing SNS topic you should specify `create_sns_topic = false` as argument and specify name of existing SNS topic name in `sns_topic_name`.
 
+## Import existing Cloudwatch Log Group
+
+Since `v2.3.0` of this module AWS Cloudwatch Log group is created also by this module.
+
+If you are updating from previous version of this module and you don't want to recreate log group, you need to import it like this (change `MODULE_NAME` as necessary):
+
+```
+$ terraform import module.MODULE_NAME.aws_cloudwatch_log_group.lambda /aws/lambda/notify_slack
+``` 
+
 ## Examples
 
 * [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
@@ -49,6 +59,9 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| cloudwatch\_log\_group\_kms\_key\_id | The ARN of the KMS Key to use when encrypting log data for Lambda | string | `"null"` | no |
+| cloudwatch\_log\_group\_retention\_in\_days | Specifies the number of days you want to retain log events in log group for Lambda. | number | `"0"` | no |
+| cloudwatch\_log\_group\_tags | Additional tags for the Cloudwatch log group | map(string) | `{}` | no |
 | create | Whether to create all resources | bool | `"true"` | no |
 | create\_sns\_topic | Whether to create new SNS topic | bool | `"true"` | no |
 | iam\_role\_tags | Additional tags for the IAM role | map(string) | `{}` | no |
@@ -68,6 +81,7 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 
 | Name | Description |
 |------|-------------|
+| lambda\_cloudwatch\_log\_group\_arn | The Amazon Resource Name (ARN) specifying the log group |
 | lambda\_iam\_role\_arn | The ARN of the IAM role used by Lambda function |
 | lambda\_iam\_role\_name | The name of the IAM role used by Lambda function |
 | notify\_slack\_lambda\_function\_arn | The ARN of the Lambda function |

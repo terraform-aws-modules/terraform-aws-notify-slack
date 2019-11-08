@@ -22,12 +22,11 @@ data "aws_iam_policy_document" "lambda_basic" {
     effect = "Allow"
 
     actions = [
-      "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
     ]
 
-    resources = ["arn:aws:logs:*:*:*"]
+    resources = [aws_cloudwatch_log_group.lambda[0].arn]
   }
 }
 
@@ -70,4 +69,3 @@ resource "aws_iam_role_policy" "lambda" {
     0,
   )
 }
-

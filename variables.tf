@@ -54,6 +54,18 @@ variable "reserved_concurrent_executions" {
   default     = -1
 }
 
+variable "cloudwatch_log_group_retention_in_days" {
+  description = "Specifies the number of days you want to retain log events in log group for Lambda."
+  type        = number
+  default     = 0
+}
+
+variable "cloudwatch_log_group_kms_key_id" {
+  description = "The ARN of the KMS Key to use when encrypting log data for Lambda"
+  type        = string
+  default     = null
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
@@ -74,6 +86,12 @@ variable "lambda_function_tags" {
 
 variable "sns_topic_tags" {
   description = "Additional tags for the SNS topic"
+  type        = map(string)
+  default     = {}
+}
+
+variable "cloudwatch_log_group_tags" {
+  description = "Additional tags for the Cloudwatch log group"
   type        = map(string)
   default     = {}
 }
