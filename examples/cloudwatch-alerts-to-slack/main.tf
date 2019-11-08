@@ -23,6 +23,10 @@ module "notify_slack" {
   slack_username    = "reporter"
 
   kms_key_arn = aws_kms_key.this.arn
+
+  tags = {
+    Name = "cloudwatch-alerts-to-slack"
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "LambdaDuration" {
