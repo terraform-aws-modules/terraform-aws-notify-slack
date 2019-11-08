@@ -56,17 +56,17 @@ Note that in practice, encryption of the Slack webhook URL should happen differe
 Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| kms_key_arn |  | string | `arn:aws:kms:eu-west-1:000014191260:key/66db1c5d-d42b-4e28-8efb-07a9cf607a73` | no |
-
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| this_sns_topic_arn | The ARN of the created SNS topic from which messages will be sent to Slack |
+| lambda\_iam\_role\_arn | The ARN of the IAM role used by Lambda function |
+| lambda\_iam\_role\_name | The name of the IAM role used by Lambda function |
+| notify\_slack\_lambda\_function\_arn | The ARN of the Lambda function |
+| notify\_slack\_lambda\_function\_invoke\_arn | The ARN to be used for invoking Lambda function from API Gateway |
+| notify\_slack\_lambda\_function\_last\_modified | The date Lambda function was last modified |
+| notify\_slack\_lambda\_function\_name | The name of the Lambda function |
+| notify\_slack\_lambda\_function\_version | Latest published version of your Lambda function |
+| this\_sns\_topic\_arn | The ARN of the SNS topic from which messages will be sent to Slack |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

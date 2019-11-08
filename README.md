@@ -45,33 +45,38 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 * [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| create | Whether to create all resources | string | `true` | no |
-| create_sns_topic | Whether to create new SNS topic | string | `true` | no |
-| kms_key_arn | ARN of the KMS key used for decrypting slack webhook url | string | `` | no |
-| lambda_function_name | The name of the Lambda function to create | string | `notify_slack` | no |
-| slack_channel | The name of the channel in Slack for notifications | string | - | yes |
-| slack_emoji | A custom emoji that will appear on Slack messages | string | `:aws:` | no |
-| slack_username | The username that will appear on Slack messages | string | - | yes |
-| slack_webhook_url | The URL of Slack webhook | string | - | yes |
-| sns_topic_name | The name of the SNS topic to create | string | - | yes |
+| create | Whether to create all resources | bool | `"true"` | no |
+| create\_sns\_topic | Whether to create new SNS topic | bool | `"true"` | no |
+| iam\_role\_tags | Additional tags for the IAM role | map(string) | `{}` | no |
+| kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | string | `""` | no |
+| lambda\_function\_name | The name of the Lambda function to create | string | `"notify_slack"` | no |
+| lambda\_function\_tags | Additional tags for the Lambda function | map(string) | `{}` | no |
+| lambda\_log\_retention | Number of days to retain logs in Cloudwatch | number | `"30"` | no |
+| reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | number | `"-1"` | no |
+| slack\_channel | The name of the channel in Slack for notifications | string | n/a | yes |
+| slack\_emoji | A custom emoji that will appear on Slack messages | string | `":aws:"` | no |
+| slack\_username | The username that will appear on Slack messages | string | n/a | yes |
+| slack\_webhook\_url | The URL of Slack webhook | string | n/a | yes |
+| sns\_topic\_name | The name of the SNS topic to create | string | n/a | yes |
+| sns\_topic\_tags | Additional tags for the SNS topic | map(string) | `{}` | no |
+| tags | A map of tags to add to all resources | map(string) | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| lambda_iam_role_arn | The ARN of the IAM role used by Lambda function |
-| lambda_iam_role_name | The name of the IAM role used by Lambda function |
-| notify_slack_lambda_function_arn | The ARN of the Lambda function |
-| notify_slack_lambda_function_invoke_arn | The ARN to be used for invoking Lambda function from API Gateway |
-| notify_slack_lambda_function_last_modified | The date Lambda function was last modified |
-| notify_slack_lambda_function_name | The name of the Lambda function |
-| notify_slack_lambda_function_version | Latest published version of your Lambda function |
-| this_slack_topic_arn | The ARN of the SNS topic from which messages will be sent to Slack |
+| lambda\_iam\_role\_arn | The ARN of the IAM role used by Lambda function |
+| lambda\_iam\_role\_name | The name of the IAM role used by Lambda function |
+| notify\_slack\_lambda\_function\_arn | The ARN of the Lambda function |
+| notify\_slack\_lambda\_function\_invoke\_arn | The ARN to be used for invoking Lambda function from API Gateway |
+| notify\_slack\_lambda\_function\_last\_modified | The date Lambda function was last modified |
+| notify\_slack\_lambda\_function\_name | The name of the Lambda function |
+| notify\_slack\_lambda\_function\_version | Latest published version of your Lambda function |
+| this\_slack\_topic\_arn | The ARN of the SNS topic from which messages will be sent to Slack |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

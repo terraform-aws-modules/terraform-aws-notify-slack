@@ -48,6 +48,36 @@ variable "kms_key_arn" {
   default     = ""
 }
 
+variable "reserved_concurrent_executions" {
+  description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations"
+  type        = number
+  default     = -1
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+
+variable "iam_role_tags" {
+  description = "Additional tags for the IAM role"
+  type        = map(string)
+  default     = {}
+}
+
+variable "lambda_function_tags" {
+  description = "Additional tags for the Lambda function"
+  type        = map(string)
+  default     = {}
+}
+
+variable "sns_topic_tags" {
+  description = "Additional tags for the SNS topic"
+  type        = map(string)
+  default     = {}
+}
+
 variable "lambda_log_retention" {
   description = "Number of days to retain logs in Cloudwatch"
   type        = number

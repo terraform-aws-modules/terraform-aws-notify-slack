@@ -10,4 +10,8 @@ module "notify_slack" {
   slack_webhook_url = "https://hooks.slack.com/services/AAA/BBB/CCC"
   slack_channel     = "aws-notification"
   slack_username    = "reporter"
+
+  tags = {
+    Name = "notify-slack-simple"
+  }
 }
