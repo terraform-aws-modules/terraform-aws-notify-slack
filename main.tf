@@ -104,5 +104,5 @@ resource "aws_lambda_function" "notify_slack" {
     ]
   }
 
-  depends_on = ["aws_cloudwatch_log_group.lambda"]
+  depends_on = [aws_cloudwatch_log_group.lambda]
 }
