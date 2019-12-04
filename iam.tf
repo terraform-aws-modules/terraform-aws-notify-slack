@@ -60,7 +60,10 @@ data "aws_iam_policy_document" "lambda_xray" {
     "xray:GetSamplingStatisticSummaries",
   ]
 
-  resources = ["*"]
+  principals {
+    identifiers = ["lambda.amazonaws.com"]
+    type        = "Service"
+  }
 }
 
 resource "aws_iam_role" "lambda" {
