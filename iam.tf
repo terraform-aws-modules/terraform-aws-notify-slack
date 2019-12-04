@@ -29,25 +29,6 @@ data "aws_iam_policy_document" "lambda_basic" {
 
     resources = ["arn:aws:logs:*:*:*"]
   }
-}
-
-data "aws_iam_policy_document" "lambda" {
-  count = var.kms_key_arn != "" && var.create ? 1 : 0
-
-  source_json = data.aws_iam_policy_document.lambda_basic[0].json
-
-  statement {
-    sid = "AllowKMSDecrypt"
-
-    effect = "Allow"
-
-    actions = ["kms:Decrypt"]
-
-    resources = [var.kms_key_arn]
-  }
-}
-
-data "aws_iam_policy_document" "lambda_xray" {
   statement {
     sid = "AllowXRay"
 
@@ -66,6 +47,41 @@ data "aws_iam_policy_document" "lambda_xray" {
   }
 }
 
+data "aws_iam_policy_document" "lambda" {
+  count = var.kms_key_arn != "" && var.create ? 1 : 0
+
+  source_json = data.aws_iam_policy_document.lambda_basic[0].json
+
+  statement {
+    sid = "AllowKMSDecrypt"
+
+    effect = "Allow"
+
+    actions = ["kms:Decrypt"]
+
+    resources = [var.kms_key_arn]
+  }
+}
+
+#data "aws_iam_policy_document" "lambda_xray" {
+#  statement {
+#    sid = "AllowXRay"
+#
+#    effect = "Allow"
+#
+#    actions = [
+#      "xray:PutTraceSegments",
+#      "xray:PutTelemetryRecords",
+#      "xray:GetSamplingRules",
+#      "xray:GetSamplingTargets",
+#      "xray:GetSamplingStatisticSummaries",
+#    ]
+#
+#    resources = ["*"]
+#
+#  }
+#}
+
 resource "aws_iam_role" "lambda" {
   count = var.create ? 1 : 0
 
@@ -83,7 +99,7 @@ resource "aws_iam_role_policy" "lambda" {
     concat(
       data.aws_iam_policy_document.lambda.*.json,
       data.aws_iam_policy_document.lambda_basic.*.json,
-      data.aws_iam_policy_document.lambda_xray.*.json,
+#      data.aws_iam_policy_document.lambda_xray.*.json,
     ),
     0,
   )
