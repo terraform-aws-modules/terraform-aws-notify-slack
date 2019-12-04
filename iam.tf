@@ -48,21 +48,21 @@ data "aws_iam_policy_document" "lambda" {
 }
 
 data "aws_iam_policy_document" "lambda_xray" {
-  sid = "AllowXRay"
+  statement {
+    sid = "AllowXRay"
 
-  effect = "Allow"
+    effect = "Allow"
 
-  actions = [
-    "xray:PutTraceSegments",
-    "xray:PutTelemetryRecords",
-    "xray:GetSamplingRules",
-    "xray:GetSamplingTargets",
-    "xray:GetSamplingStatisticSummaries",
-  ]
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+      "xray:GetSamplingStatisticSummaries",
+    ]
 
-  principals {
-    identifiers = ["lambda.amazonaws.com"]
-    type        = "Service"
+    resources = ["*"]
+
   }
 }
 
