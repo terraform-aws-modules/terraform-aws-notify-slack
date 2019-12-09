@@ -88,5 +88,9 @@ resource "aws_lambda_function" "notify_slack" {
       last_modified,
     ]
   }
+
+  tracing_config {
+    mode = "Active"
+  }
 }
 
