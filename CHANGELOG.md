@@ -3,9 +3,16 @@
 
 
 
+<a name="v2.7.0"></a>
+## [v2.7.0] - 2019-12-20
+
+- Added support for multiline messages ([#55](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/55))
+
+
 <a name="v2.6.0"></a>
 ## [v2.6.0] - 2019-12-20
 
+- Updated CHANGELOG
 - Added pytest and logging (based on [#27](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/27)) ([#54](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/54))
 
 
@@ -185,7 +192,8 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.6.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.7.0...HEAD
+[v2.7.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.6.0...v2.7.0
 [v2.6.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.5.0...v2.6.0
 [v2.5.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.4.0...v2.5.0
 [v2.4.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v1.14.0...v2.4.0
