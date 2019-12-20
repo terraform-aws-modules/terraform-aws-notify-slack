@@ -81,7 +81,7 @@ $ terraform import module.MODULE_NAME.aws_cloudwatch_log_group.lambda /aws/lambd
 
 | Name | Description |
 |------|-------------|
-| lambda\_cloudwatch\_log\_group\_arn | The Amazon Resource Name (ARN) specifying the log group |
+| lambda\_cloudwatch\_log\_group\_arn | The Amazon Resource Name \(ARN\) specifying the log group |
 | lambda\_iam\_role\_arn | The ARN of the IAM role used by Lambda function |
 | lambda\_iam\_role\_name | The name of the IAM role used by Lambda function |
 | notify\_slack\_lambda\_function\_arn | The ARN of the Lambda function |
