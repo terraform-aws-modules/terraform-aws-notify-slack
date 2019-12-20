@@ -48,6 +48,11 @@ variable "kms_key_arn" {
   default     = ""
 }
 
+variable "log_events" {
+  description = "Boolean flag to enabled/disable logging of incoming events"
+  default     = false
+}
+
 variable "reserved_concurrent_executions" {
   description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations"
   type        = number
