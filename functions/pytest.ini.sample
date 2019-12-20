@@ -1,0 +1,8 @@
+[pytest]
+addopts = --disable-pytest-warnings
+env =
+  SLACK_CHANNEL=slack_testing_sandbox
+  SLACK_EMOJI=:aws:
+  SLACK_USERNAME=notify_slack_test
+  SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBOOK/URL
+

@@ -92,6 +92,7 @@ resource "aws_lambda_function" "notify_slack" {
       SLACK_CHANNEL     = var.slack_channel
       SLACK_USERNAME    = var.slack_username
       SLACK_EMOJI       = var.slack_emoji
+      LOG_EVENTS        = var.log_events ? "True" : "False"
     }
   }
 
