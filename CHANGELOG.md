@@ -3,9 +3,17 @@
 
 
 
+<a name="v2.5.0"></a>
+## [v2.5.0] - 2019-12-20
+
+- Updated formatting
+- use 0.12 syntax for depends_on ([#51](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/51))
+
+
 <a name="v2.4.0"></a>
 ## [v2.4.0] - 2019-12-10
 
+- Updated CHANGELOG
 - Use urllib.parse.quote for the alarm name ([#35](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/35))
 - Updated simple example a bit
 - Updated CHANGELOG
@@ -170,7 +178,8 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.5.0...HEAD
+[v2.5.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.4.0...v2.5.0
 [v2.4.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v1.14.0...v2.4.0
 [v1.14.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.3.0...v1.14.0
 [v2.3.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.2.0...v2.3.0
