@@ -16,6 +16,12 @@ variable "lambda_function_name" {
   default     = "notify_slack"
 }
 
+variable "lambda_description" {
+  description = "The description of the Lambda function"
+  type        = string
+  default     = null
+}
+
 variable "sns_topic_name" {
   description = "The name of the SNS topic to create"
   type        = string

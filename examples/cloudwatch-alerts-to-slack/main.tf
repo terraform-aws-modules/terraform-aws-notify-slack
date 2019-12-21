@@ -24,6 +24,9 @@ module "notify_slack" {
 
   kms_key_arn = aws_kms_key.this.arn
 
+  lambda_description = "Lambda function which sends notifications to Slack"
+  log_events         = true
+
   tags = {
     Name = "cloudwatch-alerts-to-slack"
   }

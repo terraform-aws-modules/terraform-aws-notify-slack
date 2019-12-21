@@ -1,3 +1,22 @@
+locals {
+  lambda_policy_document = [{
+    sid    = "AllowWriteToCloudwatchLogs"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = [aws_cloudwatch_log_group.lambda[0].arn]
+  }]
+
+  lambda_policy_document_kms = var.kms_key_arn != "" ? [{
+    sid       = "AllowKMSDecrypt"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = [var.kms_key_arn]
+  }] : []
+}
+
 data "aws_iam_policy_document" "assume_role" {
   count = var.create ? 1 : 0
 
@@ -13,36 +32,17 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "lambda_basic" {
+data "aws_iam_policy_document" "lambda" {
   count = var.create ? 1 : 0
 
-  statement {
-    sid = "AllowWriteToCloudwatchLogs"
-
-    effect = "Allow"
-
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = [aws_cloudwatch_log_group.lambda[0].arn]
-  }
-}
-
-data "aws_iam_policy_document" "lambda" {
-  count = var.kms_key_arn != "" && var.create ? 1 : 0
-
-  source_json = data.aws_iam_policy_document.lambda_basic[0].json
-
-  statement {
-    sid = "AllowKMSDecrypt"
-
-    effect = "Allow"
-
-    actions = ["kms:Decrypt"]
-
-    resources = [var.kms_key_arn]
+  dynamic "statement" {
+    for_each = concat(local.lambda_policy_document, local.lambda_policy_document_kms)
+    content {
+      sid       = statement.value.sid
+      effect    = statement.value.effect
+      actions   = statement.value.actions
+      resources = statement.value.resources
+    }
   }
 }
 
@@ -60,12 +60,5 @@ resource "aws_iam_role_policy" "lambda" {
 
   name_prefix = "lambda-policy-"
   role        = aws_iam_role.lambda[0].id
-
-  policy = element(
-    concat(
-      data.aws_iam_policy_document.lambda.*.json,
-      data.aws_iam_policy_document.lambda_basic.*.json,
-    ),
-    0,
-  )
+  policy      = data.aws_iam_policy_document.lambda[0].json
 }
