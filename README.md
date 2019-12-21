@@ -71,6 +71,7 @@ To run the tests:
 | create\_sns\_topic | Whether to create new SNS topic | bool | `"true"` | no |
 | iam\_role\_tags | Additional tags for the IAM role | map(string) | `{}` | no |
 | kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | string | `""` | no |
+| lambda\_description | The description of the Lambda function | string | `"null"` | no |
 | lambda\_function\_name | The name of the Lambda function to create | string | `"notify_slack"` | no |
 | lambda\_function\_tags | Additional tags for the Lambda function | map(string) | `{}` | no |
 | log\_events | Boolean flag to enabled/disable logging of incoming events | string | `"false"` | no |
