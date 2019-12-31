@@ -49,8 +49,9 @@ data "aws_iam_policy_document" "lambda" {
 resource "aws_iam_role" "lambda" {
   count = var.create ? 1 : 0
 
-  name_prefix        = "lambda"
-  assume_role_policy = data.aws_iam_policy_document.assume_role[0].json
+  name_prefix          = "lambda"
+  assume_role_policy   = data.aws_iam_policy_document.assume_role[0].json
+  permissions_boundary = var.iam_role_boundary_policy_arn
 
   tags = merge(var.tags, var.iam_role_tags)
 }

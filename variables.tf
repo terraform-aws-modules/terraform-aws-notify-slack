@@ -89,6 +89,12 @@ variable "iam_role_tags" {
   default     = {}
 }
 
+variable "iam_role_boundary_policy_arn" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the role"
+  type        = string
+  default     = null
+}
+
 variable "lambda_function_tags" {
   description = "Additional tags for the Lambda function"
   type        = map(string)

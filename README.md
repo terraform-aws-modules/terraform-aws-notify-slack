@@ -70,6 +70,7 @@ To run the tests:
 | create | Whether to create all resources | bool | `"true"` | no |
 | create\_sns\_topic | Whether to create new SNS topic | bool | `"true"` | no |
 | iam\_role\_tags | Additional tags for the IAM role | map(string) | `{}` | no |
+| iam\_role\_boundary\_policy\_arn | The ARN of the policy that is used to set the permissions boundary for the role | string | `null` | no |
 | kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | string | `""` | no |
 | lambda\_description | The description of the Lambda function | string | `"null"` | no |
 | lambda\_function\_name | The name of the Lambda function to create | string | `"notify_slack"` | no |
