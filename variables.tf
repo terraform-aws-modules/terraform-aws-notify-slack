@@ -25,6 +25,19 @@ variable "lambda_description" {
 variable "sns_topic_name" {
   description = "The name of the SNS topic to create"
   type        = string
+  default     = ""
+}
+
+variable "sns_topic" {
+  description = "The existing SNS topic"
+  type = object({
+    arn  = string
+    name = string
+  })
+  default = {
+    arn  = ""
+    name = ""
+  }
 }
 
 variable "slack_webhook_url" {
