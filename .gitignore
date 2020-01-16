@@ -4,3 +4,5 @@ terraform.tfstate
 terraform.tfvars
 functions/*.zip
 functions/pytest.ini
+.idea
+*.iml
