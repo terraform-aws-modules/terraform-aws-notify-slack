@@ -3,9 +3,16 @@
 
 
 
+<a name="v2.10.0"></a>
+## [v2.10.0] - 2020-01-21
+
+- Updated pre-commit-terraform with terraform-docs 0.8.0 support ([#65](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/65))
+
+
 <a name="v2.9.0"></a>
 ## [v2.9.0] - 2020-01-16
 
+- Updated CHANGELOG
 - Fix empty tuple error ([#64](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/64))
 
 
@@ -206,7 +213,8 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.9.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.10.0...HEAD
+[v2.10.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.9.0...v2.10.0
 [v2.9.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.8.0...v2.9.0
 [v2.8.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.7.0...v2.8.0
 [v2.7.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.6.0...v2.7.0
