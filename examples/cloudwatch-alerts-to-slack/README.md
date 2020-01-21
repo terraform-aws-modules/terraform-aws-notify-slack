@@ -56,6 +56,16 @@ Note that in practice, encryption of the Slack webhook URL should happen differe
 Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | n/a |
+
+## Inputs
+
+No input.
+
 ## Outputs
 
 | Name | Description |
