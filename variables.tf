@@ -27,8 +27,8 @@ variable "sns_topic_name" {
   type        = string
 }
 
-variable "slack_webhook_url" {
-  description = "The URL of Slack webhook"
+variable "slack_webhook_path" {
+  description = "The path of Slack webhook URL"
   type        = string
 }
 
@@ -39,6 +39,11 @@ variable "slack_channel" {
 
 variable "slack_username" {
   description = "The username that will appear on Slack messages"
+  type        = string
+}
+
+variable "slack_message" {
+  description = "Formatted Slack message"
   type        = string
 }
 

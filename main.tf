@@ -53,13 +53,19 @@ resource "aws_lambda_permission" "sns_notify_slack" {
 
 data "null_data_source" "lambda_file" {
   inputs = {
-    filename = "${path.module}/functions/notify_slack.py"
+    filename = "${path.module}/functions/snsToSlack.js"
   }
 }
 
 data "null_data_source" "lambda_archive" {
   inputs = {
     filename = "${path.module}/functions/notify_slack.zip"
+  }
+}
+
+data "null_data_source" "lambda_handler" {
+  inputs = {
+    handler = split(".", basename(data.null_data_source.lambda_file.outputs.filename))[0]
   }
 }
 
@@ -80,20 +86,21 @@ resource "aws_lambda_function" "notify_slack" {
   description   = var.lambda_description
 
   role                           = aws_iam_role.lambda[0].arn
-  handler                        = "notify_slack.lambda_handler"
+  handler                        = "${data.null_data_source.lambda_handler.outputs.handler}.handler"
   source_code_hash               = data.archive_file.notify_slack[0].output_base64sha256
-  runtime                        = "python3.7"
-  timeout                        = 30
+  runtime                        = "nodejs12.x"
+  timeout                        = 3
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
   environment {
     variables = {
-      SLACK_WEBHOOK_URL = var.slack_webhook_url
-      SLACK_CHANNEL     = var.slack_channel
-      SLACK_USERNAME    = var.slack_username
-      SLACK_EMOJI       = var.slack_emoji
-      LOG_EVENTS        = var.log_events ? "True" : "False"
+      SLACK_WEBHOOK_PATH = var.slack_webhook_path
+      SLACK_CHANNEL      = var.slack_channel
+      SLACK_USERNAME     = var.slack_username
+      SLACK_EMOJI        = var.slack_emoji
+      SLACK_MESSAGE      = var.slack_message
+      LOG_EVENTS         = var.log_events ? "True" : "False"
     }
   }
 
