@@ -6,7 +6,11 @@ locals {
       "logs:CreateLogStream",
       "logs:PutLogEvents",
     ]
-    resources = [element(concat(aws_cloudwatch_log_group.lambda[*].arn, list("")), 0)]
+    resources = [
+      element(concat(aws_cloudwatch_log_group.notify_lambda[*].arn, list("")), 0),
+      element(concat(aws_cloudwatch_log_group.approve_request_lambda[*].arn, list("")), 0),
+      element(concat(aws_cloudwatch_log_group.approve_response_lambda[*].arn, list("")), 0)
+    ]
   }]
 
   lambda_policy_document_kms = var.kms_key_arn != "" ? [{

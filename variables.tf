@@ -4,25 +4,60 @@ variable "create" {
   default     = true
 }
 
-variable "create_sns_topic" {
+variable "create_notify_sns_topic" {
   description = "Whether to create new SNS topic"
   type        = bool
   default     = true
 }
 
-variable "lambda_function_name" {
+variable "create_approve_sns_topic" {
+  description = "Whether to create new SNS topic"
+  type        = bool
+  default     = true
+}
+
+variable "notify_lambda_function_name" {
   description = "The name of the Lambda function to create"
   type        = string
   default     = "notify_slack"
 }
 
-variable "lambda_description" {
+variable "notify_lambda_description" {
   description = "The description of the Lambda function"
   type        = string
   default     = null
 }
 
-variable "sns_topic_name" {
+variable "notify_sns_topic_name" {
+  description = "The name of the SNS topic to create"
+  type        = string
+}
+
+variable "approve_request_lambda_function_name" {
+  description = "The name of the Lambda function to create"
+  type        = string
+  default     = "approve_request_slack"
+}
+
+variable "approve_request_lambda_description" {
+  description = "The description of the Lambda function"
+  type        = string
+  default     = null
+}
+
+variable "approve_response_lambda_function_name" {
+  description = "The name of the Lambda function to create"
+  type        = string
+  default     = "approve_response_slack"
+}
+
+variable "approve_response_lambda_description" {
+  description = "The description of the Lambda function"
+  type        = string
+  default     = null
+}
+
+variable "approve_sns_topic_name" {
   description = "The name of the SNS topic to create"
   type        = string
 }
@@ -39,6 +74,11 @@ variable "slack_channel" {
 
 variable "slack_username" {
   description = "The username that will appear on Slack messages"
+  type        = string
+}
+
+variable "slack_verification_token" {
+  description = "The slack verification token that will be used to verify incoming responses"
   type        = string
 }
 
@@ -90,7 +130,7 @@ variable "iam_role_tags" {
 }
 
 variable "lambda_function_tags" {
-  description = "Additional tags for the Lambda function"
+  description = "Additional tags for the Lambda functions"
   type        = map(string)
   default     = {}
 }

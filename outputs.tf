@@ -1,6 +1,11 @@
-output "this_slack_topic_arn" {
+output "notify_slack_topic_arn" {
   description = "The ARN of the SNS topic from which messages will be sent to Slack"
-  value       = local.sns_topic_arn
+  value       = local.notify_sns_topic_arn
+}
+
+output "approve_slack_topic_arn" {
+  description = "The ARN of the SNS topic from which messages will be sent to Slack"
+  value       = local.approve_sns_topic_arn
 }
 
 output "lambda_iam_role_arn" {
