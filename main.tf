@@ -86,11 +86,15 @@ resource "aws_lambda_function" "notify_slack" {
 
   lifecycle {
     ignore_changes = [
-      filename,
+      # filename, # removing this as its no longer needed since the file name is realitive
       last_modified,
     ]
   }
 
   tags = merge(var.tags, var.lambda_function_tags)
+  
+  tracing_config {
+    mode = "Active"
+  }
 }
 

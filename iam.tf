@@ -29,6 +29,22 @@ data "aws_iam_policy_document" "lambda_basic" {
 
     resources = ["arn:aws:logs:*:*:*"]
   }
+  statement {
+    sid = "AllowXRay"
+
+    effect = "Allow"
+
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+      "xray:GetSamplingStatisticSummaries",
+    ]
+
+    resources = ["*"]
+
+  }
 }
 
 data "aws_iam_policy_document" "lambda" {
