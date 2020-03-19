@@ -3,9 +3,26 @@
 
 
 
+<a name="v2.11.0"></a>
+## [v2.11.0] - 2020-03-19
+
+- Add subsription filter policy support ([#74](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/74))
+- Merge pull request [#73](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/73) from terraform-aws-modules/terraform-provider-githubfile-1584537047829318000
+- [ci skip] Create "Makefile".
+- Merge pull request [#68](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/68) from terraform-aws-modules/terraform-provider-githubfile-1584537014149178000
+- Merge pull request [#72](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/72) from terraform-aws-modules/terraform-provider-githubfile-1584537014149128000
+- Merge pull request [#70](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/70) from terraform-aws-modules/terraform-provider-githubfile-1584537014149683000
+- Merge pull request [#69](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/69) from terraform-aws-modules/terraform-provider-githubfile-1584537014149305000
+- [ci skip] Create ".pre-commit-config.yaml".
+- [ci skip] Create ".gitignore".
+- [ci skip] Create ".editorconfig".
+- [ci skip] Create "LICENSE".
+
+
 <a name="v2.10.0"></a>
 ## [v2.10.0] - 2020-01-21
 
+- Updated CHANGELOG
 - Updated pre-commit-terraform with terraform-docs 0.8.0 support ([#65](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/65))
 
 
@@ -213,7 +230,8 @@
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.10.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.11.0...HEAD
+[v2.11.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.10.0...v2.11.0
 [v2.10.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.9.0...v2.10.0
 [v2.9.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.8.0...v2.9.0
 [v2.8.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.7.0...v2.8.0
