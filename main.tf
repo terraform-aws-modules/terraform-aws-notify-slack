@@ -36,9 +36,10 @@ resource "aws_cloudwatch_log_group" "lambda" {
 resource "aws_sns_topic_subscription" "sns_notify_slack" {
   count = var.create ? 1 : 0
 
-  topic_arn = local.sns_topic_arn
-  protocol  = "lambda"
-  endpoint  = aws_lambda_function.notify_slack[0].arn
+  topic_arn     = local.sns_topic_arn
+  protocol      = "lambda"
+  endpoint      = aws_lambda_function.notify_slack[0].arn
+  filter_policy = var.subsription_filter_policy
 }
 
 resource "aws_lambda_permission" "sns_notify_slack" {
