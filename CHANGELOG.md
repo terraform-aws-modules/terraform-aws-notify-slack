@@ -214,13 +214,9 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-<<<<<<< HEAD
 [Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.13.0...HEAD
 [v2.13.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.12.0...v2.13.0
 [v2.12.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.11.0...v2.12.0
-=======
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.11.0...HEAD
->>>>>>> Add formatting for ASG, fix bug in AlarmName payload
 [v2.11.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.10.0...v2.11.0
 [v2.10.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.9.0...v2.10.0
 [v2.9.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.8.0...v2.9.0
