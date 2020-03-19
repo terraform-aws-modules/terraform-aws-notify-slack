@@ -6,12 +6,15 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+
 <a name="v2.13.0"></a>
 ## [v2.13.0] - 2020-03-19
 
 
+
 <a name="v2.12.0"></a>
 ## [v2.12.0] - 2020-03-19
+
 
 
 <a name="v2.11.0"></a>
@@ -23,7 +26,6 @@ All notable changes to this project will be documented in this file.
 <a name="v2.10.0"></a>
 ## [v2.10.0] - 2020-01-21
 
-- Updated CHANGELOG
 - Updated pre-commit-terraform with terraform-docs 0.8.0 support ([#65](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/65))
 
 
