@@ -55,6 +55,31 @@ events = (
       }
     ),
     (
+      {
+        "Records": [
+          {
+            "EventSource": "aws:sns",
+            "EventVersion": "1.0",
+            "EventSubscriptionArn": "arn:aws:sns:eu-west-2:735598076380:service-updates:d29b4e2c-6840-9c4e-ceac-17128efcc337",
+            "Sns": {
+              "Type": "Notification",
+              "MessageId": "f86e3c5b-cd17-1ab8-80e9-c0776d4f1e7a",
+              "TopicArn": "arn:aws:sns:eu-west-2:735598076380:service-updates",
+              "Subject": "Auto Scaling: launch for group \"My-AutoScaling-Group-Name\"",
+              "Message": "{\"Progress\": 50, \"AccountId\": \"123456789012\", \"Description\": \"Launching a new EC2 instance: i-738930393837fa\", \"RequestId\": \"abc123456-6d35-74de-25a5-c6c85ff6a521\", \"EndTime\": \"2020-03-04T16:23:18.101Z\", \"AutoScalingGroupARN\": \"arn:aws:autoscaling:us-east-1:123456789012:autoScalingGroup:abc1abc1-1234-1234-1234-c95217515fed:autoScalingGroupName/my-group-name\", \"ActivityId\": \"abc1abc1-1234-1234-1234-c95217515fed\", \"StartTime\": \"2020-03-04T16:22:46.365Z\", \"Service\": \"AWS Auto Scaling\", \"Time\": \"2020-03-04T16:23:18.101Z\", \"EC2InstanceId\": \"i-738930393837fa\", \"StatusCode\": \"InProgress\", \"StatusMessage\": \"\", \"Details\": {\"Subnet ID\": \"subnet-012345679012\", \"Availability Zone\": \"us-east-1d\"}, \"AutoScalingGroupName\": \"My-AutoScaling-Group-Name\", \"Cause\": \"At 2020-03-04T16:22:44Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 2 to 3.\", \"Event\": \"autoscaling:EC2_INSTANCE_LAUNCH\"}",
+              "Timestamp": "2020-02-12T15:45:24.091Z",
+              "SignatureVersion": "1",
+              "Signature": "WMYdVRN7ECNXMWZ0faRDD4fSfALW5MISB6O//LMd/LeSQYNQ/1eKYEE0PM1SHcH+73T/f/eVHbID/F203VZaGECQTD4LVA4B0DGAEY39LVbWdPTCHIDC6QCBV5ScGFZcROBXMe3UBWWMQAVTSWTE0eP526BFUTecaDFM4b9HMT4NEHWa4A2TA7d888JaVKKdSVNTd4bGS6Q2XFG1MOb652BRAHdARO7A6//2/47JZ5COM6LR0/V7TcOYCBZ20CRF6L5XLU46YYL3I1PNGKbEC1PIeVDVJVPcA17NfUbFXWYBX8LHfM4O7ZbGAPaGffDYLFWM6TX1Y6fQ01OSMc21OdUGV6HQR01e%==",
+              "SigningCertUrl": "https://sns.eu-west-2.amazonaws.com/SimpleNotificationService-7dd85a2b76adaa8dd603b7a0c9150589.pem",
+              "UnsubscribeUrl": "https://sns.eu-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-2:735598076380:service-updates:d29b4e2c-6840-9c4e-ceac-17128efcc337",
+              "MessageAttributes": {}
+            }
+          }
+        ]
+      }
+    )
+    ,
+    (
         {
             "AlarmName": "Example",
             "AlarmDescription": "Example alarm description.",
