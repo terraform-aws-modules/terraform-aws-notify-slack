@@ -6,15 +6,12 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
-
 <a name="v2.13.0"></a>
 ## [v2.13.0] - 2020-03-19
 
 
-
 <a name="v2.12.0"></a>
 ## [v2.12.0] - 2020-03-19
-
 
 
 <a name="v2.11.0"></a>
