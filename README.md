@@ -90,6 +90,7 @@ To run the tests:
 | slack\_webhook\_url | The URL of Slack webhook | `string` | n/a | yes |
 | sns\_topic\_name | The name of the SNS topic to create | `string` | n/a | yes |
 | sns\_topic\_tags | Additional tags for the SNS topic | `map(string)` | `{}` | no |
+| subsription\_filter\_policy | A valid filter policy that will be used in the subscription to filter messages seen by the target resource | `string` | n/a | no |
 | tags | A map of tags to add to all resources | `map(string)` | `{}` | no |
 
 ## Outputs
