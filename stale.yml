@@ -24,10 +24,12 @@ pulls:
     This PR has been automatically marked as stale because it has not had
     recent activity. It will be closed if no further activity occurs. Thank you
     for your contributions.
+    
     To track this PR (even if closed), please open a corresponding issue if one
     does not already exist.
   # Comment to post when closing a stale PR.
   closeComment: >
     This PR has been automatically closed because it has not had recent
     activity since being marked as stale.
+    
     Please reopen when work resumes.
