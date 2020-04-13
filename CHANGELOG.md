@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v2.15.0"></a>
+## [v2.15.0] - 2020-04-13
+
+- docs: Updated required versions in README
+- Add support fro IAM role boundary policy ([#61](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/61))
+
+
 <a name="v2.14.0"></a>
 ## [v2.14.0] - 2020-04-13
 
@@ -225,7 +232,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.14.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.15.0...HEAD
+[v2.15.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.14.0...v2.15.0
 [v2.14.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.13.0...v2.14.0
 [v2.13.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.12.0...v2.13.0
 [v2.12.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.11.0...v2.12.0
