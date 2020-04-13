@@ -89,6 +89,12 @@ variable "iam_role_tags" {
   default     = {}
 }
 
+variable "iam_role_boundary_policy_arn" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the role"
+  type        = string
+  default     = null
+}
+
 variable "iam_role_name_prefix" {
   description = "A unique role name beginning with the specified prefix"
   type        = string
