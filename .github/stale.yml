@@ -8,6 +8,9 @@ daysUntilClose: 30
 # Label to use when marking an issue as stale
 staleLabel: stale
 
+# Limit to only `issues` or `pulls`
+only: issues
+
 issues:
   # Comment to post when marking an issue as stale.
   markComment: >
