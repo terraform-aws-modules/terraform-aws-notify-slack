@@ -89,6 +89,18 @@ variable "iam_role_tags" {
   default     = {}
 }
 
+variable "iam_role_name_prefix" {
+  description = "A unique role name beginning with the specified prefix"
+  type        = string
+  default     = "lambda"
+}
+
+variable "iam_role_policy_name_prefix" {
+  description = "A unique policy name beginning with the specified prefix"
+  type        = string
+  default     = "lambda-policy-"
+}
+
 variable "lambda_function_tags" {
   description = "Additional tags for the Lambda function"
   type        = map(string)
