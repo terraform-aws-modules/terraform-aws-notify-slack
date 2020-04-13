@@ -6,7 +6,7 @@ locals {
       "logs:CreateLogStream",
       "logs:PutLogEvents",
     ]
-    resources = [aws_cloudwatch_log_group.lambda[0].arn]
+    resources = [element(concat(aws_cloudwatch_log_group.lambda[*].arn, list("")), 0)]
   }]
 
   lambda_policy_document_kms = var.kms_key_arn != "" ? [{
@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "lambda" {
 resource "aws_iam_role" "lambda" {
   count = var.create ? 1 : 0
 
-  name_prefix          = "lambda"
+  name_prefix          = var.iam_role_name_prefix
   assume_role_policy   = data.aws_iam_policy_document.assume_role[0].json
   permissions_boundary = var.iam_role_boundary_policy_arn
 
@@ -59,7 +59,7 @@ resource "aws_iam_role" "lambda" {
 resource "aws_iam_role_policy" "lambda" {
   count = var.create ? 1 : 0
 
-  name_prefix = "lambda-policy-"
+  name_prefix = var.iam_role_policy_name_prefix
   role        = aws_iam_role.lambda[0].id
   policy      = data.aws_iam_policy_document.lambda[0].json
 }

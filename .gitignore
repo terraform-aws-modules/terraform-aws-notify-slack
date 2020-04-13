@@ -2,5 +2,3 @@
 terraform.tfstate
 *.tfstate*
 terraform.tfvars
-functions/*.zip
-functions/pytest.ini

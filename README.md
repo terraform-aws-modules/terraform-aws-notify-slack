@@ -60,6 +60,18 @@ To run the tests:
         pytest functions/notify_slack_test.py
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+No requirements.
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| archive | n/a |
+| aws | n/a |
+| null | n/a |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -89,7 +101,7 @@ To run the tests:
 
 | Name | Description |
 |------|-------------|
-| lambda\_cloudwatch\_log\_group\_arn | The Amazon Resource Name \(ARN\) specifying the log group |
+| lambda\_cloudwatch\_log\_group\_arn | The Amazon Resource Name (ARN) specifying the log group |
 | lambda\_iam\_role\_arn | The ARN of the IAM role used by Lambda function |
 | lambda\_iam\_role\_name | The name of the IAM role used by Lambda function |
 | notify\_slack\_lambda\_function\_arn | The ARN of the Lambda function |

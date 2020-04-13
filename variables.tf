@@ -95,6 +95,18 @@ variable "iam_role_boundary_policy_arn" {
   default     = null
 }
 
+variable "iam_role_name_prefix" {
+  description = "A unique role name beginning with the specified prefix"
+  type        = string
+  default     = "lambda"
+}
+
+variable "iam_role_policy_name_prefix" {
+  description = "A unique policy name beginning with the specified prefix"
+  type        = string
+  default     = "lambda-policy-"
+}
+
 variable "lambda_function_tags" {
   description = "Additional tags for the Lambda function"
   type        = map(string)
@@ -111,4 +123,10 @@ variable "cloudwatch_log_group_tags" {
   description = "Additional tags for the Cloudwatch log group"
   type        = map(string)
   default     = {}
+}
+
+variable "subsription_filter_policy" {
+  description = "(Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource."
+  type        = string
+  default     = null
 }
