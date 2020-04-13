@@ -7,6 +7,15 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v2.14.0"></a>
+## [v2.14.0] - 2020-04-13
+
+- docs: Updated README after [#62](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/62)
+- feat: Add support for custom name prefixes for IAM role and policy ([#62](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/62))
+- fix: Move stale.yml to .github ([#78](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/78))
+- feat: Add Stale Bot Config ([#77](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/77))
+
+
 <a name="v2.13.0"></a>
 ## [v2.13.0] - 2020-03-19
 
@@ -216,7 +225,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.13.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.14.0...HEAD
+[v2.14.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.13.0...v2.14.0
 [v2.13.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.12.0...v2.13.0
 [v2.12.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.11.0...v2.12.0
 [v2.11.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.10.0...v2.11.0
