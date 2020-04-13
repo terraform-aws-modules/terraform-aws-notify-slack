@@ -122,5 +122,5 @@ variable "cloudwatch_log_group_tags" {
 variable "subsription_filter_policy" {
   description = "(Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource."
   type        = string
-  default     = null  
+  default     = null
 }
