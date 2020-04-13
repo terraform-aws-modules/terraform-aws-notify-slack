@@ -60,6 +60,14 @@ To run the tests:
         pytest functions/notify_slack_test.py
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Providers
+
+| Name | Version |
+|------|---------|
+| archive | n/a |
+| aws | n/a |
+| null | n/a |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -83,14 +91,12 @@ To run the tests:
 | slack\_username | The username that will appear on Slack messages | string | n/a | yes |
 | slack\_webhook\_url | The URL of Slack webhook | string | n/a | yes |
 | sns\_topic\_name | The name of the SNS topic to create | string | n/a | yes |
-| sns\_topic\_tags | Additional tags for the SNS topic | map(string) | `{}` | no |
-| tags | A map of tags to add to all resources | map(string) | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| lambda\_cloudwatch\_log\_group\_arn | The Amazon Resource Name \(ARN\) specifying the log group |
+| lambda\_cloudwatch\_log\_group\_arn | The Amazon Resource Name (ARN) specifying the log group |
 | lambda\_iam\_role\_arn | The ARN of the IAM role used by Lambda function |
 | lambda\_iam\_role\_name | The name of the IAM role used by Lambda function |
 | notify\_slack\_lambda\_function\_arn | The ARN of the Lambda function |
