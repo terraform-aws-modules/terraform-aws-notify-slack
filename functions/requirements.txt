@@ -2,3 +2,5 @@ boto3
 
 pytest
 pytest-env
+certifi
+
