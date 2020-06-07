@@ -7,6 +7,15 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v3.0.0"></a>
+## [v3.0.0] - 2020-06-07
+
+- Updated pre-commit hooks
+- feat: Rewrote module to handle Lambda resources properly with terraform-aws-lambda module ([#83](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/83))
+- chore: Removed stale.yml from .github folder
+- fix: Stale bot should process only issues for now ([#79](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/79))
+
+
 <a name="v2.15.0"></a>
 ## [v2.15.0] - 2020-04-13
 
@@ -232,7 +241,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.15.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.0.0...HEAD
+[v3.0.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.15.0...v3.0.0
 [v2.15.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.14.0...v2.15.0
 [v2.14.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.13.0...v2.14.0
 [v2.13.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v2.12.0...v2.13.0
