@@ -13,14 +13,35 @@ resource "aws_sns_topic" "this" {
 }
 
 locals {
-  sns_topic_arn = element(
-    concat(
-      aws_sns_topic.this.*.arn,
-      data.aws_sns_topic.this.*.arn,
-      [""],
-    ),
-    0,
-  )
+  sns_topic_arn = element(concat(aws_sns_topic.this.*.arn, data.aws_sns_topic.this.*.arn, [""]), 0)
+
+  lambda_policy_document = {
+    sid       = "AllowWriteToCloudwatchLogs"
+    effect    = "Allow"
+    actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
+    resources = [element(concat(aws_cloudwatch_log_group.lambda[*].arn, list("")), 0)]
+  }
+
+  lambda_policy_document_kms = {
+    sid       = "AllowKMSDecrypt"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = [var.kms_key_arn]
+  }
+}
+
+data "aws_iam_policy_document" "lambda" {
+  count = var.create ? 1 : 0
+
+  dynamic "statement" {
+    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
+    content {
+      sid       = statement.value.sid
+      effect    = statement.value.effect
+      actions   = statement.value.actions
+      resources = statement.value.resources
+    }
+  }
 }
 
 resource "aws_cloudwatch_log_group" "lambda" {
@@ -38,74 +59,52 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 
   topic_arn     = local.sns_topic_arn
   protocol      = "lambda"
-  endpoint      = aws_lambda_function.notify_slack[0].arn
+  endpoint      = module.lambda.this_lambda_function_arn
   filter_policy = var.subsription_filter_policy
 }
 
-resource "aws_lambda_permission" "sns_notify_slack" {
-  count = var.create ? 1 : 0
+module "lambda" {
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "1.3.0"
 
-  statement_id  = "AllowExecutionFromSNS"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.notify_slack[0].function_name
-  principal     = "sns.amazonaws.com"
-  source_arn    = local.sns_topic_arn
-}
-
-data "null_data_source" "lambda_file" {
-  inputs = {
-    filename = "${path.module}/functions/notify_slack.py"
-  }
-}
-
-data "null_data_source" "lambda_archive" {
-  inputs = {
-    filename = "${path.module}/functions/notify_slack.zip"
-  }
-}
-
-data "archive_file" "notify_slack" {
-  count = var.create ? 1 : 0
-
-  type        = "zip"
-  source_file = data.null_data_source.lambda_file.outputs.filename
-  output_path = data.null_data_source.lambda_archive.outputs.filename
-}
-
-resource "aws_lambda_function" "notify_slack" {
-  count = var.create ? 1 : 0
-
-  filename = data.archive_file.notify_slack[0].output_path
+  create = var.create
 
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  role                           = aws_iam_role.lambda[0].arn
   handler                        = "notify_slack.lambda_handler"
-  source_code_hash               = data.archive_file.notify_slack[0].output_base64sha256
-  runtime                        = "python3.7"
+  source_path                    = "${path.module}/functions/notify_slack.py"
+  runtime                        = "python3.8"
   timeout                        = 30
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
-  environment {
-    variables = {
-      SLACK_WEBHOOK_URL = var.slack_webhook_url
-      SLACK_CHANNEL     = var.slack_channel
-      SLACK_USERNAME    = var.slack_username
-      SLACK_EMOJI       = var.slack_emoji
-      LOG_EVENTS        = var.log_events ? "True" : "False"
+  environment_variables = {
+    SLACK_WEBHOOK_URL = var.slack_webhook_url
+    SLACK_CHANNEL     = var.slack_channel
+    SLACK_USERNAME    = var.slack_username
+    SLACK_EMOJI       = var.slack_emoji
+    LOG_EVENTS        = var.log_events ? "True" : "False"
+  }
+
+  create_role               = true
+  role_name                 = "${var.iam_role_name_prefix}-${var.lambda_function_name}"
+  role_permissions_boundary = var.iam_role_boundary_policy_arn
+  role_tags                 = var.iam_role_tags
+
+  # Do not use Lambda's policy for cloudwatch logs, because we have to add a policy
+  # for KMS conditionally. This way attach_policy_json is always true independenty of
+  # the value of presense of KMS. Famous "computed values in count" bug...
+  attach_cloudwatch_logs_policy = false
+  attach_policy_json            = true
+  policy_json                   = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
+
+  allowed_triggers = {
+    AllowExecutionFromSNS = {
+      principal  = "sns.amazonaws.com"
+      source_arn = local.sns_topic_arn
     }
   }
 
   tags = merge(var.tags, var.lambda_function_tags)
-
-  lifecycle {
-    ignore_changes = [
-      filename,
-      last_modified,
-    ]
-  }
-
-  depends_on = [aws_cloudwatch_log_group.lambda]
 }

@@ -4,15 +4,18 @@ This module creates an SNS topic (or uses an existing one) and an AWS Lambda fun
 
 Start by setting up an [incoming webhook integration](https://my.slack.com/services/new/incoming-webhook/) in your Slack workspace.
 
+Doing serverless with Terraform? Check out [serverless.tf framework](https://serverless.tf), which aims to simplify all operations when working with the serverless in Terraform.
+
+
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+Terraform 0.12. Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
 
-Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+Terraform 0.11. Pin module version to `~> v1.0`.
 
 ## Features
 
-- [x] AWS Lambda runtime Python 3.6
+- [x] AWS Lambda runtime Python 3.8
 - [x] Create new SNS topic or use existing one
 - [x] Support plaintext and encrypted version of Slack webhook URL
 - [x] Most of Slack message options are customizable
@@ -27,7 +30,7 @@ Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraf
 ```hcl
 module "notify_slack" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   sns_topic_name = "slack-topic"
 
@@ -36,6 +39,11 @@ module "notify_slack" {
   slack_username    = "reporter"
 }
 ```
+
+## Upgrade from 2.0 to 3.0
+
+Version 3 uses [Terraform AWS Lambda module](https://github.com/terraform-aws-modules/terraform-aws-lambda) to handle most of heavy-lifting related to Lambda packaging, roles, and permissions, while maintaining the same interface for the user of this module after many of resources will be recreated.
+
 
 ## Use existing SNS topic or create new
 
@@ -71,9 +79,7 @@ To run the tests:
 
 | Name | Version |
 |------|---------|
-| archive | n/a |
 | aws | ~> 2.35 |
-| null | n/a |
 
 ## Inputs
 
