@@ -94,9 +94,16 @@ def lambda_handler(event, context):
   subject = event['Records'][0]['Sns']['Subject']
   message = event['Records'][0]['Sns']['Message']
   region = event['Records'][0]['Sns']['TopicArn'].split(":")[3]
-  response = notify_slack(subject, message, region)
 
-  if json.loads(response)["code"] != 200:
-    logging.error("Error: received status `{}` using event `{}` and context `{}`".format(json.loads(response)["info"], event, context))
+  # Filter the INSUFFICIENT_DATA to OK state changes
+  message = json.loads(message)
+  if (message['OldStateValue'] == 'INSUFFICIENT_DATA' and message['NewStateValue'] == 'OK'):
+    logging.warning('Message is being filtered: %s to %s', message['OldStateValue'], message['NewStateValue'])
+    return
+  else:
+    response = notify_slack(subject, message, region)
 
-  return response
+    if json.loads(response)["code"] != 200:
+      logging.error("Error: received status `{}` using event `{}` and context `{}`".format(json.loads(response)["info"], event, context))
+
+    return response
