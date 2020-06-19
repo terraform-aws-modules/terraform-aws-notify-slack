@@ -9,6 +9,8 @@ resource "aws_sns_topic" "this" {
 
   name = var.sns_topic_name
 
+  kms_master_key_id = var.sns_topic_kms_key_id
+
   tags = merge(var.tags, var.sns_topic_tags)
 }
 
