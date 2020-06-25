@@ -107,6 +107,11 @@ variable "iam_role_policy_name_prefix" {
   default     = "lambda-policy-"
 }
 
+variable "create_lambda_role" {
+  description = "Conditionally create IAM role for lambda (bool)"
+  default     = false
+}
+
 variable "lambda_function_tags" {
   description = "Additional tags for the Lambda function"
   type        = map(string)

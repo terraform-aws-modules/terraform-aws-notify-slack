@@ -93,7 +93,7 @@ module "lambda" {
     LOG_EVENTS        = var.log_events ? "True" : "False"
   }
 
-  create_role               = true
+  create_role               = var.create_lambda_role
   role_name                 = "${var.iam_role_name_prefix}-${var.lambda_function_name}"
   role_permissions_boundary = var.iam_role_boundary_policy_arn
   role_tags                 = var.iam_role_tags
