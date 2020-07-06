@@ -10,6 +10,12 @@ variable "create_sns_topic" {
   default     = true
 }
 
+variable "lambda_role" {
+  description = "IAM role attached to the Lambda Function.  If this is set then a role will not be created for you."
+  type        = string
+  default     = ""
+}
+
 variable "lambda_function_name" {
   description = "The name of the Lambda function to create"
   type        = string
