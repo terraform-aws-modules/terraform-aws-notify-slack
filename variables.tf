@@ -43,3 +43,8 @@ variable "kms_key_arn" {
   description = "ARN of the KMS key used for decrypting slack webhook url"
   default     = ""
 }
+
+variable "channel_if_alarm" {
+  description = "Call all people from channel when alarm state is ALARM (@channel)"
+  default     = false
+}

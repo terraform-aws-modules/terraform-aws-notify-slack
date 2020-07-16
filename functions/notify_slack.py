@@ -4,6 +4,9 @@ import urllib.request, urllib.parse
 import logging
 
 
+CHANNEL_IF_ALARM = os.getenv("CHANNEL_IF_ALARM", "false").lower() == "true"
+
+
 # Decrypt encrypted URL with KMS
 def decrypt(encrypted_url):
     region = os.environ['AWS_REGION']
@@ -18,22 +21,54 @@ def decrypt(encrypted_url):
 def cloudwatch_notification(message, region):
     states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
 
+    link_value = "".join((
+        "https://console.aws.amazon.com/cloudwatch/home?region=",
+        f"{region}",
+        "#alarm:alarmFilter=ANY;name=",
+        f"{urllib.parse.quote(message['AlarmName'])}",
+    ))
+
+    ALARM_STATE = message['NewStateValue'] == 'ALARM'
+
+    if CHANNEL_IF_ALARM and ALARM_STATE:
+        link_value += ' <!channel>'
+
     return {
-            "color": states[message['NewStateValue']],
-            "fallback": "Alarm {} triggered".format(message['AlarmName']),
-            "fields": [
-                { "title": "Alarm Name", "value": message['AlarmName'], "short": True },
-                { "title": "Alarm Description", "value": message['AlarmDescription'], "short": False},
-                { "title": "Alarm reason", "value": message['NewStateReason'], "short": False},
-                { "title": "Old State", "value": message['OldStateValue'], "short": True },
-                { "title": "Current State", "value": message['NewStateValue'], "short": True },
-                {
-                    "title": "Link to Alarm",
-                    "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote_plus(message['AlarmName']),
-                    "short": False
-                }
-            ]
-        }
+        "color": states[message['NewStateValue']],
+        "fallback": "Alarm {} triggered".format(message['AlarmName']),
+        "fields": [
+            {
+                "title": "Alarm Name",
+                "value": message['AlarmName'],
+                "short": True
+            },
+            {
+                "title": "Alarm Description",
+                "value": message['AlarmDescription'],
+                "short": False
+            },
+            {
+                "title": "Alarm reason",
+                "value": message['NewStateReason'],
+                "short": False
+            },
+            {
+                "title": "Old State",
+                "value": message['OldStateValue'],
+                "short": True
+            },
+            {
+                "title": "Current State",
+                "value": message['NewStateValue'],
+                "short": True
+            },
+            {
+              "title": "Link to Alarm",
+              "value": link_value,
+              "short": False
+            }
+        ]
+    }
 
 
 def default_notification(subject, message):
