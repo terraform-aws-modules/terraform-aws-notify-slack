@@ -53,6 +53,7 @@ If you want to subscribe AWS Lambda Function created by this module to an existi
 | slack\_username | The username that will appear on Slack messages | string | n/a | yes |
 | slack\_webhook\_url | The URL of Slack webhook | string | n/a | yes |
 | sns\_topic\_name | The name of the SNS topic to create | string | n/a | yes |
+| channel\_if\_alarm | Call all people from channel when alarm state is ALARM (@channel) | bool | false | no |
 
 ## Outputs
 
