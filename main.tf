@@ -67,7 +67,7 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = ">= 1.18.0"
+  version = "1.18.0"
 
   create = var.create
 
@@ -104,6 +104,8 @@ module "lambda" {
   attach_policy_json            = true
   policy_json                   = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
 
+  use_existing_cloudwatch_log_group = true
+
   allowed_triggers = {
     AllowExecutionFromSNS = {
       principal  = "sns.amazonaws.com"
@@ -112,4 +114,6 @@ module "lambda" {
   }
 
   tags = merge(var.tags, var.lambda_function_tags)
+
+  depends_on = [aws_cloudwatch_log_group.lambda]
 }

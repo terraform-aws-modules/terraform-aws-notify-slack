@@ -9,7 +9,9 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
+Terraform 0.13. Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
+
+Terraform 0.12. Pin module version to `3.4.0` (or older).
 
 Terraform 0.11. Pin module version to `~> v1.0`.
 
