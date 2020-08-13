@@ -81,7 +81,7 @@ variable "reserved_concurrent_executions" {
 variable "cloudwatch_log_group_retention_in_days" {
   description = "Specifies the number of days you want to retain log events in log group for Lambda."
   type        = number
-  default     = 0
+  default     = 7
 }
 
 variable "cloudwatch_log_group_kms_key_id" {
