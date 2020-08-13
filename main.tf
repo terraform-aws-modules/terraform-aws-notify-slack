@@ -103,7 +103,7 @@ module "lambda" {
   attach_cloudwatch_logs_policy     = false
   attach_policy_json                = true
   policy_json                       = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
-  use_existing_cloudwatch_log_group = true
+  use_existing_cloudwatch_log_group = aws_cloudwatch_log_group.lambda.name != "" ? true : false
 
   allowed_triggers = {
     AllowExecutionFromSNS = {
