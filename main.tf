@@ -100,9 +100,10 @@ module "lambda" {
   # Do not use Lambda's policy for cloudwatch logs, because we have to add a policy
   # for KMS conditionally. This way attach_policy_json is always true independenty of
   # the value of presense of KMS. Famous "computed values in count" bug...
-  attach_cloudwatch_logs_policy = false
-  attach_policy_json            = true
-  policy_json                   = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
+  attach_cloudwatch_logs_policy     = false
+  attach_policy_json                = true
+  policy_json                       = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
+  use_existing_cloudwatch_log_group = true
 
   allowed_triggers = {
     AllowExecutionFromSNS = {
