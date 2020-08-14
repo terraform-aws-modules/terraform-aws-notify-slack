@@ -74,7 +74,7 @@ To run the tests:
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.6, < 0.14 |
+| terraform | >= 0.13.0, < 0.14 |
 | aws | >= 2.35, < 4.0 |
 
 ## Providers
