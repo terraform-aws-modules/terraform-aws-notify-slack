@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.1.0"></a>
+## [v4.1.0] - 2020-08-14
+
+- fix: Updated version requirements to be Terraform 0.13 only ([#101](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/101))
+
+
 <a name="v4.0.0"></a>
 ## [v4.0.0] - 2020-08-13
 
@@ -273,7 +279,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.1.0...HEAD
+[v4.1.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.0.0...v4.1.0
 [v4.0.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.4.0...v4.0.0
 [v3.4.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.3.0...v3.4.0
 [v3.3.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.2.0...v3.3.0
