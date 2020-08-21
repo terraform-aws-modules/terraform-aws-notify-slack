@@ -7,6 +7,25 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.1.0"></a>
+## [v4.1.0] - 2020-08-14
+
+- fix: Updated version requirements to be Terraform 0.13 only ([#101](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/101))
+
+
+<a name="v4.0.0"></a>
+## [v4.0.0] - 2020-08-13
+
+- feat: Updated Lambda module to work with Terraform 0.13 ([#99](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/99))
+- fix: Bump version of lambda module that supports Terraform 13 and AWS Provider 3.x ([#96](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/96))
+
+
+<a name="v3.4.0"></a>
+## [v3.4.0] - 2020-08-13
+
+- feat: update required version of aws provider to allow 3.0 ([#95](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/95))
+
+
 <a name="v3.3.0"></a>
 ## [v3.3.0] - 2020-06-19
 
@@ -260,7 +279,10 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.1.0...HEAD
+[v4.1.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.0.0...v4.1.0
+[v4.0.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.4.0...v4.0.0
+[v3.4.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.3.0...v3.4.0
 [v3.3.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.2.0...v3.3.0
 [v3.2.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.1.0...v3.2.0
 [v3.1.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.0.0...v3.1.0
