@@ -19,6 +19,4 @@ module "notify_slack" {
   tags = {
     Name = "notify-slack-simple"
   }
-
-  depends_on = [aws_sns_topic.my_sns]
 }
