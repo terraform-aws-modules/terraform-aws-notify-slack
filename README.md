@@ -9,7 +9,9 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
+Terraform 0.13. Pin module version to `~> v4.0`. Submit pull-requests to `master` branch.
+
+Terraform 0.12. Pin module version to `3.5.0` (or older). Submit pull-requests to `terraform012` branch.
 
 Terraform 0.11. Pin module version to `~> v1.0`.
 
@@ -30,7 +32,7 @@ Terraform 0.11. Pin module version to `~> v1.0`.
 ```hcl
 module "notify_slack" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   sns_topic_name = "slack-topic"
 
@@ -72,14 +74,14 @@ To run the tests:
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.12.6 |
-| aws | ~> 2.35 |
+| terraform | >= 0.13.0, < 0.14 |
+| aws | >= 2.35, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.35 |
+| aws | >= 2.35, < 4.0 |
 
 ## Inputs
 
