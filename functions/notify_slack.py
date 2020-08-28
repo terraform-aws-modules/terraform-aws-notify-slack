@@ -3,6 +3,7 @@ import os, boto3, json, base64
 import urllib.request, urllib.parse
 import logging
 import pprint
+import re
 
 
 # Decrypt encrypted URL with KMS
@@ -46,6 +47,10 @@ def ecs_notification(message, region):
 
     if message.get("detail", {}).get('stopCode', 'NOTFOUND') != 'NOTFOUND':
       fields.append( { "title": "stopCode", "value": message.get('detail', {}).get('stopCode', ""), "short": True })
+
+    for key in message['detail']['containers']:
+      if 'reason' in key:
+        fields.append( { "title": "reason", "value": key['reason'], "short": True } )
 
     if message.get("detail", {}).get('eventName', 'NOTFOUND') == 'UpdateService':
       fields.append( { "title": "eventName", "value": "UpdateService", "short": True })
@@ -160,9 +165,9 @@ def filter_message_from_slack(message):
     if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') in ["GenerateCredentialReport", "GenerateServiceLastAccessedDetails"]:
       return True
     elif message.get('source', "") == "aws.rds":
-      if message.get('detail', {}).get('eventName', '').startswith("Snapshot succeeded"):
+      if message.get('detail', {}).get('Message', '').startswith("Snapshot succeeded"):
         return True
-      elif message.get('detail', {}).get('eventName', '') in ["Finished DB Instance backup", "Backing up DB instance"]:
+      elif message.get('detail', {}).get('Message', '') in ["Finished DB Instance backup", "Backing up DB instance"]:
         return True
       else:
         return False
@@ -171,9 +176,11 @@ def filter_message_from_slack(message):
     elif message.get('source', "") == "aws.ecs":
       if message.get('detail', {}).get('eventName', '') in ["DeregisterTaskDefinition"]:
         return True
-      if message.get('detail', {}).get('desiredStatus', '') in ["STOPPED"]:
+      if message.get('detail', {}).get('desiredStatus', '') in ["STOPPED"] and message.get('detail', {}).get('stopCode', '') in ["UserInitiated"]:
         return True
       if message.get('detail', {}).get('desiredStatus', '') in ["RUNNING"] and message.get('detail', {}).get('lastStatus', '') in ["PENDING", "PROVISIONING"]:
+        return True
+      if re.match("Scaling activity initiated by \(deployment ecs-svc\/[0-9]+\)", message.get('detail', {}).get('stoppedReason', '')):
         return True
     elif message.get('source', "") == "aws.iot":
       if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex"]:
