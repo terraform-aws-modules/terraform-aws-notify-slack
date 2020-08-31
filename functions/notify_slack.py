@@ -182,6 +182,17 @@ def filter_message_from_slack(message):
         return True
       if re.match("Scaling activity initiated by \(deployment ecs-svc\/[0-9]+\)", message.get('detail', {}).get('stoppedReason', '')):
         return True
+      code = []
+      for key in message['detail']['containers']:
+        if 'exitCode' in key:
+          code.append( {"exitCode": key['exitCode'] })
+      if code:
+        for key in code:
+          if key['exitCode'] != 0:
+            return False
+          else:
+            continue
+        return True
     elif message.get('source', "") == "aws.iot":
       if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex"]:
         return True
