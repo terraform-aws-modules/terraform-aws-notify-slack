@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.3.0"></a>
+## [v4.3.0] - 2020-09-07
+
+- feat: allow reuse of existing lambda_role ([#85](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/85))
+
+
 <a name="v4.2.0"></a>
 ## [v4.2.0] - 2020-09-07
 
@@ -295,7 +301,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.2.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.3.0...HEAD
+[v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.2.0...v4.3.0
 [v4.2.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.5.0...v4.2.0
 [v3.5.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.1.0...v3.5.0
 [v4.1.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.0.0...v4.1.0
