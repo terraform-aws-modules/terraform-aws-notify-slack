@@ -51,6 +51,8 @@ def ecs_notification(message, region):
     for key in message['detail']['containers']:
       if 'reason' in key:
         fields.append( { "title": "reason", "value": key['reason'], "short": True } )
+        fields.append( { "title": "taskArn", "value": key['taskArn'], "short": True } )
+        fields.append( { "title": "containerArn", "value": key['containerArn'], "short": True } )
 
     if message.get("detail", {}).get('eventName', 'NOTFOUND') == 'UpdateService':
       fields.append( { "title": "eventName", "value": "UpdateService", "short": True })
