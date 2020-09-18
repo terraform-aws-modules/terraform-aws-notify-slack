@@ -51,8 +51,7 @@ def ecs_notification(message, region):
     for key in message['detail']['containers']:
       if 'reason' in key:
         fields.append( { "title": "reason", "value": key['reason'], "short": True } )
-        fields.append( { "title": "taskArn", "value": key['taskArn'], "short": True } )
-        fields.append( { "title": "containerArn", "value": key['containerArn'], "short": True } )
+        fields.append( { "title": "containerName", "value": key['name'], "short": True } )
 
     if message.get("detail", {}).get('eventName', 'NOTFOUND') == 'UpdateService':
       fields.append( { "title": "eventName", "value": "UpdateService", "short": True })
@@ -62,7 +61,7 @@ def ecs_notification(message, region):
       fields.append({ "title": "desiredStatus", "value": message.get('detail', {}).get('desiredStatus', ""), "short": True })
 
     if message.get("detail", {}).get('taskDefinitionArn', 'NOTFOUND') != 'NOTFOUND':
-      fields.append({ "title": "taskDefinitionArn", "value": message.get('detail', {}).get('taskDefinitionArn', ""), "short": False })
+      fields.append({ "title": "taskArn", "value": message.get('detail', {}).get('taskArn', ""), "short": False })
 
     fields.append({ "title": "time", "value": message['time'], "short": True})
 
