@@ -60,7 +60,7 @@ def ecs_notification(message, region):
       fields.append({ "title": "lastStatus", "value": message.get('detail', {}).get('lastStatus', ""), "short": True })
       fields.append({ "title": "desiredStatus", "value": message.get('detail', {}).get('desiredStatus', ""), "short": True })
 
-    if message.get("detail", {}).get('taskDefinitionArn', 'NOTFOUND') != 'NOTFOUND':
+    if message.get("detail", {}).get('taskArn', 'NOTFOUND') != 'NOTFOUND':
       fields.append({ "title": "taskArn", "value": message.get('detail', {}).get('taskArn', ""), "short": False })
 
     fields.append({ "title": "time", "value": message['time'], "short": True})
@@ -183,6 +183,10 @@ def filter_message_from_slack(message):
         return True
       if re.match("Scaling activity initiated by \(deployment ecs-svc\/[0-9]+\)", message.get('detail', {}).get('stoppedReason', '')):
         return True
+      for key in message['detail']['containers']:
+        if 'reason' in key:
+          # look for reasons before exitCodes, in some instances where container exits with reason but no exitCode and all other containers have exitCode 0, we want this alert not to get filtered.
+          return False
       code = []
       for key in message['detail']['containers']:
         if 'exitCode' in key:
