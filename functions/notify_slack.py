@@ -186,7 +186,7 @@ def filter_message_from_slack(message):
       for key in message['detail']['containers']:
         if 'reason' in key:
           # look for reasons before exitCodes, in some instances where container exits with reason but no exitCode and all other containers have exitCode 0, we want this alert not to get filtered.
-           return False
+          return False
       code = []
       for key in message['detail']['containers']:
         if 'exitCode' in key:
