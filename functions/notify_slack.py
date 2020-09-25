@@ -47,7 +47,13 @@ def default_notification(subject, message):
 # Send a message to a slack channel
 def notify_slack(subject, message, region):
   slack_url = os.environ['SLACK_WEBHOOK_URL']
-  if not slack_url.startswith("http"):
+  if 'SLACK_WEBHOOK_URL_IS_SSM_PARAM' in os.environ and os.environ['SLACK_WEBHOOK_URL_IS_SSM_PARAM'] == 'True':
+    ssm = boto3.client("ssm")
+    slack_url = ssm.get_parameter(
+      Name=slack_url,
+      WithDecryption=True
+    ).get("Parameter").get("Value")
+  elif not slack_url.startswith("http"):
     slack_url = decrypt(slack_url)
 
   slack_channel = os.environ['SLACK_CHANNEL']

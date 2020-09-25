@@ -14,6 +14,11 @@ resource "aws_sns_topic" "this" {
   tags = merge(var.tags, var.sns_topic_tags)
 }
 
+data "aws_ssm_parameter" "this" {
+  count = var.slack_webhook_url_is_ssm_param ? 1 : 0
+  name  = var.slack_webhook_url
+}
+
 locals {
   sns_topic_arn = element(concat(aws_sns_topic.this.*.arn, data.aws_sns_topic.this.*.arn, [""]), 0)
 
@@ -30,13 +35,24 @@ locals {
     actions   = ["kms:Decrypt"]
     resources = [var.kms_key_arn]
   }
+
+  lambda_policy_document_ssm = {
+    sid       = "AllowSSMGetParameter"
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter"]
+    resources = [var.slack_webhook_url_is_ssm_param ? data.aws_ssm_parameter.this[0].arn : ""]
+  }
 }
 
 data "aws_iam_policy_document" "lambda" {
   count = var.create ? 1 : 0
 
   dynamic "statement" {
-    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
+    for_each = concat(
+      [local.lambda_policy_document],
+      var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [],
+      var.slack_webhook_url_is_ssm_param ? [local.lambda_policy_document_ssm] : []
+    )
     content {
       sid       = statement.value.sid
       effect    = statement.value.effect
@@ -67,7 +83,7 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "1.18.0"
+  version = "1.24.0"
 
   create = var.create
 
@@ -85,11 +101,12 @@ module "lambda" {
   publish = true
 
   environment_variables = {
-    SLACK_WEBHOOK_URL = var.slack_webhook_url
-    SLACK_CHANNEL     = var.slack_channel
-    SLACK_USERNAME    = var.slack_username
-    SLACK_EMOJI       = var.slack_emoji
-    LOG_EVENTS        = var.log_events ? "True" : "False"
+    SLACK_WEBHOOK_URL              = var.slack_webhook_url
+    SLACK_WEBHOOK_URL_IS_SSM_PARAM = var.slack_webhook_url_is_ssm_param ? "True" : "False"
+    SLACK_CHANNEL                  = var.slack_channel
+    SLACK_USERNAME                 = var.slack_username
+    SLACK_EMOJI                    = var.slack_emoji
+    LOG_EVENTS                     = var.log_events ? "True" : "False"
   }
 
   create_role               = var.lambda_role == ""
