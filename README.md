@@ -100,12 +100,14 @@ To run the tests:
 | lambda\_description | The description of the Lambda function | `string` | `null` | no |
 | lambda\_function\_name | The name of the Lambda function to create | `string` | `"notify_slack"` | no |
 | lambda\_function\_tags | Additional tags for the Lambda function | `map(string)` | `{}` | no |
+| lambda\_role | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you. | `string` | `""` | no |
 | log\_events | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
 | reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | `number` | `-1` | no |
 | slack\_channel | The name of the channel in Slack for notifications | `string` | n/a | yes |
 | slack\_emoji | A custom emoji that will appear on Slack messages | `string` | `":aws:"` | no |
 | slack\_username | The username that will appear on Slack messages | `string` | n/a | yes |
 | slack\_webhook\_url | The URL of Slack webhook | `string` | n/a | yes |
+| slack\_webhook\_url\_is\_ssm\_param | Whether slack\_webhook\_url is an ssm parameter | `bool` | `false` | no |
 | sns\_topic\_kms\_key\_id | ARN of the KMS key used for enabling SSE on the topic | `string` | `""` | no |
 | sns\_topic\_name | The name of the SNS topic to create | `string` | n/a | yes |
 | sns\_topic\_tags | Additional tags for the SNS topic | `map(string)` | `{}` | no |
