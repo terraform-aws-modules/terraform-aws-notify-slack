@@ -58,13 +58,16 @@ Note that this example may create resources which can cost money. Run `terraform
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.13.0, < 0.14 |
+| aws | >= 2.35, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | >= 2.35, < 4.0 |
 
 ## Inputs
 

@@ -32,7 +32,7 @@ module "notify_slack" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "LambdaDuration" {
+resource "aws_cloudwatch_metric_alarm" "lambda_duration" {
   alarm_name          = "NotifySlackDuration"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"

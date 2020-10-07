@@ -46,6 +46,17 @@ module "notify_slack" {
 
 Version 3 uses [Terraform AWS Lambda module](https://github.com/terraform-aws-modules/terraform-aws-lambda) to handle most of heavy-lifting related to Lambda packaging, roles, and permissions, while maintaining the same interface for the user of this module after many of resources will be recreated.
 
+## Using with Terraform Cloud Agents
+
+[Terraform Cloud Agents](https://www.terraform.io/docs/cloud/workspaces/agent.html) are a paid feature, available as part of the Terraform Cloud for Business upgrade package.
+
+This module requires Python 3.8, which you need to install, build an image, and use it for your [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent). Here is a sample Dockerfile you can use:
+
+```
+FROM hashicorp/tfc-agent:latest
+RUN apt-get -y update && apt-get -y install python3.8 python3-pip
+ENTRYPOINT ["/bin/tfc-agent"]
+```
 
 ## Use existing SNS topic or create new
 
@@ -94,12 +105,12 @@ To run the tests:
 | create\_sns\_topic | Whether to create new SNS topic | `bool` | `true` | no |
 | iam\_role\_boundary\_policy\_arn | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `null` | no |
 | iam\_role\_name\_prefix | A unique role name beginning with the specified prefix | `string` | `"lambda"` | no |
-| iam\_role\_policy\_name\_prefix | A unique policy name beginning with the specified prefix | `string` | `"lambda-policy-"` | no |
 | iam\_role\_tags | Additional tags for the IAM role | `map(string)` | `{}` | no |
 | kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | `string` | `""` | no |
 | lambda\_description | The description of the Lambda function | `string` | `null` | no |
 | lambda\_function\_name | The name of the Lambda function to create | `string` | `"notify_slack"` | no |
 | lambda\_function\_tags | Additional tags for the Lambda function | `map(string)` | `{}` | no |
+| lambda\_role | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you. | `string` | `""` | no |
 | log\_events | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
 | reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | `number` | `-1` | no |
 | slack\_channel | The name of the channel in Slack for notifications | `string` | n/a | yes |
