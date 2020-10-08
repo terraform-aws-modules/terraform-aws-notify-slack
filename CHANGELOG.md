@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.4.0"></a>
+## [v4.4.0] - 2020-10-08
+
+- docs: Added a note about using with Terraform Cloud Agents ([#108](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/108))
+
+
 <a name="v4.3.0"></a>
 ## [v4.3.0] - 2020-09-07
 
@@ -301,7 +307,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.4.0...HEAD
+[v4.4.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.3.0...v4.4.0
 [v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.2.0...v4.3.0
 [v4.2.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.5.0...v4.2.0
 [v3.5.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.1.0...v3.5.0
