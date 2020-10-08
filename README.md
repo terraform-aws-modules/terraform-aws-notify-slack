@@ -50,7 +50,7 @@ Version 3 uses [Terraform AWS Lambda module](https://github.com/terraform-aws-mo
 
 [Terraform Cloud Agents](https://www.terraform.io/docs/cloud/workspaces/agent.html) are a paid feature, available as part of the Terraform Cloud for Business upgrade package.
 
-This module requires Python 3.8, which you need to install, build an image, and use it for your [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent). Here is a sample Dockerfile you can use:
+This module requires Python 3.8. You can customize [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent) to include Python using this sample `Dockerfile`:
 
 ```
 FROM hashicorp/tfc-agent:latest
