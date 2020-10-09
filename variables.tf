@@ -74,6 +74,7 @@ variable "kms_key_arn" {
 
 variable "log_events" {
   description = "Boolean flag to enabled/disable logging of incoming events"
+  type        = bool
   default     = false
 }
 
@@ -117,12 +118,6 @@ variable "iam_role_name_prefix" {
   description = "A unique role name beginning with the specified prefix"
   type        = string
   default     = "lambda"
-}
-
-variable "iam_role_policy_name_prefix" {
-  description = "A unique policy name beginning with the specified prefix"
-  type        = string
-  default     = "lambda-policy-"
 }
 
 variable "lambda_function_tags" {

@@ -46,6 +46,17 @@ module "notify_slack" {
 
 Version 3 uses [Terraform AWS Lambda module](https://github.com/terraform-aws-modules/terraform-aws-lambda) to handle most of heavy-lifting related to Lambda packaging, roles, and permissions, while maintaining the same interface for the user of this module after many of resources will be recreated.
 
+## Using with Terraform Cloud Agents
+
+[Terraform Cloud Agents](https://www.terraform.io/docs/cloud/workspaces/agent.html) are a paid feature, available as part of the Terraform Cloud for Business upgrade package.
+
+This module requires Python 3.8. You can customize [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent) to include Python using this sample `Dockerfile`:
+
+```
+FROM hashicorp/tfc-agent:latest
+RUN apt-get -y update && apt-get -y install python3.8 python3-pip
+ENTRYPOINT ["/bin/tfc-agent"]
+```
 
 ## Use existing SNS topic or create new
 
@@ -94,7 +105,6 @@ To run the tests:
 | create\_sns\_topic | Whether to create new SNS topic | `bool` | `true` | no |
 | iam\_role\_boundary\_policy\_arn | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `null` | no |
 | iam\_role\_name\_prefix | A unique role name beginning with the specified prefix | `string` | `"lambda"` | no |
-| iam\_role\_policy\_name\_prefix | A unique policy name beginning with the specified prefix | `string` | `"lambda-policy-"` | no |
 | iam\_role\_tags | Additional tags for the IAM role | `map(string)` | `{}` | no |
 | kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | `string` | `""` | no |
 | lambda\_description | The description of the Lambda function | `string` | `null` | no |
