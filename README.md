@@ -117,6 +117,7 @@ To run the tests:
 | slack\_emoji | A custom emoji that will appear on Slack messages | `string` | `":aws:"` | no |
 | slack\_username | The username that will appear on Slack messages | `string` | n/a | yes |
 | slack\_webhook\_url | The URL of Slack webhook | `string` | n/a | yes |
+| slack\_webhook\_url\_is\_ssm\_param | Whether slack\_webhook\_url is an ssm parameter | `bool` | `false` | no |
 | sns\_topic\_kms\_key\_id | ARN of the KMS key used for enabling SSE on the topic | `string` | `""` | no |
 | sns\_topic\_name | The name of the SNS topic to create | `string` | n/a | yes |
 | sns\_topic\_tags | Additional tags for the SNS topic | `map(string)` | `{}` | no |

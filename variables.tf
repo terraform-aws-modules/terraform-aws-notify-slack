@@ -44,6 +44,12 @@ variable "slack_webhook_url" {
   type        = string
 }
 
+variable "slack_webhook_url_is_ssm_param" {
+  description = "Whether slack_webhook_url is an ssm parameter"
+  type        = bool
+  default     = false
+}
+
 variable "slack_channel" {
   description = "The name of the channel in Slack for notifications"
   type        = string

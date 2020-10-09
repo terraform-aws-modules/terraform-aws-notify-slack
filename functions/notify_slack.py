@@ -15,6 +15,15 @@ def decrypt(encrypted_url):
   except Exception:
     logging.exception("Failed to decrypt URL with KMS")
 
+def get_ssm_param(ssm_param):
+  try:
+    ssm = boto3.client("ssm")
+    return ssm.get_parameter(
+      Name=ssm_param,
+      WithDecryption=True
+    ).get("Parameter").get("Value")
+  except Exception:
+    logging.exception("Failed to get URL from SSM")
 
 def cloudwatch_notification(message, region):
   states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
@@ -47,7 +56,9 @@ def default_notification(subject, message):
 # Send a message to a slack channel
 def notify_slack(subject, message, region):
   slack_url = os.environ['SLACK_WEBHOOK_URL']
-  if not slack_url.startswith("http"):
+  if 'SLACK_WEBHOOK_URL_IS_SSM_PARAM' in os.environ and os.environ['SLACK_WEBHOOK_URL_IS_SSM_PARAM'] == 'True':
+    slack_url = get_ssm_param(slack_url)
+  elif not slack_url.startswith("http"):
     slack_url = decrypt(slack_url)
 
   slack_channel = os.environ['SLACK_CHANNEL']
