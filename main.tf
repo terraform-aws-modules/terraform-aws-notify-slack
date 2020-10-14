@@ -62,7 +62,7 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
   topic_arn     = local.sns_topic_arn
   protocol      = "lambda"
   endpoint      = module.lambda.this_lambda_function_arn
-  filter_policy = var.subsription_filter_policy
+  filter_policy = var.subscription_filter_policy
 }
 
 module "lambda" {
