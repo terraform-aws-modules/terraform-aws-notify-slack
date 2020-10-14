@@ -19,7 +19,7 @@ locals {
     sid       = "AllowWriteToCloudwatchLogs"
     effect    = "Allow"
     actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
-    resources = [element(concat(aws_cloudwatch_log_group.lambda[*].arn, list("")), 0)]
+    resources = [replace("${element(concat(aws_cloudwatch_log_group.lambda[*].arn, list("")), 0)}:*", ":*:*", ":*")]
   }
 
   lambda_policy_document_kms = {
@@ -105,6 +105,8 @@ module "lambda" {
   attach_policy_json            = true
   policy_json                   = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
 
+  use_existing_cloudwatch_log_group = true
+
   allowed_triggers = {
     AllowExecutionFromSNS = {
       principal  = "sns.amazonaws.com"
@@ -113,4 +115,6 @@ module "lambda" {
   }
 
   tags = merge(var.tags, var.lambda_function_tags)
+
+  depends_on = [aws_cloudwatch_log_group.lambda]
 }
