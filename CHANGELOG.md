@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.5.0"></a>
+## [v4.5.0] - 2020-10-15
+
+- fix: Typo on subscription_filter_policy variable ([#113](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/113))
+
+
 <a name="v4.4.0"></a>
 ## [v4.4.0] - 2020-10-08
 
@@ -111,7 +117,7 @@ All notable changes to this project will be documented in this file.
 <a name="v2.11.0"></a>
 ## [v2.11.0] - 2020-03-19
 
-- Add subscription filter policy support ([#74](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/74))
+- Add subsription filter policy support ([#74](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/74))
 
 
 <a name="v2.10.0"></a>
@@ -307,7 +313,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.4.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.5.0...HEAD
+[v4.5.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.4.0...v4.5.0
 [v4.4.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.3.0...v4.4.0
 [v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.2.0...v4.3.0
 [v4.2.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.5.0...v4.2.0
