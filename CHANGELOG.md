@@ -111,7 +111,7 @@ All notable changes to this project will be documented in this file.
 <a name="v2.11.0"></a>
 ## [v2.11.0] - 2020-03-19
 
-- Add subsription filter policy support ([#74](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/74))
+- Add subscription filter policy support ([#74](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/74))
 
 
 <a name="v2.10.0"></a>

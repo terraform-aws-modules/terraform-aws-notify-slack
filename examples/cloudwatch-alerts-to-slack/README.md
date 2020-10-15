@@ -60,14 +60,14 @@ Note that this example may create resources which can cost money. Run `terraform
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.13.0, < 0.14 |
-| aws | >= 2.35, < 4.0 |
+| terraform | >= 0.13.0 |
+| aws | >= 2.35 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.35, < 4.0 |
+| aws | >= 2.35 |
 
 ## Inputs
 

@@ -85,14 +85,14 @@ To run the tests:
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.13.0, < 0.14 |
-| aws | >= 2.35, < 4.0 |
+| terraform | >= 0.13.0 |
+| aws | >= 2.35 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.35, < 4.0 |
+| aws | >= 2.35 |
 
 ## Inputs
 
@@ -120,7 +120,7 @@ To run the tests:
 | sns\_topic\_kms\_key\_id | ARN of the KMS key used for enabling SSE on the topic | `string` | `""` | no |
 | sns\_topic\_name | The name of the SNS topic to create | `string` | n/a | yes |
 | sns\_topic\_tags | Additional tags for the SNS topic | `map(string)` | `{}` | no |
-| subsription\_filter\_policy | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
+| subscription\_filter\_policy | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
 | tags | A map of tags to add to all resources | `map(string)` | `{}` | no |
 
 ## Outputs
