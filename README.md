@@ -85,14 +85,14 @@ To run the tests:
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.13.0, < 0.14 |
-| aws | >= 2.35, < 4.0 |
+| terraform | >= 0.13.0 |
+| aws | >= 2.35 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.35, < 4.0 |
+| aws | >= 2.35 |
 
 ## Inputs
 
