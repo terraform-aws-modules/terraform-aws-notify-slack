@@ -18,6 +18,10 @@ def decrypt(encrypted_url):
 
 def cloudwatch_notification(message, region):
   states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
+  if region.startswith("us-gov-"):
+    cloudwatch_url = "https://console.amazonaws-us-gov.com/cloudwatch/home?region="
+  else:
+    cloudwatch_url = "https://console.aws.amazon.com/cloudwatch/home?region="
 
   return {
     "color": states[message['NewStateValue']],
@@ -30,7 +34,7 @@ def cloudwatch_notification(message, region):
       { "title": "Current State", "value": message['NewStateValue'], "short": True },
       {
         "title": "Link to Alarm",
-        "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote(message['AlarmName']),
+        "value": cloudwatch_url + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote(message['AlarmName']),
         "short": False
       }
     ]
