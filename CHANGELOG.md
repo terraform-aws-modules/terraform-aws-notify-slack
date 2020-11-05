@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.6.0"></a>
+## [v4.6.0] - 2020-11-05
+
+- feat: Updated version of Terraform AWS Lambda module to support multiple copies ([#117](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/117))
+
+
 <a name="v4.5.0"></a>
 ## [v4.5.0] - 2020-10-15
 
@@ -313,7 +319,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.5.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.6.0...HEAD
+[v4.6.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.5.0...v4.6.0
 [v4.5.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.4.0...v4.5.0
 [v4.4.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.3.0...v4.4.0
 [v4.3.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.2.0...v4.3.0
