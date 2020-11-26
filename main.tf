@@ -30,13 +30,26 @@ locals {
     actions   = ["kms:Decrypt"]
     resources = [var.kms_key_arn]
   }
+
+  lambda_policy_document_vpc = {
+    sid    = "AllowEC2ManageNetworkInterfaces"
+    effect = "Allow"
+    actions = [
+      "ec2:CreateNetworkInterface",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:AssignPrivateIpAddresses",
+      "ec2:UnassignPrivateIpAddresses"
+    ]
+    resources = ["*"]
+  }
 }
 
 data "aws_iam_policy_document" "lambda" {
   count = var.create ? 1 : 0
 
   dynamic "statement" {
-    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
+    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [], var.lambda_function_vpc_subnet_ids != null ? [local.lambda_policy_document_vpc] : [])
     content {
       sid       = statement.value.sid
       effect    = statement.value.effect
