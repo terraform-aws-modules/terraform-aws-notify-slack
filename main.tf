@@ -114,6 +114,9 @@ module "lambda" {
     }
   }
 
+  vpc_subnet_ids         = var.lambda_function_vpc_subnet_ids
+  vpc_security_group_ids = var.lambda_function_vpc_security_group_ids
+
   tags = merge(var.tags, var.lambda_function_tags)
 
   depends_on = [aws_cloudwatch_log_group.lambda]
