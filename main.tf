@@ -127,6 +127,9 @@ module "lambda" {
     }
   }
 
+  store_on_s3 = var.lambda_function_store_on_s3
+  s3_bucket   = var.lambda_function_s3_bucket
+
   vpc_subnet_ids         = var.lambda_function_vpc_subnet_ids
   vpc_security_group_ids = var.lambda_function_vpc_security_group_ids
 

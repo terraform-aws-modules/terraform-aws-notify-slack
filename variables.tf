@@ -132,6 +132,18 @@ variable "lambda_function_vpc_security_group_ids" {
   default     = null
 }
 
+variable "lambda_function_store_on_s3" {
+  description = "Whether to store produced artifacts on S3 or locally."
+  type        = bool
+  default     = false
+}
+
+variable "lambda_function_s3_bucket" {
+  description = "S3 bucket to store artifacts"
+  type        = string
+  default     = null
+}
+
 variable "sns_topic_tags" {
   description = "Additional tags for the SNS topic"
   type        = map(string)
