@@ -106,6 +106,7 @@ module "lambda" {
   policy_json                   = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
 
   use_existing_cloudwatch_log_group = true
+  attach_network_policy             = var.lambda_function_vpc_subnet_ids != null
 
   allowed_triggers = {
     AllowExecutionFromSNS = {
@@ -113,6 +114,12 @@ module "lambda" {
       source_arn = local.sns_topic_arn
     }
   }
+
+  store_on_s3 = var.lambda_function_store_on_s3
+  s3_bucket   = var.lambda_function_s3_bucket
+
+  vpc_subnet_ids         = var.lambda_function_vpc_subnet_ids
+  vpc_security_group_ids = var.lambda_function_vpc_security_group_ids
 
   tags = merge(var.tags, var.lambda_function_tags)
 

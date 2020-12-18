@@ -35,6 +35,10 @@ module "notify_slack" {
   lambda_description = "Lambda function which sends notifications to Slack"
   log_events         = true
 
+  # VPC
+  #  lambda_function_vpc_subnet_ids = module.vpc.intra_subnets
+  #  lambda_function_vpc_security_group_ids = [module.vpc.default_security_group_id]
+
   tags = {
     Name = "cloudwatch-alerts-to-slack"
   }
@@ -56,4 +60,21 @@ resource "aws_cloudwatch_metric_alarm" "lambda_duration" {
   dimensions = {
     FunctionName = module.notify_slack["develop"].notify_slack_lambda_function_name
   }
+}
+
+######
+# VPC
+######
+resource "random_pet" "this" {
+  length = 2
+}
+
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = random_pet.this.id
+  cidr = "10.10.0.0/16"
+
+  azs           = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  intra_subnets = ["10.10.101.0/24", "10.10.102.0/24", "10.10.103.0/24"]
 }
