@@ -1,6 +1,6 @@
 # CloudWatch alerts to Slack
 
-Configuration in this directory creates an SNS topic that sends messages to a Slack channel with Slack webhook URL encrypted using KMS and a CloudWatch Alarm that monitors the duration of lambda execution.
+Configuration in this directory creates a VPC, an SNS topic that sends messages to a Slack channel with Slack webhook URL encrypted using KMS and a CloudWatch Alarm that monitors the duration of lambda execution.
 
 ## KMS keys
 
@@ -62,12 +62,14 @@ Note that this example may create resources which can cost money. Run `terraform
 |------|---------|
 | terraform | >= 0.13.0 |
 | aws | >= 2.35 |
+| random | >= 2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | aws | >= 2.35 |
+| random | >= 2 |
 
 ## Inputs
 

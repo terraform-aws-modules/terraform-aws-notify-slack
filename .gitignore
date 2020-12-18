@@ -2,5 +2,6 @@
 terraform.tfstate
 *.tfstate*
 terraform.tfvars
+.terraform.lock.hcl
 
 builds/

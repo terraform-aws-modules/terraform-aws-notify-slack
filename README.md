@@ -109,7 +109,11 @@ To run the tests:
 | kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | `string` | `""` | no |
 | lambda\_description | The description of the Lambda function | `string` | `null` | no |
 | lambda\_function\_name | The name of the Lambda function to create | `string` | `"notify_slack"` | no |
+| lambda\_function\_s3\_bucket | S3 bucket to store artifacts | `string` | `null` | no |
+| lambda\_function\_store\_on\_s3 | Whether to store produced artifacts on S3 or locally. | `bool` | `false` | no |
 | lambda\_function\_tags | Additional tags for the Lambda function | `map(string)` | `{}` | no |
+| lambda\_function\_vpc\_security\_group\_ids | List of security group ids when Lambda Function should run in the VPC. | `list(string)` | `null` | no |
+| lambda\_function\_vpc\_subnet\_ids | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets. | `list(string)` | `null` | no |
 | lambda\_role | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you. | `string` | `""` | no |
 | log\_events | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
 | reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | `number` | `-1` | no |
