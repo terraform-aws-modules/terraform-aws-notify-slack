@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.9.0"></a>
+## [v4.9.0] - 2020-12-18
+
+- feat: add support for GovCloud URLs ([#114](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/114))
+
+
 <a name="v4.8.0"></a>
 ## [v4.8.0] - 2020-12-18
 
@@ -331,7 +337,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.8.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.9.0...HEAD
+[v4.9.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.8.0...v4.9.0
 [v4.8.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.7.0...v4.8.0
 [v4.7.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.6.0...v4.7.0
 [v4.6.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.5.0...v4.6.0
