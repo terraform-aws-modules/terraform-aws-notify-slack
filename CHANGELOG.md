@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.8.0"></a>
+## [v4.8.0] - 2020-12-18
+
+- feat: Allow Lambda function to be VPC bound ([#122](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/122))
+
+
 <a name="v4.7.0"></a>
 ## [v4.7.0] - 2020-11-17
 
@@ -325,7 +331,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.7.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.8.0...HEAD
+[v4.8.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.7.0...v4.8.0
 [v4.7.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.6.0...v4.7.0
 [v4.6.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.5.0...v4.6.0
 [v4.5.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.4.0...v4.5.0

@@ -120,6 +120,30 @@ variable "lambda_function_tags" {
   default     = {}
 }
 
+variable "lambda_function_vpc_subnet_ids" {
+  description = "List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets."
+  type        = list(string)
+  default     = null
+}
+
+variable "lambda_function_vpc_security_group_ids" {
+  description = "List of security group ids when Lambda Function should run in the VPC."
+  type        = list(string)
+  default     = null
+}
+
+variable "lambda_function_store_on_s3" {
+  description = "Whether to store produced artifacts on S3 or locally."
+  type        = bool
+  default     = false
+}
+
+variable "lambda_function_s3_bucket" {
+  description = "S3 bucket to store artifacts"
+  type        = string
+  default     = null
+}
+
 variable "sns_topic_tags" {
   description = "Additional tags for the SNS topic"
   type        = map(string)
