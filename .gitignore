@@ -31,3 +31,4 @@ terraform.rc
 # Lambda directories
 builds/
 __pycache__/
+functions/pytest.ini
