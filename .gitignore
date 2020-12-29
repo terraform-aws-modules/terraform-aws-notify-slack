@@ -5,3 +5,5 @@ terraform.tfvars
 .terraform.lock.hcl
 
 builds/
+
+functions/pytest.ini
