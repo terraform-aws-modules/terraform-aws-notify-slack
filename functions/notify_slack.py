@@ -118,6 +118,21 @@ def rds_notification(message, region):
             ]
         }
 
+def rds_event_subscription_notification(message, region):
+    account = message.get("Source ARN").split(":")[4]
+    region = message.get("Source ARN").split(":")[3]
+    return {
+            "color": 'good',
+            "fallback": "RDS {} event".format(message['Event Message']),
+            "fields": [
+                { "title": "account", "value": account, "short": True },
+                { "title": "region", "value": region, "short": True },
+                { "title": "resources", "value": message.get('Source ID', ""), "short": False },
+                { "title": "message", "value": message.get('Event Message', ""), "short": True },
+                { "title": "time", "value": message['Event Time'], "short": True}
+            ]
+        }
+
 def iam_notification(message, region):
     return {
             "color": 'good',
@@ -201,6 +216,13 @@ def filter_message_from_slack(message):
     elif message.get('source', "") == "aws.iot":
       if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex"]:
         return True
+    elif message.get('Event Source', "") in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]:
+      if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance"]:
+        return True
+      elif message.get('Event Message', '').startswith("Snapshot succeeded"):
+        return True
+      else:
+        return False
     else:
       return False
 
@@ -231,6 +253,10 @@ def notify_slack(subject, message, region):
         print("filtering message, not posting to slack")
         return
 
+    if "Event Source" in message and filter_message_from_slack(message):
+        print("filtering message, not posting to slack")
+        return
+
     # pprint.pprint(message)
     if "AlarmName" in message:
         notification = cloudwatch_notification(message, region)
@@ -247,6 +273,10 @@ def notify_slack(subject, message, region):
     elif ("source" in message and message['source'] == "aws.rds"):
         notification = rds_notification(message, region)
         payload['text'] = "AWS RDS notification - " + message["detail-type"]
+        payload['attachments'].append(notification)
+    elif ("Event Source" in message and message['Event Source'] in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]):
+        notification = rds_event_subscription_notification(message, region)
+        payload['text'] = "AWS RDS notification - " + message["Event Message"]
         payload['attachments'].append(notification)
     elif ("source" in message and message['source'] == "aws.iam"):
         notification = iam_notification(message, region)
