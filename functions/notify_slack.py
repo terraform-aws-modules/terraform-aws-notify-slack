@@ -217,12 +217,8 @@ def filter_message_from_slack(message):
       if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex"]:
         return True
     elif message.get('Event Source', "") in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]:
-      if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance"]:
+      if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance", "Automated snapshot created", "Creating automated snapshot"]:
         return True
-      elif message.get('Event Message', '').startswith("Snapshot succeeded"):
-        return True
-      else:
-        return False
     else:
       return False
 
