@@ -42,10 +42,18 @@ def cloudwatch_notification(message, region):
 
 
 def default_notification(subject, message):
-  return {
+  attachments = {
     "fallback": "A new message",
-    "fields": [{"title": subject if subject else "Message", "value": json.dumps(message) if type(message) is dict else message, "short": False}]
+    "title": subject if subject else "Message",
+    "fields": []
   }
+  if type(message) is dict:
+    for k, v in message.items():
+      attachments['fields'].append({"title": k, "value": v, "short": False})
+  else:
+    attachments['fields'].append({"value": message, "short": False})
+
+  return attachments
 
 
 # Send a message to a slack channel
