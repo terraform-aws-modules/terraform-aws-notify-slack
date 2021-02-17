@@ -94,6 +94,22 @@ To run the tests:
 |------|---------|
 | aws | >= 2.35 |
 
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| lambda | terraform-aws-modules/lambda/aws | 1.28.0 |
+
+## Resources
+
+| Name |
+|------|
+| [aws_cloudwatch_log_group](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/cloudwatch_log_group) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/data-sources/iam_policy_document) |
+| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/data-sources/sns_topic) |
+| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/sns_topic) |
+| [aws_sns_topic_subscription](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/sns_topic_subscription) |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -140,7 +156,6 @@ To run the tests:
 | notify\_slack\_lambda\_function\_name | The name of the Lambda function |
 | notify\_slack\_lambda\_function\_version | Latest published version of your Lambda function |
 | this\_slack\_topic\_arn | The ARN of the SNS topic from which messages will be sent to Slack |
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Authors

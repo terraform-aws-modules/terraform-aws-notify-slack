@@ -71,6 +71,22 @@ Note that this example may create resources which can cost money. Run `terraform
 | aws | >= 2.35 |
 | random | >= 2 |
 
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| notify_slack | ../../ |  |
+| vpc | terraform-aws-modules/vpc/aws |  |
+
+## Resources
+
+| Name |
+|------|
+| [aws_cloudwatch_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/cloudwatch_metric_alarm) |
+| [aws_kms_ciphertext](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/kms_ciphertext) |
+| [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/kms_key) |
+| [random_pet](https://registry.terraform.io/providers/hashicorp/random/2/docs/resources/pet) |
+
 ## Inputs
 
 No input.
@@ -87,5 +103,4 @@ No input.
 | notify\_slack\_lambda\_function\_name | The name of the Lambda function |
 | notify\_slack\_lambda\_function\_version | Latest published version of your Lambda function |
 | this\_sns\_topic\_arn | The ARN of the SNS topic from which messages will be sent to Slack |
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
