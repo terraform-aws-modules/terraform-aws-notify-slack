@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.11.0"></a>
+## [v4.11.0] - 2021-02-21
+
+- feat: Improve slack message formatting for generic messages ([#124](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/124))
+
+
 <a name="v4.10.0"></a>
 ## [v4.10.0] - 2021-02-20
 
@@ -343,7 +349,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.10.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.11.0...HEAD
+[v4.11.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.10.0...v4.11.0
 [v4.10.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.9.0...v4.10.0
 [v4.9.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.8.0...v4.9.0
 [v4.8.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.7.0...v4.8.0
