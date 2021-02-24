@@ -42,7 +42,7 @@ Note that this example may create resources which can cost money (AWS Elastic IP
 
 | Name |
 |------|
-| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/sns_topic) |
+| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) |
 
 ## Inputs
 
