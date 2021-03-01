@@ -4,15 +4,20 @@ This module creates an SNS topic (or uses an existing one) and an AWS Lambda fun
 
 Start by setting up an [incoming webhook integration](https://my.slack.com/services/new/incoming-webhook/) in your Slack workspace.
 
+Doing serverless with Terraform? Check out [serverless.tf framework](https://serverless.tf), which aims to simplify all operations when working with the serverless in Terraform.
+
+
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+Terraform 0.13. Pin module version to `~> v4.0`. Submit pull-requests to `master` branch.
 
-Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+Terraform 0.12. Pin module version to `3.5.0` (or older). Submit pull-requests to `terraform012` branch.
+
+Terraform 0.11. Pin module version to `~> v1.0`.
 
 ## Features
 
-- [x] AWS Lambda runtime Python 3.6
+- [x] AWS Lambda runtime Python 3.8
 - [x] Create new SNS topic or use existing one
 - [x] Support plaintext and encrypted version of Slack webhook URL
 - [x] Most of Slack message options are customizable
@@ -27,7 +32,7 @@ Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraf
 ```hcl
 module "notify_slack" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "~> 2.0"
+  version = "~> 4.0"
 
   sns_topic_name = "slack-topic"
 
@@ -35,6 +40,22 @@ module "notify_slack" {
   slack_channel     = "aws-notification"
   slack_username    = "reporter"
 }
+```
+
+## Upgrade from 2.0 to 3.0
+
+Version 3 uses [Terraform AWS Lambda module](https://github.com/terraform-aws-modules/terraform-aws-lambda) to handle most of heavy-lifting related to Lambda packaging, roles, and permissions, while maintaining the same interface for the user of this module after many of resources will be recreated.
+
+## Using with Terraform Cloud Agents
+
+[Terraform Cloud Agents](https://www.terraform.io/docs/cloud/workspaces/agent.html) are a paid feature, available as part of the Terraform Cloud for Business upgrade package.
+
+This module requires Python 3.8. You can customize [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent) to include Python using this sample `Dockerfile`:
+
+```
+FROM hashicorp/tfc-agent:latest
+RUN apt-get -y update && apt-get -y install python3.8 python3-pip
+ENTRYPOINT ["/bin/tfc-agent"]
 ```
 
 ## Use existing SNS topic or create new
@@ -64,16 +85,30 @@ To run the tests:
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.12.6 |
-| aws | ~> 2.35 |
+| terraform | >= 0.13.0 |
+| aws | >= 2.35 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| archive | n/a |
-| aws | ~> 2.35 |
-| null | n/a |
+| aws | >= 2.35 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| lambda | terraform-aws-modules/lambda/aws | 1.28.0 |
+
+## Resources
+
+| Name |
+|------|
+| [aws_cloudwatch_log_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
+| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/sns_topic) |
+| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) |
+| [aws_sns_topic_subscription](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) |
 
 ## Inputs
 
@@ -86,21 +121,26 @@ To run the tests:
 | create\_sns\_topic | Whether to create new SNS topic | `bool` | `true` | no |
 | iam\_role\_boundary\_policy\_arn | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `null` | no |
 | iam\_role\_name\_prefix | A unique role name beginning with the specified prefix | `string` | `"lambda"` | no |
-| iam\_role\_policy\_name\_prefix | A unique policy name beginning with the specified prefix | `string` | `"lambda-policy-"` | no |
 | iam\_role\_tags | Additional tags for the IAM role | `map(string)` | `{}` | no |
 | kms\_key\_arn | ARN of the KMS key used for decrypting slack webhook url | `string` | `""` | no |
 | lambda\_description | The description of the Lambda function | `string` | `null` | no |
 | lambda\_function\_name | The name of the Lambda function to create | `string` | `"notify_slack"` | no |
+| lambda\_function\_s3\_bucket | S3 bucket to store artifacts | `string` | `null` | no |
+| lambda\_function\_store\_on\_s3 | Whether to store produced artifacts on S3 or locally. | `bool` | `false` | no |
 | lambda\_function\_tags | Additional tags for the Lambda function | `map(string)` | `{}` | no |
+| lambda\_function\_vpc\_security\_group\_ids | List of security group ids when Lambda Function should run in the VPC. | `list(string)` | `null` | no |
+| lambda\_function\_vpc\_subnet\_ids | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets. | `list(string)` | `null` | no |
+| lambda\_role | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you. | `string` | `""` | no |
 | log\_events | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
 | reserved\_concurrent\_executions | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | `number` | `-1` | no |
 | slack\_channel | The name of the channel in Slack for notifications | `string` | n/a | yes |
 | slack\_emoji | A custom emoji that will appear on Slack messages | `string` | `":aws:"` | no |
 | slack\_username | The username that will appear on Slack messages | `string` | n/a | yes |
 | slack\_webhook\_url | The URL of Slack webhook | `string` | n/a | yes |
+| sns\_topic\_kms\_key\_id | ARN of the KMS key used for enabling SSE on the topic | `string` | `""` | no |
 | sns\_topic\_name | The name of the SNS topic to create | `string` | n/a | yes |
 | sns\_topic\_tags | Additional tags for the SNS topic | `map(string)` | `{}` | no |
-| subsription\_filter\_policy | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
+| subscription\_filter\_policy | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
 | tags | A map of tags to add to all resources | `map(string)` | `{}` | no |
 
 ## Outputs
@@ -116,7 +156,6 @@ To run the tests:
 | notify\_slack\_lambda\_function\_name | The name of the Lambda function |
 | notify\_slack\_lambda\_function\_version | Latest published version of your Lambda function |
 | this\_slack\_topic\_arn | The ARN of the SNS topic from which messages will be sent to Slack |
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Authors

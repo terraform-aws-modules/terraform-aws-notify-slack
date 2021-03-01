@@ -18,6 +18,10 @@ def decrypt(encrypted_url):
 
 def cloudwatch_notification(message, region):
   states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
+  if region.startswith("us-gov-"):
+    cloudwatch_url = "https://console.amazonaws-us-gov.com/cloudwatch/home?region="
+  else:
+    cloudwatch_url = "https://console.aws.amazon.com/cloudwatch/home?region="
 
   return {
     "color": states[message['NewStateValue']],
@@ -30,7 +34,7 @@ def cloudwatch_notification(message, region):
       { "title": "Current State", "value": message['NewStateValue'], "short": True },
       {
         "title": "Link to Alarm",
-        "value": "https://console.aws.amazon.com/cloudwatch/home?region=" + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote(message['AlarmName']),
+        "value": cloudwatch_url + region + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote(message['AlarmName']),
         "short": False
       }
     ]
@@ -38,10 +42,18 @@ def cloudwatch_notification(message, region):
 
 
 def default_notification(subject, message):
-  return {
+  attachments = {
     "fallback": "A new message",
-    "fields": [{"title": subject if subject else "Message", "value": json.dumps(message) if type(message) is dict else message, "short": False}]
+    "title": subject if subject else "Message",
+    "fields": []
   }
+  if type(message) is dict:
+    for k, v in message.items():
+      attachments['fields'].append({"title": k, "value": v, "short": False})
+  else:
+    attachments['fields'].append({"value": message, "short": False})
+
+  return attachments
 
 
 # Send a message to a slack channel

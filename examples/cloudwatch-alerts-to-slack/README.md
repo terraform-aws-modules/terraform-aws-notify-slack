@@ -1,6 +1,6 @@
 # CloudWatch alerts to Slack
 
-Configuration in this directory creates an SNS topic that sends messages to a Slack channel with Slack webhook URL encrypted using KMS and a CloudWatch Alarm that monitors the duration of lambda execution.
+Configuration in this directory creates a VPC, an SNS topic that sends messages to a Slack channel with Slack webhook URL encrypted using KMS and a CloudWatch Alarm that monitors the duration of lambda execution.
 
 ## KMS keys
 
@@ -58,13 +58,34 @@ Note that this example may create resources which can cost money. Run `terraform
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.13.0 |
+| aws | >= 2.35 |
+| random | >= 2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | >= 2.35 |
+| random | >= 2 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| notify_slack | ../../ |  |
+| vpc | terraform-aws-modules/vpc/aws |  |
+
+## Resources
+
+| Name |
+|------|
+| [aws_cloudwatch_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) |
+| [aws_kms_ciphertext](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_ciphertext) |
+| [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) |
+| [random_pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) |
 
 ## Inputs
 
@@ -82,5 +103,4 @@ No input.
 | notify\_slack\_lambda\_function\_name | The name of the Lambda function |
 | notify\_slack\_lambda\_function\_version | Latest published version of your Lambda function |
 | this\_sns\_topic\_arn | The ARN of the SNS topic from which messages will be sent to Slack |
-
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
