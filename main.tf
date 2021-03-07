@@ -1,8 +1,5 @@
-data "aws_sns_topic" "this" {
-  count = false == var.create_sns_topic && var.create ? 1 : 0
-
-  name = var.sns_topic_name
-}
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 resource "aws_sns_topic" "this" {
   count = var.create_sns_topic && var.create ? 1 : 0
@@ -15,7 +12,14 @@ resource "aws_sns_topic" "this" {
 }
 
 locals {
-  sns_topic_arn = element(concat(aws_sns_topic.this.*.arn, data.aws_sns_topic.this.*.arn, [""]), 0)
+  sns_topic_arn = element(
+    concat(
+      aws_sns_topic.this.*.arn,
+      ["arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}"],
+      [""]
+    ),
+    0,
+  )
 
   lambda_policy_document = {
     sid       = "AllowWriteToCloudwatchLogs"

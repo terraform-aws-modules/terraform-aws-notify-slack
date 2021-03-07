@@ -82,10 +82,10 @@ Note that this example may create resources which can cost money. Run `terraform
 
 | Name |
 |------|
-| [aws_cloudwatch_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/cloudwatch_metric_alarm) |
-| [aws_kms_ciphertext](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/kms_ciphertext) |
-| [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/kms_key) |
-| [random_pet](https://registry.terraform.io/providers/hashicorp/random/2/docs/resources/pet) |
+| [aws_cloudwatch_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) |
+| [aws_kms_ciphertext](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_ciphertext) |
+| [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) |
+| [random_pet](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/pet) |
 
 ## Inputs
 

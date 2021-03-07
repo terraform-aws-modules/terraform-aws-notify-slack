@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.12.0"></a>
+## [v4.12.0] - 2021-03-01
+
+- fix: Remove data resource for sns topic to avoid race condition ([#81](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/81))
+- chore: add ci-cd workflow for pre-commit checks ([#128](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/128))
+
+
 <a name="v4.11.0"></a>
 ## [v4.11.0] - 2021-02-21
 
@@ -349,7 +356,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.11.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.12.0...HEAD
+[v4.12.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.11.0...v4.12.0
 [v4.11.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.10.0...v4.11.0
 [v4.10.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.9.0...v4.10.0
 [v4.9.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.8.0...v4.9.0

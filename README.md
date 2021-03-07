@@ -104,11 +104,12 @@ To run the tests:
 
 | Name |
 |------|
-| [aws_cloudwatch_log_group](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/cloudwatch_log_group) |
-| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/data-sources/iam_policy_document) |
-| [aws_sns_topic_subscription](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/sns_topic_subscription) |
-| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/data-sources/sns_topic) |
-| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/2.35/docs/resources/sns_topic) |
+| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) |
+| [aws_cloudwatch_log_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
+| [aws_sns_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) |
+| [aws_sns_topic_subscription](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) |
 
 ## Inputs
 
