@@ -7,6 +7,36 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.13.0"></a>
+## [v4.13.0] - 2021-03-12
+
+- fix: use the current aws partition ([#133](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/133))
+- chore: align ci-cd static checks to use individual minimum Terraform versions ([#131](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/131))
+- fix: Remove data resource for sns topic to avoid race condition ([#81](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/81))
+- chore: add ci-cd workflow for pre-commit checks ([#128](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/128))
+- feat: Improve slack message formatting for generic messages ([#124](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/124))
+- chore: update documentation based on latest `terraform-docs` which includes module and resource sections ([#126](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/126))
+- feat: add support for GovCloud URLs ([#114](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/114))
+- feat: Allow Lambda function to be VPC bound ([#122](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/122))
+- feat: Updated version of terraform-aws-lambda module to 1.28.0 ([#119](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/119))
+- feat: Updated version of Terraform AWS Lambda module to support multiple copies ([#117](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/117))
+- fix: Typo on subscription_filter_policy variable ([#113](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/113))
+- docs: Added a note about using with Terraform Cloud Agents ([#108](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/108))
+- feat: allow reuse of existing lambda_role ([#85](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/85))
+- fix: Fix regression with aws_cloudwatch_log_group resource after upgrade of AWS provider 3.0 ([#106](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/106))
+- docs: Updated version of module to use for Terraform 0.12 users
+- fix: Updated version requirements to be Terraform 0.13 only ([#101](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/101))
+- feat: Updated Lambda module to work with Terraform 0.13 ([#99](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/99))
+- fix: Bump version of lambda module that supports Terraform 13 and AWS Provider 3.x ([#96](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/96))
+
+
+<a name="v3.6.0"></a>
+## [v3.6.0] - 2021-03-01
+
+- fix: Fix regression with aws_cloudwatch_log_group resource after upgrade of AWS provider 3.0 ([#106](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/106)) ([#130](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/130))
+- feat: Updated version of Lambda module to allow AWS provider version 3
+
+
 <a name="v4.12.0"></a>
 ## [v4.12.0] - 2021-03-01
 
@@ -356,7 +386,9 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.12.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.13.0...HEAD
+[v4.13.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.6.0...v4.13.0
+[v3.6.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.12.0...v3.6.0
 [v4.12.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.11.0...v4.12.0
 [v4.11.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.10.0...v4.11.0
 [v4.10.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.9.0...v4.10.0
