@@ -1,4 +1,5 @@
 data "aws_caller_identity" "current" {}
+data "aws_partition" "current" {}
 data "aws_region" "current" {}
 
 resource "aws_sns_topic" "this" {
@@ -15,7 +16,7 @@ locals {
   sns_topic_arn = element(
     concat(
       aws_sns_topic.this.*.arn,
-      ["arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}"],
+      ["arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}"],
       [""]
     ),
     0,
