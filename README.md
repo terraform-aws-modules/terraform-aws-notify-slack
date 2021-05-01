@@ -6,15 +6,6 @@ Start by setting up an [incoming webhook integration](https://my.slack.com/servi
 
 Doing serverless with Terraform? Check out [serverless.tf framework](https://serverless.tf), which aims to simplify all operations when working with the serverless in Terraform.
 
-
-## Terraform versions
-
-Terraform 0.13. Pin module version to `~> v4.0`. Submit pull-requests to `master` branch.
-
-Terraform 0.12. Pin module version to `3.5.0` (or older). Submit pull-requests to `terraform012` branch.
-
-Terraform 0.11. Pin module version to `~> v1.0`.
-
 ## Features
 
 - [x] AWS Lambda runtime Python 3.8
@@ -64,19 +55,19 @@ If you want to subscribe the AWS Lambda Function created by this module to an ex
 
 ## Examples
 
-* [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
-* [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
+- [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
+- [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
 
 ## Testing with pytest
 
 To run the tests:
 
-1. Set up a dedicated slack channel as a test sandbox with it's own webhook. See [Slack Incoming Webhooks docs](https://api.slack.com/messaging/webhooks) for details.
-2. Make a copy of the sample pytest configuration and edit as needed.
+1.  Set up a dedicated slack channel as a test sandbox with it's own webhook. See [Slack Incoming Webhooks docs](https://api.slack.com/messaging/webhooks) for details.
+2.  Make a copy of the sample pytest configuration and edit as needed.
 
         cp functions/pytest.ini.sample functions/pytest.ini
 
-3. Run the tests:
+3.  Run the tests:
 
         pytest functions/notify_slack_test.py
 
@@ -162,8 +153,8 @@ To run the tests:
 
 ## Authors
 
-Module managed by [Anton Babenko](https://github.com/antonbabenko).
+Module is maintained by [Anton Babenko](https://github.com/antonbabenko) with help from [these awesome contributors](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/graphs/contributors).
 
 ## License
 
-Apache 2 Licensed. See LICENSE for full details.
+Apache 2 Licensed. See [LICENSE](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/LICENSE) for full details.
