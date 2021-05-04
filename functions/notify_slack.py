@@ -41,6 +41,45 @@ def cloudwatch_notification(message, region):
   }
 
 
+def guardduty_finding(message):
+  states = {'Low': '#777777', 'Medium': 'warning', 'High': 'danger'}
+  region = message['region']
+
+  if region.startswith("us-gov-"):
+    cloudwatch_url = "https://console.amazonaws-us-gov.com/guardduty/home?region="
+  else:
+    cloudwatch_url = "https://console.aws.amazon.com/guardduty/home?region="
+
+  detail = message['detail']
+  service = detail['service']
+  severity_score = detail['severity']
+
+  if severity_score < 4.0:
+    severity = 'Low'
+  elif severity_score < 7.0:
+    severity = 'Medium'
+  else:
+    severity = 'High'
+
+  return {
+    "color": states[severity],
+    "fallback": "GuardDuty Finding: {}".format(detail['title']),
+    "fields": [
+      {"title": "Description", "value": detail['description'], "short": False },
+      {"title": "Finding type", "value": detail['type'], "short": False},
+      {"title": "First Seen", "value": service['eventFirstSeen'], "short": True},
+      {"title": "Last Seen", "value": service['eventLastSeen'], "short": True},
+      {"title": "Severity", "value": severity, "short": True},
+      {"title": "Count", "value": service['count'], "short": True},
+      {
+        "title": "Link to Finding",
+        "value": cloudwatch_url + region + "#/findings?search=id%3D" + detail['id'],
+        "short": False
+      }
+    ]
+  }
+
+
 def default_notification(subject, message):
   attachments = {
     "fallback": "A new message",
@@ -82,6 +121,10 @@ def notify_slack(subject, message, region):
   if "AlarmName" in message:
     notification = cloudwatch_notification(message, region)
     payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
+    payload['attachments'].append(notification)
+  elif "detail-type" in message and message["detail-type"] == "GuardDuty Finding":
+    notification = guardduty_finding(message)
+    payload['text'] = "Amazon GuardDuty Finding - " + message["detail"]["title"]
     payload['attachments'].append(notification)
   else:
     payload['text'] = "AWS notification"
