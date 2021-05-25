@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.15.0"></a>
+## [v4.15.0] - 2021-05-25
+
+- chore: Remove check boxes that don't render properly in module doc ([#140](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/140))
+- chore: update CI/CD to use stable `terraform-docs` release artifact and discoverable Apache2.0 license ([#138](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/138))
+
+
 <a name="v4.14.0"></a>
 ## [v4.14.0] - 2021-04-19
 
@@ -187,8 +194,6 @@ All notable changes to this project will be documented in this file.
 <a name="v2.13.0"></a>
 ## [v2.13.0] - 2020-03-19
 
-- Merge pull request [#75](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/75) from terraform-aws-modules/terraform-provider-githubfile-1584633730318856000
-- [ci skip] Create ".chglog/CHANGELOG.tpl.md".
 
 
 <a name="v2.12.0"></a>
@@ -200,16 +205,6 @@ All notable changes to this project will be documented in this file.
 ## [v2.11.0] - 2020-03-19
 
 - Add subsription filter policy support ([#74](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/74))
-- Merge pull request [#73](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/73) from terraform-aws-modules/terraform-provider-githubfile-1584537047829318000
-- [ci skip] Create "Makefile".
-- Merge pull request [#68](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/68) from terraform-aws-modules/terraform-provider-githubfile-1584537014149178000
-- Merge pull request [#72](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/72) from terraform-aws-modules/terraform-provider-githubfile-1584537014149128000
-- Merge pull request [#70](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/70) from terraform-aws-modules/terraform-provider-githubfile-1584537014149683000
-- Merge pull request [#69](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/69) from terraform-aws-modules/terraform-provider-githubfile-1584537014149305000
-- [ci skip] Create ".pre-commit-config.yaml".
-- [ci skip] Create ".gitignore".
-- [ci skip] Create ".editorconfig".
-- [ci skip] Create "LICENSE".
 
 
 <a name="v2.10.0"></a>
@@ -395,7 +390,6 @@ All notable changes to this project will be documented in this file.
 <a name="v0.0.1"></a>
 ## v0.0.1 - 2018-02-12
 
-- Merge pull request [#1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/1) from nazartm/cloudwatch-event
 - Add encrypted webhook URL example
 - Fix decryption of webhook URL
 - Update readme
@@ -406,7 +400,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.14.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.15.0...HEAD
+[v4.15.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.14.0...v4.15.0
 [v4.14.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.13.0...v4.14.0
 [v4.13.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.6.0...v4.13.0
 [v3.6.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.12.0...v3.6.0
