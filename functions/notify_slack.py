@@ -214,7 +214,7 @@ def filter_message_from_slack(message):
             continue
         return True
     elif message.get('source', "") == "aws.iot":
-      if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex"]:
+      if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex", "RegisterCertificate"]:
         return True
     elif message.get('Event Source', "") in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]:
       if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance", "Automated snapshot created", "Creating automated snapshot"]:
@@ -247,10 +247,12 @@ def notify_slack(subject, message, region):
 
     if "source" in message and filter_message_from_slack(message):
         print("filtering message, not posting to slack")
+        print(message)
         return
 
     if "Event Source" in message and filter_message_from_slack(message):
         print("filtering message, not posting to slack")
+        print(message)
         return
 
     # pprint.pprint(message)
