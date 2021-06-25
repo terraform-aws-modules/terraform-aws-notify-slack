@@ -298,10 +298,6 @@ def notify_slack(subject, message, region):
             notification = rds_notification(message, region)
             payload['text'] = "AWS RDS notification - " + message["detail-type"]
             payload['attachments'].append(notification)
-        elif (message['Event Source'] in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]):
-            notification = rds_event_subscription_notification(message, region)
-            payload['text'] = "AWS RDS notification - " + message["Event Message"]
-            payload['attachments'].append(notification)
         elif (message['source'] == "aws.iam"):
             notification = iam_notification(message, region)
             payload['text'] = "AWS IAM notification - " + message["detail-type"]
@@ -317,6 +313,10 @@ def notify_slack(subject, message, region):
         else:
             payload['text'] = "AWS notification"
             payload['attachments'].append(default_notification(subject, message))
+    elif ("Event Source" in message and message['Event Source'] in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]):
+        notification = rds_event_subscription_notification(message, region)
+        payload['text'] = "AWS RDS notification - " + message["Event Message"]
+        payload['attachments'].append(notification)
     elif "Origin" in message:
         asgstates = ['Launching', 'Terminating']
         if (message.get('AutoScalingGroupName', "") != "") and (any(state in message.get('Description', "") for state in asgstates)):
