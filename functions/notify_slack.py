@@ -16,6 +16,19 @@ def decrypt(encrypted_url):
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
 
+def asg_notification(message, regions):
+    state = 'danger' if message.get("StatusCode", "") == 'Failed' else 'good'
+    return {
+        "color": state,
+        "fallback": "ASG {} event".format(message['Description']),
+        "fields": [
+            { "title": "account", "value": message.get('AccountId', ""), "short": True },
+            { "title": "progress", "value": message.get('Progress', ""), "short": True },
+            { "title": "description", "value": message.get('Description', ""), "short": True },
+            { "title": "asg name", "value": message.get('AutoScalingGroupName', ""), "short": True },
+            { "title": "status code", "value": message.get('StatusCode', ""), "short": True }
+        ]
+    }
 
 def cloudwatch_notification(message, region):
     states = {'OK': 'good', 'INSUFFICIENT_DATA': 'warning', 'ALARM': 'danger'}
@@ -72,17 +85,26 @@ def ecs_notification(message, region):
         }
 
 def ectwo_notification(message, region):
+    fields = []
+    fields.append( { "title": "account", "value": message.get('account', ""), "short": True } )
+    fields.append( { "title": "region", "value": message.get('region', ""), "short": True } )
+    fields.append( { "title": "time", "value": message.get('time', ""), "short": True} )
+
+    if message.get('detail', {}).get('userIdentity',{}).get('principalId', 'NOTFOUND') != 'NOTFOUND':
+      fields.append( { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True } )
+    if message.get('detail', {}).get('eventName', "") != "":
+      fields.append( { "title": "event", "value": message.get('detail', {}).get('eventName', ""), "short": True } )
+    if message.get('detail', {}).get('sourceIPAddress', "") != "":
+      fields.append( { "title": "ip", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True } )
+    if message.get('detail-type', "") == 'EC2 Instance State-change Notification':
+      fields.append( { "title": "state", "value": message.get('detail', {}).get('state', ""), "short": True } )
+    if message.get('detail', {}).get('instance-id', "") != "":
+      fields.append( { "title": "instance id", "value": message.get('detail', {}).get('instance-id', ""), "short": True } )
+
     return {
             "color": 'good',
             "fallback": "EC2 {} event".format(message['detail']),
-            "fields": [
-                { "title": "account", "value": message.get('account', ""), "short": True },
-                { "title": "region", "value": message.get('region', ""), "short": True },
-                { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('principalId'), "short": True },
-                { "title": "event", "value": message.get('detail', {}).get('eventName', ""), "short": True },
-                { "title": "ip", "value": message.get('detail', {}).get('sourceIPAddress', ""), "short": True },
-                { "title": "time", "value": message.get('time', ""), "short": True}
-            ]
+            "fields": fields
         }
 
 def deployment_notification(message, region):
@@ -187,8 +209,11 @@ def filter_message_from_slack(message):
         return True
       else:
         return False
-    elif message.get('source', "") == "aws.ec2"  and message.get('detail', {}).get('eventName', '') in ["DeleteNetworkInterface", "CreateNetworkInterface"]:
-      return True
+    elif message.get('source', "") == "aws.ec2":  
+      if message.get('detail', {}).get('eventName', '') in ["DeleteNetworkInterface", "CreateNetworkInterface"]:
+        return True
+      if message.get('detail', {}).get('event', '') in ["createVolume", "deleteVolume"]:
+        return True
     elif message.get('source', "") == "aws.ecs":
       if message.get('detail', {}).get('eventName', '') in ["DeregisterTaskDefinition"]:
         return True
@@ -260,34 +285,54 @@ def notify_slack(subject, message, region):
         notification = cloudwatch_notification(message, region)
         payload['text'] = "AWS CloudWatch notification - " + message['AlarmName']
         payload['attachments'].append(notification)
-    elif ("source" in message and message['source'] == "aws.ecs"):
-        notification = ecs_notification(message, region)
-        payload['text'] = "AWS ECS notification - " + message["detail-type"]
-        payload['attachments'].append(notification)
-    elif ("source" in message and message['source'] == "aws.ec2"):
-        notification = ectwo_notification(message, region)
-        payload['text'] = "AWS EC2 notification - " + message["detail-type"]
-        payload['attachments'].append(notification)
-    elif ("source" in message and message['source'] == "aws.rds"):
-        notification = rds_notification(message, region)
-        payload['text'] = "AWS RDS notification - " + message["detail-type"]
-        payload['attachments'].append(notification)
-    elif ("Event Source" in message and message['Event Source'] in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]):
-        notification = rds_event_subscription_notification(message, region)
-        payload['text'] = "AWS RDS notification - " + message["Event Message"]
-        payload['attachments'].append(notification)
-    elif ("source" in message and message['source'] == "aws.iam"):
-        notification = iam_notification(message, region)
-        payload['text'] = "AWS IAM notification - " + message["detail-type"]
-        payload['attachments'].append(notification)
-    elif ("source" in message and message['source'] == "aws.iot"):
-        notification = iot_notification(message, region)
-        payload['text'] = "AWS Iot notification - " + message["detail-type"]
-        payload['attachments'].append(notification)
-    elif ("source" in message and message['source'] == "deployment"):
-        notification = deployment_notification(message, region)
-        payload['text'] = "AWS Deployment - " + message["detail-type"]
-        payload['attachments'].append(notification)
+    elif "source" in message:
+        if (message['source'] == "aws.ecs"):
+            notification = ecs_notification(message, region)
+            payload['text'] = "AWS ECS notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.ec2"):
+            notification = ectwo_notification(message, region)
+            payload['text'] = "AWS EC2 notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.rds"):
+            notification = rds_notification(message, region)
+            payload['text'] = "AWS RDS notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['Event Source'] in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]):
+            notification = rds_event_subscription_notification(message, region)
+            payload['text'] = "AWS RDS notification - " + message["Event Message"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.iam"):
+            notification = iam_notification(message, region)
+            payload['text'] = "AWS IAM notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.iot"):
+            notification = iot_notification(message, region)
+            payload['text'] = "AWS Iot notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "deployment"):
+            notification = deployment_notification(message, region)
+            payload['text'] = "AWS Deployment - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        else:
+            payload['text'] = "AWS notification"
+            payload['attachments'].append(default_notification(subject, message))
+    elif "Origin" in message:
+        asgstates = ['Launching', 'Terminating']
+        if (message.get('AutoScalingGroupName', "") != "") and (any(state in message.get('Description', "") for state in asgstates)):
+            notification = asg_notification(message, region)
+            event_type = ""
+            if ("Terminating" in message.get('Description', "")):
+                event_type = "terminating"
+                payload['text'] = "AWS ASG notification - " + event_type
+                payload['attachments'].append(notification)
+            elif ("Launching" in message.get('Description', "")):
+                event_type = "launching"
+                payload['text'] = "AWS ASG notification - " + event_type
+                payload['attachments'].append(notification)
+        else:
+            payload['text'] = "AWS notification"
+            payload['attachments'].append(default_notification(subject, message))
     else:
         payload['text'] = "AWS notification"
         payload['attachments'].append(default_notification(subject, message))
