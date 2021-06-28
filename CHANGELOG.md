@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.16.0"></a>
+## [v4.16.0] - 2021-06-28
+
+- feat: add support for nested messages ([#142](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/142))
+
+
 <a name="v4.15.0"></a>
 ## [v4.15.0] - 2021-05-25
 
@@ -400,7 +406,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.15.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.16.0...HEAD
+[v4.16.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.15.0...v4.16.0
 [v4.15.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.14.0...v4.15.0
 [v4.14.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.13.0...v4.14.0
 [v4.13.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v3.6.0...v4.13.0
