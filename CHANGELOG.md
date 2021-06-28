@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.17.0"></a>
+## [v4.17.0] - 2021-06-28
+
+- feat: Allow custom attachement ([#123](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/123))
+
+
 <a name="v4.16.0"></a>
 ## [v4.16.0] - 2021-06-28
 
@@ -406,7 +412,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.16.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.17.0...HEAD
+[v4.17.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.16.0...v4.17.0
 [v4.16.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.15.0...v4.16.0
 [v4.15.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.14.0...v4.15.0
 [v4.14.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.13.0...v4.14.0
