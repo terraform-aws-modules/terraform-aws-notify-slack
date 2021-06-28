@@ -45,11 +45,19 @@ def default_notification(subject, message):
   attachments = {
     "fallback": "A new message",
     "title": subject if subject else "Message",
+    "mrkdwn_in": ["value"],
     "fields": []
   }
   if type(message) is dict:
     for k, v in message.items():
-      attachments['fields'].append({"title": k, "value": v, "short": False})
+      value = f"`{json.dumps(v)}`" if isinstance(v, (dict, list)) else str(v)
+      attachments['fields'].append(
+        {
+          "title": k,
+          "value": value,
+          "short": len(value) < 25
+        }
+      )
   else:
     attachments['fields'].append({"value": message, "short": False})
 
