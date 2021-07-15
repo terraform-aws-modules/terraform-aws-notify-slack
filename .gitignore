@@ -3,3 +3,5 @@ terraform.tfstate
 *.tfstate*
 terraform.tfvars
 functions/*.zip
+*.iml
+.vscode/

@@ -209,7 +209,7 @@ def filter_message_from_slack(message):
         return True
       else:
         return False
-    elif message.get('source', "") == "aws.ec2":  
+    elif message.get('source', "") == "aws.ec2":
       if message.get('detail', {}).get('eventName', '') in ["DeleteNetworkInterface", "CreateNetworkInterface"]:
         return True
       if message.get('detail', {}).get('event', '') in ["createVolume", "deleteVolume"]:
@@ -242,7 +242,11 @@ def filter_message_from_slack(message):
       if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex", "RegisterCertificate"]:
         return True
     elif message.get('Event Source', "") in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]:
-      if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance", "Automated snapshot created", "Creating automated snapshot"]:
+      if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance", "Automated snapshot created", "Creating automated snapshot", "Creating manual snapshot", "Manual snapshot created", "Deleted manual snapshot"]:
+        return True
+      if re.match("Finished copy of snapshot awsbackup\:*.+", message.get('Event Message', '')):
+        return True
+      if re.match("Started copy of snapshot awsbackup\:*.+", message.get('Event Message', '')):
         return True
     else:
       return False
