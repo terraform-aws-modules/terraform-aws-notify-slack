@@ -33,6 +33,12 @@ variable "sns_topic_name" {
   type        = string
 }
 
+variable "sns_topic_access_policy" {
+  description = "A custom SNS access policy, use this to customize and grant more services and cross-account access to your SNS topic"
+  type        = string
+  default     = null
+}
+
 variable "sns_topic_kms_key_id" {
   description = "ARN of the KMS key used for enabling SSE on the topic"
   type        = string

@@ -10,6 +10,8 @@ resource "aws_sns_topic" "this" {
   kms_master_key_id = var.sns_topic_kms_key_id
 
   tags = merge(var.tags, var.sns_topic_tags)
+
+  policy = var.sns_topic_access_policy
 }
 
 locals {
