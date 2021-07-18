@@ -34,7 +34,7 @@ variable "sns_topic_name" {
 }
 
 variable "sns_topic_access_policy" {
-  description = "A custom SNS access policy, use this to customize and grant more services and cross-account access to your SNS topic"
+  description = "The SNS access policy, use this to grant cross-account access, or more services (eg: budgets/guardduty) to your SNS topic"
   type        = string
   default     = null
 }
