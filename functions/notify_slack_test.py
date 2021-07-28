@@ -2,7 +2,7 @@
 
 import notify_slack
 import pytest
-from json import loads
+import json
 from os import environ
 
 events = (
@@ -164,7 +164,7 @@ events = (
 
 @pytest.fixture(scope='module', autouse=True)
 def check_environment_variables():
-    required_environment_variables = ("SLACK_CHANNEL", "SLACK_EMOJI", "SLACK_USERNAME", "SLACK_WEBHOOK_URL")
+    required_environment_variables = ("SLACK_CHANNELS", "SLACK_EMOJI", "SLACK_USERS")
     missing_environment_variables = []
     for k in required_environment_variables:
         if k not in environ:
@@ -178,9 +178,8 @@ def check_environment_variables():
 def test_lambda_handler(event):
     if 'Records' in event:
         response = notify_slack.lambda_handler(event, 'self-context')
-
+        msgs_sent = json.loads(response['body'])['msgs_sent']
     else:
         response = notify_slack.notify_slack('subject', event, 'eu-west-1')
-
-    response = loads(response)
-    assert response['code'] == 200
+        msgs_sent = response['msgs_sent']
+    assert msgs_sent > 0

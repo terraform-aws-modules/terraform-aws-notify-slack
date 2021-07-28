@@ -1,4 +1,5 @@
 boto3
+slack_sdk
 
 pytest
 pytest-env
