@@ -1,5 +1,4 @@
 from __future__ import print_function
-
 from urllib.error import HTTPError
 import os, boto3, json, base64
 import urllib.request, urllib.parse
