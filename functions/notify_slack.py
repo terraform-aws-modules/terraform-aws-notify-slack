@@ -1,4 +1,6 @@
 from __future__ import print_function
+
+import uuid
 from urllib.error import HTTPError
 import os, boto3, json, base64
 import urllib.request, urllib.parse
@@ -97,8 +99,10 @@ def notify_slack(subject, message, region):
     payload['text'] = "AWS notification"
     payload['attachments'].append(default_notification(subject, message))
 
-  data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
+  data = json.dumps(payload).encode('utf-8')
   req = urllib.request.Request(slack_url)
+  req.add_header('Content-Type', 'application/json; charset=utf-8')
+  req.add_header('Content-Length', len(data))
 
   try:
     result = urllib.request.urlopen(req, data)
