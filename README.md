@@ -15,6 +15,7 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
 - Support different types of SNS messages:
   - AWS CloudWatch Alarms
   - AWS CloudWatch LogMetrics Alarms
+  - AWS GuardDuty Findings
 - Local pytest driven testing of the lambda to a Slack sandbox channel
 
 ## Feature Roadmap
