@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 
 
 
+<a name="v4.18.0"></a>
+## [v4.18.0] - 2021-10-01
+
+- feat: Added support for GuardDuty Findings format ([#143](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/143))
+
+
 <a name="v4.17.0"></a>
 ## [v4.17.0] - 2021-06-28
 
@@ -412,7 +418,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.17.0...HEAD
+[Unreleased]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.18.0...HEAD
+[v4.18.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.17.0...v4.18.0
 [v4.17.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.16.0...v4.17.0
 [v4.16.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.15.0...v4.16.0
 [v4.15.0]: https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.14.0...v4.15.0

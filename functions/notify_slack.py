@@ -41,6 +41,39 @@ def cloudwatch_notification(message, region):
   }
 
 
+def guardduty_finding(message, region):
+  states = {'Low': '#777777', 'Medium': 'warning', 'High': 'danger'}
+  if region.startswith("us-gov-"):
+    guardduty_url = "https://console.amazonaws-us-gov.com/guardduty/home?region="
+  else:
+    guardduty_url = "https://console.aws.amazon.com/guardduty/home?region="
+
+  if message['detail']['severity'] < 4.0:
+    severity = 'Low'
+  elif message['detail']['severity'] < 7.0:
+    severity = 'Medium'
+  else:
+    severity = 'High'
+
+  return {
+    "color": states[severity],
+    "fallback": "GuardDuty Finding: {}".format(message['detail']['title']),
+    "fields": [
+      {"title": "Description", "value": message['detail']['description'], "short": False },
+      {"title": "Finding type", "value": message['detail']['type'], "short": False},
+      {"title": "First Seen", "value": message['detail']['service']['eventFirstSeen'], "short": True},
+      {"title": "Last Seen", "value": message['detail']['service']['eventLastSeen'], "short": True},
+      {"title": "Severity", "value": severity, "short": True},
+      {"title": "Count", "value": message['detail']['service']['count'], "short": True},
+      {
+        "title": "Link to Finding",
+        "value": guardduty_url + region + "#/findings?search=id%3D" + message['detail']['id'],
+        "short": False
+      }
+    ]
+  }
+
+
 def default_notification(subject, message):
   attachments = {
     "fallback": "A new message",
@@ -90,6 +123,10 @@ def notify_slack(subject, message, region):
   if "AlarmName" in message:
     notification = cloudwatch_notification(message, region)
     payload['text'] = "AWS CloudWatch notification - " + message["AlarmName"]
+    payload['attachments'].append(notification)
+  elif "detail-type" in message and message["detail-type"] == "GuardDuty Finding":
+    notification = guardduty_finding(message, message["region"])
+    payload['text'] = "Amazon GuardDuty Finding - " + message["detail"]["title"]
     payload['attachments'].append(notification)
   elif "attachments" in message or "text" in message:
     payload = {**payload, **message}
