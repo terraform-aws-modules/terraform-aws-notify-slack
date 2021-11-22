@@ -36,7 +36,7 @@ Note that this example may create resources which can cost money (AWS Elastic IP
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_notify_slack"></a> [notify\_slack](#module\_notify\_slack) | ../../ |  |
+| <a name="module_notify_slack"></a> [notify\_slack](#module\_notify\_slack) | ../../ | n/a |
 
 ## Resources
 
