@@ -1,0 +1,3 @@
+# Slack Notify Lambda Functions
+
+Moar docs will go here shortly...
