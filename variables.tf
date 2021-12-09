@@ -114,6 +114,12 @@ variable "iam_role_name_prefix" {
   default     = "lambda"
 }
 
+variable "iam_role_path" {
+  description = "Path of IAM role to use for Lambda Function"
+  type        = string
+  default     = null
+}
+
 variable "lambda_function_tags" {
   description = "Additional tags for the Lambda function"
   type        = map(string)
