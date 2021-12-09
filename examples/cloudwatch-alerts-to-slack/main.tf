@@ -55,7 +55,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_duration" {
   threshold           = "5000"
   alarm_description   = "Duration of notifying slack exceeds threshold"
 
-  alarm_actions = [module.notify_slack["develop"].this_slack_topic_arn]
+  alarm_actions = [module.notify_slack["develop"].slack_topic_arn]
 
   dimensions = {
     FunctionName = module.notify_slack["develop"].notify_slack_lambda_function_name

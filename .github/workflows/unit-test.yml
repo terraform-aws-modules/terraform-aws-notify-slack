@@ -1,0 +1,33 @@
+name: Unit Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'functions/**'
+      - '.github/workflows/unit-test.yml'
+
+defaults:
+  run:
+    working-directory: functions
+
+jobs:
+  test:
+    name: Execute unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pipenv

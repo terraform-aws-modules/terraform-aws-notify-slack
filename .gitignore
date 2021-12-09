@@ -32,3 +32,4 @@ terraform.rc
 builds/
 __pycache__/
 functions/pytest.ini
+*.zip

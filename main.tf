@@ -2,31 +2,18 @@ data "aws_caller_identity" "current" {}
 data "aws_partition" "current" {}
 data "aws_region" "current" {}
 
-resource "aws_sns_topic" "this" {
-  count = var.create_sns_topic && var.create ? 1 : 0
-
-  name = var.sns_topic_name
-
-  kms_master_key_id = var.sns_topic_kms_key_id
-
-  tags = merge(var.tags, var.sns_topic_tags)
-}
-
 locals {
-  sns_topic_arn = element(
-    concat(
-      aws_sns_topic.this.*.arn,
-      ["arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}"],
-      [""]
-    ),
-    0,
+  sns_topic_arn = try(
+    aws_sns_topic.this[0].arn,
+    "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
+    ""
   )
 
   lambda_policy_document = {
     sid       = "AllowWriteToCloudwatchLogs"
     effect    = "Allow"
     actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
-    resources = [replace("${element(concat(aws_cloudwatch_log_group.lambda[*].arn, [""]), 0)}:*", ":*:*", ":*")]
+    resources = [replace("${try(aws_cloudwatch_log_group.lambda[0].arn, "")}:*", ":*:*", ":*")]
   }
 
   lambda_policy_document_kms = {
@@ -61,18 +48,29 @@ resource "aws_cloudwatch_log_group" "lambda" {
   tags = merge(var.tags, var.cloudwatch_log_group_tags)
 }
 
+resource "aws_sns_topic" "this" {
+  count = var.create_sns_topic && var.create ? 1 : 0
+
+  name = var.sns_topic_name
+
+  kms_master_key_id = var.sns_topic_kms_key_id
+
+  tags = merge(var.tags, var.sns_topic_tags)
+}
+
+
 resource "aws_sns_topic_subscription" "sns_notify_slack" {
   count = var.create ? 1 : 0
 
   topic_arn     = local.sns_topic_arn
   protocol      = "lambda"
-  endpoint      = module.lambda.this_lambda_function_arn
+  endpoint      = module.lambda.lambda_function_arn
   filter_policy = var.subscription_filter_policy
 }
 
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "1.47.0"
+  version = "2.27.1"
 
   create = var.create
 
@@ -86,7 +84,8 @@ module "lambda" {
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
-  # If publish is disabled, there will be "Error adding new Lambda Permission for notify_slack: InvalidParameterValueException: We currently do not support adding policies for $LATEST."
+  # If publish is disabled, there will be "Error adding new Lambda Permission for notify_slack:
+  # InvalidParameterValueException: We currently do not support adding policies for $LATEST."
   publish = true
 
   environment_variables = {
@@ -109,7 +108,7 @@ module "lambda" {
   # the value of presense of KMS. Famous "computed values in count" bug...
   attach_cloudwatch_logs_policy = false
   attach_policy_json            = true
-  policy_json                   = element(concat(data.aws_iam_policy_document.lambda[*].json, [""]), 0)
+  policy_json                   = try(data.aws_iam_policy_document.lambda[0].json, "")
 
   use_existing_cloudwatch_log_group = true
   attach_network_policy             = var.lambda_function_vpc_subnet_ids != null
