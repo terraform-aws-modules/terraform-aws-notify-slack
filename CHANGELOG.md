@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# [4.20.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.19.0...v4.20.0) (2021-12-09)
+
+
+### Features
+
+* Update lambda module and bump Terraform/AWS provider versions ([#151](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/151)) ([0a1fae8](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/0a1fae86060248353eea2ededad26f43774e500e))
+
 # [4.19.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.18.0...v4.19.0) (2021-12-09)
 
 
