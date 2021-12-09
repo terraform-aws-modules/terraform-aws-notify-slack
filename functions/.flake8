@@ -4,4 +4,5 @@ max-line-length = 120
 exclude =
     .pytest_cache
     __pycache__/
-    *test/
+    *tests/
+    events/
