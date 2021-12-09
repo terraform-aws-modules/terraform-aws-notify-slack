@@ -1,6 +1,6 @@
-output "this_sns_topic_arn" {
+output "sns_topic_arn" {
   description = "The ARN of the SNS topic from which messages will be sent to Slack"
-  value       = module.notify_slack.this_slack_topic_arn
+  value       = module.notify_slack.slack_topic_arn
 }
 
 output "lambda_iam_role_arn" {
