@@ -1,3 +1,19 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+# [4.19.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.18.0...v4.19.0) (2021-12-09)
+
+
+### Bug Fixes
+
+* update CI/CD process to enable auto-release workflow ([#149](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/149)) ([f7dd0a3](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/f7dd0a35d1c140a3465564740abe3579c9e12b48))
+
+
+### Features
+
+* Added path input variable for lambda module IAM role ([#150](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/150)) ([fc0c120](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/fc0c120bd379be65177745637ad402b46334cda5))
+
 <a name="v4.18.0"></a>
 ## [v4.18.0] - 2021-10-01
 
