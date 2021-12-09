@@ -37,10 +37,6 @@ module "notify_slack" {
 }
 ```
 
-## Upgrade from 2.0 to 3.0
-
-Version 3 uses [Terraform AWS Lambda module](https://github.com/terraform-aws-modules/terraform-aws-lambda) to handle most of heavy-lifting related to Lambda packaging, roles, and permissions, while maintaining the same interface for the user of this module after many of resources will be recreated.
-
 ## Using with Terraform Cloud Agents
 
 [Terraform Cloud Agents](https://www.terraform.io/docs/cloud/workspaces/agent.html) are a paid feature, available as part of the Terraform Cloud for Business upgrade package.
@@ -62,18 +58,9 @@ If you want to subscribe the AWS Lambda Function created by this module to an ex
 - [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
 - [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
 
-## Testing with pytest
+## Local Development and Testing
 
-To run the tests:
-
-1.  Set up a dedicated slack channel as a test sandbox with it's own webhook. See [Slack Incoming Webhooks docs](https://api.slack.com/messaging/webhooks) for details.
-2.  Make a copy of the sample pytest configuration and edit as needed.
-
-        cp functions/pytest.ini.sample functions/pytest.ini
-
-3.  Run the tests:
-
-        pytest functions/notify_slack_test.py
+See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/functions) for further details.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements

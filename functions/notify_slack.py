@@ -5,7 +5,7 @@ import os
 import urllib.parse
 import urllib.request
 from enum import Enum
-from typing import Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 from urllib.error import HTTPError
 
 import boto3
@@ -37,6 +37,7 @@ def decrypt_url(encrypted_url: str) -> str:
         return decrypted_payload["Plaintext"].decode()
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
+        return ""
 
 
 def get_service_url(region: str, service: str) -> str:
@@ -67,7 +68,9 @@ class CloudWatchStateColor(Enum):
     ALARM = "danger"
 
 
-def format_cloudwatch_notification(message: Dict, region: str) -> Dict:
+def format_cloudwatch_notification(
+    message: Dict[str, Any], region: str
+) -> Dict[str, Any]:
     """Format CloudWatch event notification into Slack message format
 
     :params message: SNS message body containing CloudWatch notification event
@@ -82,21 +85,25 @@ def format_cloudwatch_notification(message: Dict, region: str) -> Dict:
         "color": CloudWatchStateColor[message["NewStateValue"]].value,
         "fallback": f"Alarm {alarm_name} triggered",
         "fields": [
-            {"title": "Alarm Name", "value": alarm_name, "short": True},
+            {"title": "Alarm Name", "value": f"`{alarm_name}`", "short": True},
             {
                 "title": "Alarm Description",
-                "value": message["AlarmDescription"],
+                "value": f"`{message['AlarmDescription']}`",
                 "short": False,
             },
             {
                 "title": "Alarm reason",
-                "value": message["NewStateReason"],
+                "value": f"`{message['NewStateReason']}`",
                 "short": False,
             },
-            {"title": "Old State", "value": message["OldStateValue"], "short": True},
+            {
+                "title": "Old State",
+                "value": f"`{message['OldStateValue']}`",
+                "short": True,
+            },
             {
                 "title": "Current State",
-                "value": message["NewStateValue"],
+                "value": f"`{message['NewStateValue']}`",
                 "short": True,
             },
             {
@@ -105,6 +112,7 @@ def format_cloudwatch_notification(message: Dict, region: str) -> Dict:
                 "short": False,
             },
         ],
+        "text": f"AWS CloudWatch notification - {message['AlarmName']}",
     }
 
 
@@ -116,7 +124,7 @@ class GuardDutySeverityColor(Enum):
     High = "danger"
 
 
-def format_guardduty_finding(message: Dict, region: str) -> Dict:
+def format_guardduty_finding(message: Dict[str, Any], region: str) -> Dict[str, Any]:
     """
     Format GuardDuty finding event into Slack message format
 
@@ -143,42 +151,43 @@ def format_guardduty_finding(message: Dict, region: str) -> Dict:
         "fields": [
             {
                 "title": "Description",
-                "value": detail.get("description"),
+                "value": f"`{detail['description']}`",
                 "short": False,
             },
             {
                 "title": "Finding Type",
-                "value": detail.get("type"),
+                "value": f"`{detail['type']}`",
                 "short": False,
             },
             {
                 "title": "First Seen",
-                "value": service.get("eventFirstSeen"),
+                "value": f"`{service['eventFirstSeen']}`",
                 "short": True,
             },
             {
                 "title": "Last Seen",
-                "value": service.get("eventLastSeen"),
+                "value": f"`{service['eventLastSeen']}`",
                 "short": True,
             },
-            {"title": "Severity", "value": severity, "short": True},
+            {"title": "Severity", "value": f"`{severity}`", "short": True},
             {
                 "title": "Count",
-                "value": service.get("count"),
+                "value": f"`{service['count']}`",
                 "short": True,
             },
             {
                 "title": "Link to Finding",
-                "value": f"{guardduty_url}#/findings?search=id%3D{detail.get('id')}",
+                "value": f"{guardduty_url}#/findings?search=id%3D{detail['id']}",
                 "short": False,
             },
         ],
+        "text": f"AWS GuardDuty Finding - {detail.get('title')}",
     }
 
 
 def format_default_notification(
     message: Union[str, Dict], subject: Optional[str] = None
-) -> Dict:
+) -> Dict[str, Any]:
     """
     Format default, general notification into Slack message format
 
@@ -188,19 +197,21 @@ def format_default_notification(
 
     attachments = {
         "fallback": "A new message",
+        "text": "AWS notification",
         "title": subject if subject else "Message",
         "mrkdwn_in": ["value"],
-        "fields": [],
     }
+    fields = []
 
     if type(message) is dict:
         for k, v in message.items():
-            value = f"`{json.dumps(v)}`" if isinstance(v, (dict, list)) else str(v)
-            attachments["fields"].append(
-                {"title": k, "value": value, "short": len(value) < 25}
-            )
+            value = f"{json.dumps(v)}" if isinstance(v, (dict, list)) else str(v)
+            fields.append({"title": k, "value": f"`{value}`", "short": len(value) < 25})
     else:
-        attachments["fields"].append({"value": message, "short": False})
+        fields.append({"value": message, "short": False})
+
+    if fields:
+        attachments["fields"] = fields  # type: ignore
 
     return attachments
 
@@ -225,38 +236,42 @@ def get_slack_message_payload(
         "channel": slack_channel,
         "username": slack_username,
         "icon_emoji": slack_emoji,
-        "attachments": [],
     }
+    attachment = None
 
-    if type(message) is str:
+    if isinstance(message, str):
         try:
             message = json.loads(message)
-        except json.JSONDecodeError as err:
-            logging.exception(f"JSON decode error: {err}")
+        except json.JSONDecodeError:
+            logging.info("Not a structured payload, just a string message")
+
+    message = cast(Dict[str, Any], message)
 
     if "AlarmName" in message:
-        notification = format_cloudwatch_notification(message, region)
-        payload["text"] = f"AWS CloudWatch notification - {message['AlarmName']}"
-        payload["attachments"].append(notification)
+        notification = format_cloudwatch_notification(message=message, region=region)
+        attachment = notification
 
-    elif "detail-type" in message and message["detail-type"] == "GuardDuty Finding":
-        notification = format_guardduty_finding(message, message["region"])
-        payload["text"] = f"Amazon GuardDuty Finding - {message['detail']['title']}"
-        payload["attachments"].append(notification)
+    elif (
+        isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding"
+    ):
+        notification = format_guardduty_finding(
+            message=message, region=message["region"]
+        )
+        attachment = notification
 
     elif "attachments" in message or "text" in message:
         payload = {**payload, **message}
 
     else:
-        payload["text"] = "AWS notification"
-        payload["attachments"].append(
-            format_default_notification(message=message, subject=subject)
-        )
+        attachment = format_default_notification(message=message, subject=subject)
+
+    if attachment:
+        payload["attachments"] = [attachment]  # type: ignore
 
     return payload
 
 
-def send_slack_notification(payload: Dict) -> Dict:
+def send_slack_notification(payload: Dict[str, Any]) -> str:
     """
     Send notification payload to Slack
 
@@ -280,7 +295,7 @@ def send_slack_notification(payload: Dict) -> Dict:
         return json.dumps({"code": e.getcode(), "info": e.info().as_string()})
 
 
-def lambda_handler(event: Dict, context: Dict) -> Dict:
+def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     """
     Lambda function to parse notification events and forward to Slack
 

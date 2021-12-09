@@ -38,6 +38,9 @@ jobs:
       - name: Lint check
         run: pipenv run lint:ci
 
+      - name: Type check
+        run: pipenv run typecheck
+
       - name: Unit tests
         run: |
           # will need to add mocks for these or else it fails
