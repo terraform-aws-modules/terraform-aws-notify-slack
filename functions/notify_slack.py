@@ -4,30 +4,63 @@ import logging
 import os
 import urllib.parse
 import urllib.request
+from enum import Enum
 from urllib.error import HTTPError
 
 import boto3
 
-# Decrypt encrypted URL with KMS
-def decrypt(encrypted_url):
-    region = os.environ["AWS_REGION"]
+# Set default region if not provided
+REGION = os.environ.get("AWS_REGION", "us-east-1")
+
+# Create client so its cached/frozen between invocations
+KMS_CLIENT = boto3.client("kms", region_name=REGION)
+
+
+class AwsService(Enum):
+    """AWS service supported by function"""
+
+    cloudwatch = "cloudwatch"
+    guardduty = "guardduty"
+
+
+def decrypt(encrypted_url: str) -> str:
+    """Decrypt encrypted URL with KMS
+
+    :param encrypted_url: URL to decrypt with KMS
+    :returns: plaintext URL
+    """
     try:
-        kms = boto3.client("kms", region_name=region)
-        plaintext = kms.decrypt(CiphertextBlob=base64.b64decode(encrypted_url))[
-            "Plaintext"
-        ]
-        return plaintext.decode()
+        decrypted_payload = KMS_CLIENT.decrypt(
+            CiphertextBlob=base64.b64decode(encrypted_url)
+        )
+        return decrypted_payload["Plaintext"].decode()
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
 
 
+def get_service_url(region: str, service: str) -> str:
+    """Get the appropriate service URL for the region
+
+    :param region: name of the AWS region
+    :param service: name of the AWS service
+    :returns: AWS console url formatted for the region and service provided
+    """
+    try:
+        service_name = AwsService[service].value
+
+        if region.startswith("us-gov-"):
+            return f"https://console.amazonaws-us-gov.com/{service_name}/home?region={region}"
+        else:
+            return f"https://console.aws.amazon.com/{service_name}/home?region={region}"
+
+    except KeyError:
+        print(f"Service {service} is currently not supported")
+        raise
+
+
 def cloudwatch_notification(message, region):
     states = {"OK": "good", "INSUFFICIENT_DATA": "warning", "ALARM": "danger"}
-    if region.startswith("us-gov-"):
-        cloudwatch_url = "https://console.amazonaws-us-gov.com/cloudwatch/home?region="
-    else:
-        cloudwatch_url = "https://console.aws.amazon.com/cloudwatch/home?region="
-
+    cloudwatch_url = get_service_url(region=region, service="cloudwatch")
     alarm_name = message["AlarmName"]
     return {
         "color": states[message["NewStateValue"]],
@@ -52,7 +85,7 @@ def cloudwatch_notification(message, region):
             },
             {
                 "title": "Link to Alarm",
-                "value": f"{cloudwatch_url}{region}#alarm:alarmFilter=ANY;name={urllib.parse.quote(alarm_name)}",
+                "value": f"{cloudwatch_url}#alarm:alarmFilter=ANY;name={urllib.parse.quote(alarm_name)}",
                 "short": False,
             },
         ],
@@ -61,10 +94,7 @@ def cloudwatch_notification(message, region):
 
 def guardduty_finding(message, region):
     states = {"Low": "#777777", "Medium": "warning", "High": "danger"}
-    if region.startswith("us-gov-"):
-        guardduty_url = "https://console.amazonaws-us-gov.com/guardduty/home?region="
-    else:
-        guardduty_url = "https://console.aws.amazon.com/guardduty/home?region="
+    guardduty_url = get_service_url(region=region, service="guardduty")
 
     detail = message["details"]
     severity_score = detail.get("severity")
@@ -110,7 +140,7 @@ def guardduty_finding(message, region):
             },
             {
                 "title": "Link to Finding",
-                "value": f"{guardduty_url}{region}#/findings?search=id%3D{detail.get('id')}",
+                "value": f"{guardduty_url}#/findings?search=id%3D{detail.get('id')}",
                 "short": False,
             },
         ],

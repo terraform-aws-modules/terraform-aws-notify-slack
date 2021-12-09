@@ -1,6 +1,6 @@
 #!/usr/bin/env pytest
 
-from json import loads
+import json
 from os import environ
 
 import notify_slack
@@ -210,5 +210,24 @@ def test_lambda_handler(event):
     else:
         response = notify_slack.notify_slack("subject", event, "eu-west-1")
 
-    response = loads(response)
+    response = json.loads(response)
     assert response["code"] == 200
+
+
+@pytest.mark.parametrize(
+    "region,service,expected",
+    [
+        (
+            "us-east-1",
+            "cloudwatch",
+            "https://console.aws.amazon.com/cloudwatch/home?region=us-east-1",
+        )
+    ],
+)
+def test_get_service_url(region, service, expected):
+    assert notify_slack.get_service_url(region=region, service=service) == expected
+
+
+def test_get_service_url_exception():
+    with pytest.raises(KeyError):
+        notify_slack.get_service_url(region="us-east-1", service="athena")
