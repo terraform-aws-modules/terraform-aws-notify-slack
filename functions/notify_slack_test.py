@@ -14,7 +14,7 @@ import notify_slack
 import pytest
 
 
-def test_get_slack_message_payload_snapshots(snapshot, monkeypatch):
+def test_get_sns_slack_message_payload_snapshots(snapshot, monkeypatch):
     """
     Compare outputs of get_slack_message_payload() with snapshots stored
 
@@ -25,7 +25,7 @@ def test_get_slack_message_payload_snapshots(snapshot, monkeypatch):
     monkeypatch.setenv("SLACK_USERNAME", "notify_slack_test")
     monkeypatch.setenv("SLACK_EMOJI", ":aws:")
 
-    _dir = "./events"
+    _dir = "./messages"
     event_files = [f for f in os.listdir(_dir) if os.path.isfile(os.path.join(_dir, f))]
 
     for file in event_files:
@@ -33,6 +33,7 @@ def test_get_slack_message_payload_snapshots(snapshot, monkeypatch):
             event = ast.literal_eval(efile.read())
 
             attachments = []
+            # These are as delivered wrapped in an SNS message payload so we unpack
             for record in event["Records"]:
                 sns = record["Sns"]
                 subject = sns["Subject"]
@@ -60,7 +61,7 @@ def test_environment_variables_set(monkeypatch):
         "SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL"
     )
 
-    with open(os.path.join("./events/sns_message.py"), "r") as efile:
+    with open(os.path.join("./messages/text_message.py"), "r") as efile:
         event = ast.literal_eval(efile.read())
 
         for record in event["Records"]:

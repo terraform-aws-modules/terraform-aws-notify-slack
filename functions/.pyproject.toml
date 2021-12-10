@@ -49,7 +49,7 @@ show_traceback = true
 
 [tool.coverage.run]
 branch = true
-omit = ["*_test.py", "tests/*", "venv/*", ".mypy_cache/*", ".pytest_cache/*"]
+omit = ["*_test.py", "tests/*", "events/*", "messages/*", "snapshots/*", "venv/*", ".mypy_cache/*", ".pytest_cache/*"]
 
 [tool.coverage.report]
 show_missing = true

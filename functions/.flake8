@@ -6,4 +6,5 @@ exclude =
     __pycache__/
     *tests/
     events/
+    messages/
     snapshots/
