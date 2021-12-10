@@ -14,7 +14,7 @@ import notify_slack
 import pytest
 
 
-def test_get_sns_slack_message_payload_snapshots(snapshot, monkeypatch):
+def test_sns_get_slack_message_payload_snapshots(snapshot, monkeypatch):
     """
     Compare outputs of get_slack_message_payload() with snapshots stored
 
@@ -25,12 +25,14 @@ def test_get_sns_slack_message_payload_snapshots(snapshot, monkeypatch):
     monkeypatch.setenv("SLACK_USERNAME", "notify_slack_test")
     monkeypatch.setenv("SLACK_EMOJI", ":aws:")
 
+    # These are SNS messages that invoke the lambda handler; the event payload is in the
+    # `message` field
     _dir = "./messages"
-    event_files = [f for f in os.listdir(_dir) if os.path.isfile(os.path.join(_dir, f))]
+    messages = [f for f in os.listdir(_dir) if os.path.isfile(os.path.join(_dir, f))]
 
-    for file in event_files:
-        with open(os.path.join(_dir, file), "r") as efile:
-            event = ast.literal_eval(efile.read())
+    for file in messages:
+        with open(os.path.join(_dir, file), "r") as ofile:
+            event = ast.literal_eval(ofile.read())
 
             attachments = []
             # These are as delivered wrapped in an SNS message payload so we unpack
@@ -46,7 +48,36 @@ def test_get_sns_slack_message_payload_snapshots(snapshot, monkeypatch):
                 attachments.append(attachment)
 
             filename = os.path.basename(file)
-            snapshot.assert_match(attachments, filename)
+            snapshot.assert_match(attachments, f"message_{filename}")
+
+
+def test_event_get_slack_message_payload_snapshots(snapshot, monkeypatch):
+    """
+    Compare outputs of get_slack_message_payload() with snapshots stored
+
+    Run `pipenv run test:updatesnapshots` to update snapshot images
+    """
+
+    monkeypatch.setenv("SLACK_CHANNEL", "slack_testing_sandbox")
+    monkeypatch.setenv("SLACK_USERNAME", "notify_slack_test")
+    monkeypatch.setenv("SLACK_EMOJI", ":aws:")
+
+    # These are just the raw events that will be converted to JSON string and
+    # sent via SNS message
+    _dir = "./events"
+    events = [f for f in os.listdir(_dir) if os.path.isfile(os.path.join(_dir, f))]
+
+    for file in events:
+        with open(os.path.join(_dir, file), "r") as ofile:
+            event = ast.literal_eval(ofile.read())
+
+            attachment = notify_slack.get_slack_message_payload(
+                message=event, region="us-east-1", subject="bar"
+            )
+            attachments = [attachment]
+
+            filename = os.path.basename(file)
+            snapshot.assert_match(attachments, f"event_{filename}")
 
 
 def test_environment_variables_set(monkeypatch):
