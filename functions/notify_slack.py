@@ -68,7 +68,7 @@ def get_service_url(region: str, service: str) -> str:
         raise
 
 
-class CloudWatchStateColor(Enum):
+class CloudWatchAlarmState(Enum):
     """Maps CloudWatch notification state to Slack message format color"""
 
     OK = "good"
@@ -76,12 +76,10 @@ class CloudWatchStateColor(Enum):
     ALARM = "danger"
 
 
-def format_cloudwatch_notification(
-    message: Dict[str, Any], region: str
-) -> Dict[str, Any]:
-    """Format CloudWatch event notification into Slack message format
+def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """Format CloudWatch alarm event into Slack message format
 
-    :params message: SNS message body containing CloudWatch notification event
+    :params message: SNS message body containing CloudWatch alarm event
     :region: AWS region where the event originated from
     :returns: formatted Slack message payload
     """
@@ -90,7 +88,7 @@ def format_cloudwatch_notification(
     alarm_name = message["AlarmName"]
 
     return {
-        "color": CloudWatchStateColor[message["NewStateValue"]].value,
+        "color": CloudWatchAlarmState[message["NewStateValue"]].value,
         "fallback": f"Alarm {alarm_name} triggered",
         "fields": [
             {"title": "Alarm Name", "value": f"`{alarm_name}`", "short": True},
@@ -124,7 +122,7 @@ def format_cloudwatch_notification(
     }
 
 
-class GuardDutySeverityColor(Enum):
+class GuardDutyFindingSeverity(Enum):
     """Maps GuardDuty finding severity to Slack message format color"""
 
     Low = "#777777"
@@ -154,7 +152,7 @@ def format_guardduty_finding(message: Dict[str, Any], region: str) -> Dict[str, 
         severity = "High"
 
     return {
-        "color": GuardDutySeverityColor[severity].value,
+        "color": GuardDutyFindingSeverity[severity].value,
         "fallback": f"GuardDuty Finding: {detail.get('title')}",
         "fields": [
             {
@@ -193,13 +191,13 @@ def format_guardduty_finding(message: Dict[str, Any], region: str) -> Dict[str, 
     }
 
 
-def format_default_notification(
+def format_default(
     message: Union[str, Dict], subject: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Format default, general notification into Slack message format
+    Default formatter, converting event into Slack message format
 
-    :params message: SNS message body containing message/notification event
+    :params message: SNS message body containing message/event
     :returns: formatted Slack message payload
     """
 
@@ -256,7 +254,7 @@ def get_slack_message_payload(
     message = cast(Dict[str, Any], message)
 
     if "AlarmName" in message:
-        notification = format_cloudwatch_notification(message=message, region=region)
+        notification = format_cloudwatch_alarm(message=message, region=region)
         attachment = notification
 
     elif (
@@ -271,7 +269,7 @@ def get_slack_message_payload(
         payload = {**payload, **message}
 
     else:
-        attachment = format_default_notification(message=message, subject=subject)
+        attachment = format_default(message=message, subject=subject)
 
     if attachment:
         payload["attachments"] = [attachment]  # type: ignore

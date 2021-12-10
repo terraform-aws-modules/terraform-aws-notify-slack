@@ -35,6 +35,7 @@ terraform.rc
 .vscode/*
 *.DS_Store
 *.zip
+.env
 .envrc
 
 # Byte-compiled / optimized / DLL files

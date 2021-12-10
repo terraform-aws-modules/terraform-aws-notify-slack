@@ -6,20 +6,16 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-aws-lambda-powertools = "~=1.22"
 boto3 = "~=1.20"
 botocore = "~=1.23"
 black = "*"
 flake8 = "*"
-flake8-polyfill = "*"
 isort = "*"
 mypy = "*"
-pyflakes = "*"
 pytest = "*"
 pytest-cov = "*"
-pytest-mock = "*"
 radon = "*"
-snapshottest = "*"
+snapshottest = "~=0.6"
 
 [requires]
 python_version = "3.8"
