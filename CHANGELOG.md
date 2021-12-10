@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# [4.22.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.21.0...v4.22.0) (2021-12-10)
+
+
+### Features
+
+* add lint and unit test workflow checks for pull requests ([#152](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/152)) ([d2675ec](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/d2675eca91f3ca4bc8b7a18912ae84b36b7922f1))
+
 # [4.21.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.20.0...v4.21.0) (2021-12-10)
 
 
