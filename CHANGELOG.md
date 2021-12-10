@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# [4.21.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.20.0...v4.21.0) (2021-12-10)
+
+
+### Features
+
+* Added policy path variable to lambda module IAM role policy ([#153](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/153)) ([b3179a9](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/b3179a9f025943da60daf39d3ce73e88ed57e9ba))
+
 # [4.20.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.19.0...v4.20.0) (2021-12-09)
 
 
