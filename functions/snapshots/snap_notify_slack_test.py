@@ -60,7 +60,7 @@ snapshots[
                     {
                         "short": False,
                         "title": "Finding Type",
-                        "value": "`Recon:EC2/PortProbeUnprotectedPort`",
+                        "value": "`Recon:EC2 PortProbeUnprotectedPort`",
                     },
                     {
                         "short": True,
@@ -106,7 +106,7 @@ snapshots[
                     {
                         "short": False,
                         "title": "Finding Type",
-                        "value": "`Recon:EC2/PortProbeUnprotectedPort`",
+                        "value": "`Recon:EC2 PortProbeUnprotectedPort`",
                     },
                     {
                         "short": True,
@@ -152,7 +152,7 @@ snapshots[
                     {
                         "short": False,
                         "title": "Finding Type",
-                        "value": "`Recon:EC2/PortProbeUnprotectedPort`",
+                        "value": "`Recon:EC2 PortProbeUnprotectedPort`",
                     },
                     {
                         "short": True,
@@ -182,7 +182,7 @@ snapshots[
 ]
 
 snapshots[
-    "test_sns_get_slack_message_payload_snapshots message_cloudwatch_alarm.py"
+    "test_sns_get_slack_message_payload_snapshots message_cloudwatch_alarm.json"
 ] = [
     {
         "attachments": [
@@ -198,7 +198,7 @@ snapshots[
                     {
                         "short": False,
                         "title": "Alarm Description",
-                        "value": '`App is reporting "A JPA error occurred (Unable to build EntityManagerFactory)"`',
+                        "value": '`App is reporting "A JPA error occurred(Unable to build EntityManagerFactory)"`',
                     },
                     {
                         "short": False,
@@ -223,7 +223,7 @@ snapshots[
 ]
 
 snapshots[
-    "test_sns_get_slack_message_payload_snapshots message_dms_notification.py"
+    "test_sns_get_slack_message_payload_snapshots message_dms_notification.json"
 ] = [
     {
         "attachments": [
@@ -243,9 +243,9 @@ snapshots[
                     {
                         "short": False,
                         "title": "Identifier Link",
-                        "value": """`https://console.aws.amazon.com/dms/home?region=eu-west-2#tasks:ids=hello-world
-SourceId: hello-world `""",
+                        "value": "`https://console.aws.amazon.com/dms/home?region=eu-west-2#tasks:ids=hello-world`",
                     },
+                    {"short": True, "title": "SourceId", "value": "`hello-world`"},
                     {
                         "short": False,
                         "title": "Event ID",
@@ -269,7 +269,7 @@ SourceId: hello-world `""",
 ]
 
 snapshots[
-    "test_sns_get_slack_message_payload_snapshots message_glue_notification.py"
+    "test_sns_get_slack_message_payload_snapshots message_glue_notification.json"
 ] = [
     {
         "attachments": [
@@ -310,7 +310,7 @@ snapshots[
 ]
 
 snapshots[
-    "test_sns_get_slack_message_payload_snapshots message_guardduty_finding.py"
+    "test_sns_get_slack_message_payload_snapshots message_guardduty_finding.json"
 ] = [
     {
         "attachments": [
@@ -355,7 +355,7 @@ snapshots[
     }
 ]
 
-snapshots["test_sns_get_slack_message_payload_snapshots message_text_message.py"] = [
+snapshots["test_sns_get_slack_message_payload_snapshots message_text_message.json"] = [
     {
         "attachments": [
             {

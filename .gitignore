@@ -80,3 +80,6 @@ Pipfile.lock
 # Lambda directories
 builds/
 functions/pytest.ini
+
+# Integration testing file
+.int.env

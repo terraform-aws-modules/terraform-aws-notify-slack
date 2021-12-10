@@ -92,7 +92,7 @@ def test_environment_variables_set(monkeypatch):
         "SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL"
     )
 
-    with open(os.path.join("./messages/text_message.py"), "r") as efile:
+    with open(os.path.join("./messages/text_message.json"), "r") as efile:
         event = ast.literal_eval(efile.read())
 
         for record in event["Records"]:
