@@ -12,15 +12,11 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
 - Create new SNS topic or use existing one
 - Support plaintext and encrypted version of Slack webhook URL
 - Most of Slack message options are customizable
-- Support different types of SNS messages:
+- Various event types are supported, even generic messages:
   - AWS CloudWatch Alarms
   - AWS CloudWatch LogMetrics Alarms
   - AWS GuardDuty Findings
-- Local pytest driven testing of the lambda to a Slack sandbox channel
 
-## Feature Roadmap
-
-- More SNS message types: [Send pull-request to add support of other message types](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/pulls)
 
 ## Usage
 

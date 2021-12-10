@@ -42,10 +42,4 @@ jobs:
         run: pipenv run typecheck
 
       - name: Unit tests
-        run: |
-          # will need to add mocks for these or else it fails
-          # SLACK_CHANNEL="aws-notification"
-          # SLACK_EMOJI=":wave:"
-          # SLACK_USERNAME="reporter"
-          # SLACK_WEBHOOK_URL="https://hooks.slack.com/services/AAA/BBB/CCC"
-          pipenv run test
+        run: pipenv run test

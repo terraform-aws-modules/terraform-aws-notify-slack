@@ -210,7 +210,7 @@ snapshots[
                     {
                         "short": False,
                         "title": "Link to Alarm",
-                        "value": "https://console.aws.amazon.com/cloudwatch/home?region=eu-west-2#alarm:alarmFilter=ANY;name=DBMigrationRequired",
+                        "value": "https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#alarm:alarmFilter=ANY;name=DBMigrationRequired",
                     },
                 ],
                 "text": "AWS CloudWatch notification - DBMigrationRequired",
@@ -243,7 +243,7 @@ snapshots[
                     {
                         "short": False,
                         "title": "Identifier Link",
-                        "value": "`https://console.aws.amazon.com/dms/home?region=eu-west-2#tasks:ids=hello-world`",
+                        "value": "`https://console.aws.amazon.com/dms/home?region=us-east-1#tasks:ids=hello-world`",
                     },
                     {"short": True, "title": "SourceId", "value": "`hello-world`"},
                     {
@@ -290,7 +290,7 @@ snapshots[
                     {"short": True, "title": "source", "value": "`aws.glue`"},
                     {"short": True, "title": "account", "value": "`000000000000`"},
                     {"short": True, "title": "time", "value": "`2021-06-18T12:34:06Z`"},
-                    {"short": True, "title": "region", "value": "`eu-west-1`"},
+                    {"short": True, "title": "region", "value": "`us-east-2`"},
                     {"short": True, "title": "resources", "value": "`[]`"},
                     {
                         "short": False,
@@ -343,7 +343,7 @@ snapshots[
                     {
                         "short": False,
                         "title": "Link to Finding",
-                        "value": "https://console.aws.amazon.com/guardduty/home?region=us-east-1#/findings?search=id%3Dsample-id-2",
+                        "value": "https://console.amazonaws-us-gov.com/guardduty/home?region=us-gov-east-1#/findings?search=id%3Dsample-id-2",
                     },
                 ],
                 "text": "AWS GuardDuty Finding - SAMPLE Unprotected port on EC2 instance i-123123123 is being probed",

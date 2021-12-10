@@ -1,4 +1,0 @@
-export SLACK_CHANNEL=slack_testing_sandbox
-export SLACK_EMOJI=:aws:
-export SLACK_USERNAME=notify_slack_test
-export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBOOK/URL
