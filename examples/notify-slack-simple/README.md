@@ -25,12 +25,14 @@ Note that this example may create resources which can cost money (AWS Elastic IP
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.1 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.61 |
+| <a name="requirement_local"></a> [local](#requirement\_local) | >= 2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.61 |
+| <a name="provider_local"></a> [local](#provider\_local) | >= 2.0 |
 
 ## Modules
 
@@ -42,7 +44,8 @@ Note that this example may create resources which can cost money (AWS Elastic IP
 
 | Name | Type |
 |------|------|
-| [aws_sns_topic.my_sns](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
+| [aws_sns_topic.example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
+| [local_file.integration_testing](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 
 ## Inputs
 

@@ -1,0 +1,20 @@
+{
+  "Records": [{
+    "EventSource": "aws:sns",
+    "EventVersion": "1.0",
+    "EventSubscriptionArn": "arn:aws:sns:us-east-1::ExampleTopic",
+    "Sns": {
+      "Type": "Notification",
+      "MessageId": "f86e3c5b-cd17-1ab8-80e9-c0776d4f1e7a",
+      "TopicArn": "arn:aws:sns:us-east-1:123456789012:ExampleTopic",
+      "Subject": "'OK: \"DBMigrationRequired\" in EU (London)",
+      "Message": "{\"AlarmName\": \"DBMigrationRequired\",\"AlarmDescription\": \"App is reporting \\\"A JPA error occurred(Unable to build EntityManagerFactory)\\\"\",\"AWSAccountId\": \"735598076380\",\"NewStateValue\": \"OK\",\"NewStateReason\": \"Threshold Crossed: 1 datapoint [1.0 (12\/02\/19 15:44:00)] was not less than the threshold (1.0).\",\"StateChangeTime\": \"2019-02-12T15:45:24.006+0000\",\"Region\": \"US (Virginia)\",\"OldStateValue\": \"ALARM\",\"Trigger\": {\"MetricName\": \"DBMigrationRequired\",\"Namespace\": \"LogMetrics\",\"StatisticType\": \"Statistic\",\"Statistic\": \"SUM\",\"Unit\": null,\"Dimensions\": [],\"Period\": 60,\"EvaluationPeriods\": 1,\"ComparisonOperator\": \"LessThanThreshold\",\"Threshold\": 1.0,\"TreatMissingData\": \"- TreatMissingData:NonBreaching\",\"EvaluateLowSampleCountPercentile\": \"\"}}",
+      "Timestamp": "2019-02-12T15:45:24.091Z",
+      "SignatureVersion": "1",
+      "Signature": "EXAMPLE",
+      "SigningCertUrl": "EXAMPLE",
+      "UnsubscribeUrl": "EXAMPLE",
+      "MessageAttributes": {}
+    }
+  }]
+}

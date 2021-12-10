@@ -1,0 +1,20 @@
+{
+  "Records": [{
+    "EventSource": "aws:sns",
+    "EventVersion": "1.0",
+    "EventSubscriptionArn": "arn:aws:sns:us-gov-west-1::ExampleTopic",
+    "Sns": {
+      "Type": "Notification",
+      "MessageId": "f86e3c5b-cd17-1ab8-80e9-c0776d4f1e7a",
+      "TopicArn": "arn:aws:sns:us-gov-west-1:123456789012:ExampleTopic",
+      "Subject": "All Fine",
+      "Message": "This\nis\na typical multi-line\nmessage from SNS!\n\nHave a ~good~ amazing day! :)",
+      "Timestamp": "2019-02-12T15:45:24.091Z",
+      "SignatureVersion": "1",
+      "Signature": "EXAMPLE",
+      "SigningCertUrl": "EXAMPLE",
+      "UnsubscribeUrl": "EXAMPLE",
+      "MessageAttributes": {}
+    }
+  }]
+}

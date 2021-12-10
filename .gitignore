@@ -28,8 +28,59 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Locals
+.swp
+.idea
+.idea*
+.vscode/*
+*.DS_Store
+*.zip
+.env
+.envrc
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+.pytest*
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.coverage
+.hypothesis/
+.mypy_cache/
+
+# Lockfile
+Pipfile.lock
+
 # Lambda directories
 builds/
-__pycache__/
 functions/pytest.ini
-*.zip
+
+# Integration testing file
+.int.env

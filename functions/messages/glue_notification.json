@@ -1,0 +1,20 @@
+{
+  "Records": [{
+    "EventSource": "aws:sns",
+    "EventVersion": "1.0",
+    "EventSubscriptionArn": "arn:aws:sns:us-east-2::ExampleTopic",
+    "Sns": {
+      "Type": "Notification",
+      "MessageId": "00337b3f-0982-5cb1-9138-22799c885da9",
+      "TopicArn": "arn:aws:sns:us-east-2:123456789012:ExampleTopic",
+      "Subject": "",
+      "Message": "{\"version\": \"0\",\"id\": \"ad3c3da1-148c-d5da-9a6a-79f1bc9a8a2e\",\"detail-type\": \"Glue Job State Change\",\"source\": \"aws.glue\",\"account\": \"000000000000\",\"time\": \"2021-06-18T12:34:06Z\",\"region\": \"us-east-2\",\"resources\": [],\"detail\": {\"jobName\": \"test_job\",\"severity\": \"ERROR\",\"state\": \"FAILED\",\"jobRunId\": \"jr_ca2144d747b45ad412d3c66a1b6934b6b27aa252be9a21a95c54dfaa224a1925\",\"message\": \"SystemExit: 1\"}}",
+      "Timestamp": "2021-06-18T12:34:09.509Z",
+      "SignatureVersion": "1",
+      "Signature": "EXAMPLE",
+      "SigningCertUrl": "EXAMPLE",
+      "UnsubscribeUrl": "EXAMPLE",
+      "MessageAttributes": {}
+    }
+  }]
+}
