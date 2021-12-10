@@ -76,3 +76,7 @@ coverage.xml
 
 # Lockfile
 Pipfile.lock
+
+# Lambda directories
+builds/
+functions/pytest.ini
