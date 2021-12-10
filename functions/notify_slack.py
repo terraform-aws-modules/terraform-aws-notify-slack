@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+    Notify Slack
+    ------------
+
+    Receives event payloads that are parsed and sent to Slack
+
+"""
+
 import base64
 import json
 import logging
@@ -5,7 +14,7 @@ import os
 import urllib.parse
 import urllib.request
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, Optional, Union, cast
 from urllib.error import HTTPError
 
 import boto3
@@ -49,7 +58,6 @@ def get_service_url(region: str, service: str) -> str:
     """
     try:
         service_name = AwsService[service].value
-
         if region.startswith("us-gov-"):
             return f"https://console.amazonaws-us-gov.com/{service_name}/home?region={region}"
         else:
@@ -275,7 +283,7 @@ def send_slack_notification(payload: Dict[str, Any]) -> str:
     """
     Send notification payload to Slack
 
-    :params payload: formatted Slack message paylod
+    :params payload: formatted Slack message payload
     :returns: response details from sending notification
     """
 
@@ -306,14 +314,16 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     if os.environ.get("LOG_EVENTS", "False") == "True":
         logging.info(f"Event logging enabled: `{json.dumps(event)}`")
 
-    sns_record = event["Records"][0]["Sns"]
+    for record in event["Records"]:
+        sns = record["Sns"]
+        subject = sns["Subject"]
+        message = sns["Message"]
+        region = sns["TopicArn"].split(":")[3]
 
-    subject = sns_record["Subject"]
-    message = sns_record["Message"]
-    region = sns_record["TopicArn"].split(":")[3]
-
-    payload = get_slack_message_payload(message=message, region=region, subject=subject)
-    response = send_slack_notification(payload=payload)
+        payload = get_slack_message_payload(
+            message=message, region=region, subject=subject
+        )
+        response = send_slack_notification(payload=payload)
 
     if json.loads(response)["code"] != 200:
         response_info = json.loads(response)["info"]

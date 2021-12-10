@@ -15,6 +15,7 @@ exclude = '''
   | _build
   | build
   | dist
+  | snapshots
 )/
 '''
 
@@ -22,8 +23,8 @@ exclude = '''
 line_length = 120
 skip = '.terraform'
 sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
-known_third_party = 'aws_lambda_powertools,boto3,botocore'
-known_first_party = ''
+known_third_party = 'aws_lambda_powertools,boto3,botocore,pytest,snapshottest'
+known_first_party = 'events,notify_slack'
 indent = '    '
 
 [tool.mypy]
