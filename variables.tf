@@ -123,7 +123,7 @@ variable "slack_emoji" {
 }
 
 variable "kms_key_arn" {
-  description = "ARN of the KMS key used for decrypting slack webhook url"
+  description = "The ARN of KMS key used by AWS Lambda to encrypt environment variables"
   type        = string
   default     = ""
 }

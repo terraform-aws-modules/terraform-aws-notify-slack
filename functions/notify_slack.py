@@ -7,7 +7,6 @@
 
 """
 
-import base64
 import json
 import logging
 import os
@@ -38,22 +37,6 @@ class AwsService(Enum):
 
     cloudwatch = "cloudwatch"
     guardduty = "guardduty"
-
-
-def decrypt_url(encrypted_url: str) -> str:
-    """Decrypt encrypted URL with KMS
-
-    :param encrypted_url: URL to decrypt with KMS
-    :returns: plaintext URL
-    """
-    try:
-        decrypted_payload = KMS_CLIENT.decrypt(
-            CiphertextBlob=base64.b64decode(encrypted_url)
-        )
-        return decrypted_payload["Plaintext"].decode()
-    except Exception:
-        logger.exception("Failed to decrypt URL with KMS")
-        return ""
 
 
 def get_service_url(region: str, service: str) -> str:
@@ -293,9 +276,6 @@ def send_slack_notification(payload: Dict[str, Any]) -> str:
     """
 
     slack_url = os.environ["SLACK_WEBHOOK_URL"]
-    if not slack_url.startswith("http"):
-        slack_url = decrypt_url(slack_url)
-
     data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
     req = urllib.request.Request(slack_url)
 

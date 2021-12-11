@@ -9,20 +9,6 @@ locals {
     ""
   )
 
-  lambda_policy_document = {
-    sid       = "AllowWriteToCloudwatchLogs"
-    effect    = "Allow"
-    actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
-    resources = [replace("${try(aws_cloudwatch_log_group.lambda[0].arn, "")}:*", ":*:*", ":*")]
-  }
-
-  lambda_policy_document_kms = {
-    sid       = "AllowKMSDecrypt"
-    effect    = "Allow"
-    actions   = ["kms:Decrypt"]
-    resources = [var.kms_key_arn]
-  }
-
   aws_lambda_powertools_layer = substr(data.aws_region.current.name, 0, 6) != "us-gov-" ? "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPython:4" : ""
 
   lambda_layers = compact(distinct(concat(var.lambda_layers, [local.aws_lambda_powertools_layer])))
@@ -35,8 +21,7 @@ locals {
 resource "aws_sns_topic" "this" {
   count = var.create_sns_topic && var.create ? 1 : 0
 
-  name = var.sns_topic_name
-
+  name              = var.sns_topic_name
   kms_master_key_id = var.sns_topic_kms_key_id
 
   tags = merge(var.tags, var.sns_topic_tags)
@@ -59,14 +44,16 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 data "aws_iam_policy_document" "lambda" {
   count = var.create ? 1 : 0
 
-  dynamic "statement" {
-    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
-    content {
-      sid       = statement.value.sid
-      effect    = statement.value.effect
-      actions   = statement.value.actions
-      resources = statement.value.resources
-    }
+  statement {
+    sid    = "AllowWriteToCloudwatchLogs"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      replace("${try(aws_cloudwatch_log_group.lambda[0].arn, "")}:*", ":*:*", ":*")
+    ]
   }
 }
 
