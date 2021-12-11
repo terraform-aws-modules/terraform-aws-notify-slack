@@ -310,7 +310,7 @@ def send_slack_notification(payload: Dict[str, Any]) -> str:
 
 @logger.inject_lambda_context(log_event=LOG_EVENTS)
 @event_source(data_class=SNSEvent)
-def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
+def lambda_handler(event: SNSEvent, context: Dict[str, Any]) -> str:
     """
     Lambda function to parse notification events and forward to Slack
 
