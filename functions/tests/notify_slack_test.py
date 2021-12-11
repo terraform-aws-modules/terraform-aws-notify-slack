@@ -12,6 +12,7 @@ import os
 
 import notify_slack
 import pytest
+import utilities
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -145,7 +146,7 @@ def test_environment_variables_missing():
     ],
 )
 def test_get_service_url(region, service, expected):
-    assert notify_slack.get_service_url(region=region, service=service) == expected
+    assert utilities.get_service_url(region=region, service=service) == expected
 
 
 def test_get_service_url_exception():
@@ -153,4 +154,4 @@ def test_get_service_url_exception():
     Should raise error since service is not defined in enum
     """
     with pytest.raises(KeyError):
-        notify_slack.get_service_url(region="us-east-1", service="athena")
+        utilities.get_service_url(region="us-east-1", service="athena")
