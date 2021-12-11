@@ -13,6 +13,8 @@ import os
 import notify_slack
 import pytest
 
+DIRNAME = os.path.dirname(__file__)
+
 
 def test_sns_get_slack_message_payload_snapshots(snapshot, monkeypatch):
     """
@@ -27,7 +29,7 @@ def test_sns_get_slack_message_payload_snapshots(snapshot, monkeypatch):
 
     # These are SNS messages that invoke the lambda handler; the event payload is in the
     # `message` field
-    _dir = "./messages"
+    _dir = os.path.join(DIRNAME, "./messages")
     messages = [f for f in os.listdir(_dir) if os.path.isfile(os.path.join(_dir, f))]
 
     for file in messages:
@@ -64,7 +66,7 @@ def test_event_get_slack_message_payload_snapshots(snapshot, monkeypatch):
 
     # These are just the raw events that will be converted to JSON string and
     # sent via SNS message
-    _dir = "./events"
+    _dir = os.path.join(DIRNAME, "./events")
     events = [f for f in os.listdir(_dir) if os.path.isfile(os.path.join(_dir, f))]
 
     for file in events:
@@ -92,7 +94,8 @@ def test_environment_variables_set(monkeypatch):
         "SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL"
     )
 
-    with open(os.path.join("./messages/text_message.json"), "r") as efile:
+    text_message = os.path.join(os.path.join(DIRNAME, "./messages/text_message.json"))
+    with open(text_message, "r") as efile:
         event = ast.literal_eval(efile.read())
 
         for record in event["Records"]:

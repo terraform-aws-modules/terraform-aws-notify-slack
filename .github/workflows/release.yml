@@ -21,6 +21,9 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
+      - name: Create zip archive
+        run: zip notify_slack.zip $(find ./functions/*.py -type f)
+
       - name: Release
         uses: cycjimmy/semantic-release-action@v2
         with:
@@ -29,4 +32,4 @@ jobs:
             @semantic-release/changelog@6.0.0
             @semantic-release/git@10.0.0
         env:
-          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE }}

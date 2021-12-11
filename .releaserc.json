@@ -13,7 +13,12 @@
         "successComment":
         "This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${nextRelease.version} :tada:",
         "labels": false,
-        "releasedLabels": false
+        "releasedLabels": false,
+        "assets": [{
+            "path": "notify_slack.zip",
+            "label": "Notify slack AWS Lambda handler zip archive"
+          }
+        ]
       }
     ],
     [
