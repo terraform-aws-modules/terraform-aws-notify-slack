@@ -15,7 +15,7 @@ import urllib.request
 from typing import Any, Dict, Optional, Union, cast
 from urllib.error import HTTPError
 
-from aws_lambda_powertools import Logger
+from aws_lambda_powertools import Logger  # type: ignore
 from aws_lambda_powertools.utilities.data_classes import SNSEvent, event_source
 
 from cloudwatch import get_slack_attachment as get_cloudwatch_slack_attachment
