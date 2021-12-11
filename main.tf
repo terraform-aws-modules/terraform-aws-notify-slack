@@ -22,31 +22,15 @@ locals {
     actions   = ["kms:Decrypt"]
     resources = [var.kms_key_arn]
   }
+
+  aws_lambda_powertools_layer = substr(data.aws_region.current.name, 0, 6) != "us-gov-" ? "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPython:4" : ""
+
+  lambda_layers = compact(distinct(concat(var.lambda_layers, [local.aws_lambda_powertools_layer])))
 }
 
-data "aws_iam_policy_document" "lambda" {
-  count = var.create ? 1 : 0
-
-  dynamic "statement" {
-    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
-    content {
-      sid       = statement.value.sid
-      effect    = statement.value.effect
-      actions   = statement.value.actions
-      resources = statement.value.resources
-    }
-  }
-}
-
-resource "aws_cloudwatch_log_group" "lambda" {
-  count = var.create ? 1 : 0
-
-  name              = "/aws/lambda/${var.lambda_function_name}"
-  retention_in_days = var.cloudwatch_log_group_retention_in_days
-  kms_key_id        = var.cloudwatch_log_group_kms_key_id
-
-  tags = merge(var.tags, var.cloudwatch_log_group_tags)
-}
+################################################################################
+# SNS Topic
+################################################################################
 
 resource "aws_sns_topic" "this" {
   count = var.create_sns_topic && var.create ? 1 : 0
@@ -68,6 +52,24 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
   filter_policy = var.subscription_filter_policy
 }
 
+################################################################################
+# Lambda Function
+################################################################################
+
+data "aws_iam_policy_document" "lambda" {
+  count = var.create ? 1 : 0
+
+  dynamic "statement" {
+    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
+    content {
+      sid       = statement.value.sid
+      effect    = statement.value.effect
+      actions   = statement.value.actions
+      resources = statement.value.resources
+    }
+  }
+}
+
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "2.27.1"
@@ -77,10 +79,12 @@ module "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  handler                        = "notify_slack.lambda_handler"
-  source_path                    = "${path.module}/functions/notify_slack.py"
-  runtime                        = "python3.8"
-  timeout                        = 30
+  handler     = "notify_slack.lambda_handler"
+  source_path = "${path.module}/functions/notify_slack.py"
+  runtime     = var.lambda_runtime
+  timeout     = var.lambda_timeout
+  layers      = local.lambda_layers
+
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
@@ -130,4 +134,18 @@ module "lambda" {
   tags = merge(var.tags, var.lambda_function_tags)
 
   depends_on = [aws_cloudwatch_log_group.lambda]
+}
+
+################################################################################
+# Cloudwatch Logs
+################################################################################
+
+resource "aws_cloudwatch_log_group" "lambda" {
+  count = var.create ? 1 : 0
+
+  name              = "/aws/lambda/${var.lambda_function_name}"
+  retention_in_days = var.cloudwatch_log_group_retention_in_days
+  kms_key_id        = var.cloudwatch_log_group_kms_key_id
+
+  tags = merge(var.tags, var.cloudwatch_log_group_tags)
 }

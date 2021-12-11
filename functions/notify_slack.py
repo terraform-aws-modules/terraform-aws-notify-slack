@@ -18,12 +18,19 @@ from typing import Any, Dict, Optional, Union, cast
 from urllib.error import HTTPError
 
 import boto3
+from aws_lambda_powertools import Logger
+from aws_lambda_powertools.utilities.data_classes import SNSEvent, event_source
+
+logger = Logger(service="notify-slack")
 
 # Set default region if not provided
 REGION = os.environ.get("AWS_REGION", "us-east-1")
 
 # Create client so its cached/frozen between invocations
 KMS_CLIENT = boto3.client("kms", region_name=REGION)
+
+# https://awslabs.github.io/aws-lambda-powertools-python/latest/core/logger/#logging-incoming-event
+LOG_EVENTS = os.environ.get("LOG_EVENTS", "False") == "True"
 
 
 class AwsService(Enum):
@@ -45,7 +52,7 @@ def decrypt_url(encrypted_url: str) -> str:
         )
         return decrypted_payload["Plaintext"].decode()
     except Exception:
-        logging.exception("Failed to decrypt URL with KMS")
+        logger.exception("Failed to decrypt URL with KMS")
         return ""
 
 
@@ -249,7 +256,7 @@ def get_slack_message_payload(
         try:
             message = json.loads(message)
         except json.JSONDecodeError:
-            logging.info("Not a structured payload, just a string message")
+            logger.info("Not a structured payload, just a string message")
 
     message = cast(Dict[str, Any], message)
 
@@ -296,11 +303,13 @@ def send_slack_notification(payload: Dict[str, Any]) -> str:
         result = urllib.request.urlopen(req, data)
         return json.dumps({"code": result.getcode(), "info": result.info().as_string()})
 
-    except HTTPError as e:
-        logging.error(f"{e}: result")
-        return json.dumps({"code": e.getcode(), "info": e.info().as_string()})
+    except HTTPError as err:
+        logger.error(err)
+        return json.dumps({"code": err.getcode(), "info": err.info().as_string()})
 
 
+@logger.inject_lambda_context(log_event=LOG_EVENTS)
+@event_source(data_class=SNSEvent)
 def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     """
     Lambda function to parse notification events and forward to Slack
@@ -309,14 +318,11 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     :param context: lambda expected context object
     :returns: none
     """
-    if os.environ.get("LOG_EVENTS", "False") == "True":
-        logging.info(f"Event logging enabled: `{json.dumps(event)}`")
 
-    for record in event["Records"]:
-        sns = record["Sns"]
-        subject = sns["Subject"]
-        message = sns["Message"]
-        region = sns["TopicArn"].split(":")[3]
+    for record in event.records:
+        subject = record.sns.subject
+        message = record.sns.message
+        region = record.sns.topic_arn.split(":")[3]
 
         payload = get_slack_message_payload(
             message=message, region=region, subject=subject
