@@ -24,9 +24,7 @@ def mock_settings_env_vars(monkeypatch):
     monkeypatch.setenv("SLACK_CHANNEL", "slack_testing_sandbox")
     monkeypatch.setenv("SLACK_USERNAME", "notify_slack_test")
     monkeypatch.setenv("SLACK_EMOJI", ":aws:")
-    monkeypatch.setenv(
-        "SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL"
-    )
+    monkeypatch.setenv("SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL")
 
 
 def test_sns_get_slack_message_payload_snapshots(snapshot, monkeypatch):

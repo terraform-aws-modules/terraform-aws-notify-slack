@@ -23,6 +23,8 @@ def _get_files(directory: str) -> List[str]:
     :params directory: directory to pull list of files from
     :returns: list of files names under directory specified
     """
+    directory = os.path.join(os.path.dirname(__file__), directory)
+
     return [os.path.join(directory, f) for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
 
 
@@ -37,7 +39,7 @@ def invoke_lambda_handler():
 
     # These are SNS messages that invoke the lambda handler;
     # the event payload is in the `message` field
-    messages = _get_files(directory="./messages")
+    messages = _get_files(directory="messages")
 
     for message in messages:
         with open(message, "r") as mfile:
@@ -60,7 +62,7 @@ def publish_event_to_sns_topic():
     sns_client = boto3.client("sns", region_name=REGION)
 
     # These are event payloads that will get published
-    events = _get_files(directory="./events")
+    events = _get_files(directory="events")
 
     for event in events:
         with open(event, "r") as efile:

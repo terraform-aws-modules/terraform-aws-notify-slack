@@ -41,20 +41,14 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 # Lambda Function
 ################################################################################
 
-data "aws_iam_policy_document" "lambda" {
+data "archive_file" "lambda" {
   count = var.create ? 1 : 0
 
-  statement {
-    sid    = "AllowWriteToCloudwatchLogs"
-    effect = "Allow"
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
-    resources = [
-      replace("${try(aws_cloudwatch_log_group.lambda[0].arn, "")}:*", ":*:*", ":*")
-    ]
-  }
+  type             = "zip"
+  source_dir       = "${path.module}/functions"
+  output_file_mode = "0666"
+  output_path      = "${path.module}/notify_zip.zip"
+  excludes         = [".mypy_cache", ".pytest_cache", "tests", ".coverage", ".flake8", ".int.env", "Pipfile", "Pipfile.lock", "pyproject.toml", "README.md"]
 }
 
 module "lambda" {
@@ -66,11 +60,13 @@ module "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  handler     = "notify_slack.lambda_handler"
-  source_path = "${path.module}/functions/notify_slack.py"
-  runtime     = var.lambda_runtime
-  timeout     = var.lambda_timeout
-  layers      = local.lambda_layers
+  handler                = "notify_slack.lambda_handler"
+  create_package         = false
+  local_existing_package = data.archive_file.lambda[0].output_path
+
+  runtime = var.lambda_runtime
+  timeout = var.lambda_timeout
+  layers  = local.lambda_layers
 
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
@@ -95,15 +91,7 @@ module "lambda" {
   role_path                 = var.iam_role_path
   policy_path               = var.iam_policy_path
 
-  # Do not use Lambda's policy for cloudwatch logs, because we have to add a policy
-  # for KMS conditionally. This way attach_policy_json is always true independenty of
-  # the value of presense of KMS. Famous "computed values in count" bug...
-  attach_cloudwatch_logs_policy = false
-  attach_policy_json            = true
-  policy_json                   = try(data.aws_iam_policy_document.lambda[0].json, "")
-
-  use_existing_cloudwatch_log_group = true
-  attach_network_policy             = var.lambda_function_vpc_subnet_ids != null
+  attach_network_policy = var.lambda_function_vpc_subnet_ids != null
 
   allowed_triggers = {
     AllowExecutionFromSNS = {
@@ -118,21 +106,10 @@ module "lambda" {
   vpc_subnet_ids         = var.lambda_function_vpc_subnet_ids
   vpc_security_group_ids = var.lambda_function_vpc_security_group_ids
 
+  # CloudWatch log group
+  cloudwatch_logs_retention_in_days = var.cloudwatch_log_group_retention_in_days
+  cloudwatch_logs_kms_key_id        = var.cloudwatch_log_group_kms_key_id
+  cloudwatch_logs_tags              = var.cloudwatch_log_group_tags
+
   tags = merge(var.tags, var.lambda_function_tags)
-
-  depends_on = [aws_cloudwatch_log_group.lambda]
-}
-
-################################################################################
-# Cloudwatch Logs
-################################################################################
-
-resource "aws_cloudwatch_log_group" "lambda" {
-  count = var.create ? 1 : 0
-
-  name              = "/aws/lambda/${var.lambda_function_name}"
-  retention_in_days = var.cloudwatch_log_group_retention_in_days
-  kms_key_id        = var.cloudwatch_log_group_kms_key_id
-
-  tags = merge(var.tags, var.cloudwatch_log_group_tags)
 }
