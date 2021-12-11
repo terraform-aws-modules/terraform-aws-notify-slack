@@ -17,6 +17,7 @@ from urllib.error import HTTPError
 
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.data_classes import SNSEvent, event_source
+
 from cloudwatch import get_slack_attachment as get_cloudwatch_slack_attachment
 from guardduty import get_slack_attachment as get_guardduty_slack_attachment
 
@@ -26,9 +27,7 @@ logger = Logger(service="notify-slack")
 LOG_EVENTS = os.environ.get("LOG_EVENTS", "False") == "True"
 
 
-def format_default(
-    message: Union[str, Dict], subject: Optional[str] = None
-) -> Dict[str, Any]:
+def format_default(message: Union[str, Dict], subject: Optional[str] = None) -> Dict[str, Any]:
     """
     Default formatter, converting event into Slack message format
 
@@ -57,9 +56,7 @@ def format_default(
     return attachments
 
 
-def get_slack_message_payload(
-    message: Union[str, Dict], region: str, subject: Optional[str] = None
-) -> Dict:
+def get_slack_message_payload(message: Union[str, Dict], region: str, subject: Optional[str] = None) -> Dict:
     """
     Parse notification message and format into Slack message payload
 
@@ -91,12 +88,8 @@ def get_slack_message_payload(
     if "AlarmName" in message:
         attachment = get_cloudwatch_slack_attachment(message=message, region=region)
 
-    elif (
-        isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding"
-    ):
-        attachment = get_guardduty_slack_attachment(
-            message=message, region=message["region"]
-        )
+    elif isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding":
+        attachment = get_guardduty_slack_attachment(message=message, region=message["region"])
 
     elif "attachments" in message or "text" in message:
         payload = {**payload, **message}
@@ -147,15 +140,11 @@ def lambda_handler(event: SNSEvent, context: Dict[str, Any]) -> str:
         message = record.sns.message
         region = record.sns.topic_arn.split(":")[3]
 
-        payload = get_slack_message_payload(
-            message=message, region=region, subject=subject
-        )
+        payload = get_slack_message_payload(message=message, region=region, subject=subject)
         response = send_slack_notification(payload=payload)
 
     if json.loads(response)["code"] != 200:
         response_info = json.loads(response)["info"]
-        logging.error(
-            f"Error: received status `{response_info}` using event `{event}` and context `{context}`"
-        )
+        logging.error(f"Error: received status `{response_info}` using event `{event}` and context `{context}`")
 
     return response

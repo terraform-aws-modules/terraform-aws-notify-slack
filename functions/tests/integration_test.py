@@ -23,11 +23,7 @@ def _get_files(directory: str) -> List[str]:
     :params directory: directory to pull list of files from
     :returns: list of files names under directory specified
     """
-    return [
-        os.path.join(directory, f)
-        for f in os.listdir(directory)
-        if os.path.isfile(os.path.join(directory, f))
-    ]
+    return [os.path.join(directory, f) for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
 
 
 @pytest.mark.skip(reason="Execute with`pytest run python integration_test.py`")

@@ -10,8 +10,9 @@
 import ast
 import os
 
-import notify_slack
 import pytest
+
+import notify_slack
 import utilities
 
 DIRNAME = os.path.dirname(__file__)
@@ -45,9 +46,7 @@ def test_sns_get_slack_message_payload_snapshots(snapshot, monkeypatch):
                 message = sns["Message"]
                 region = sns["TopicArn"].split(":")[3]
 
-                attachment = notify_slack.get_slack_message_payload(
-                    message=message, region=region, subject=subject
-                )
+                attachment = notify_slack.get_slack_message_payload(message=message, region=region, subject=subject)
                 attachments.append(attachment)
 
             filename = os.path.basename(file)
@@ -74,9 +73,7 @@ def test_event_get_slack_message_payload_snapshots(snapshot, monkeypatch):
         with open(os.path.join(_dir, file), "r") as ofile:
             event = ast.literal_eval(ofile.read())
 
-            attachment = notify_slack.get_slack_message_payload(
-                message=event, region="us-east-1", subject="bar"
-            )
+            attachment = notify_slack.get_slack_message_payload(message=event, region="us-east-1", subject="bar")
             attachments = [attachment]
 
             filename = os.path.basename(file)
@@ -91,9 +88,7 @@ def test_environment_variables_set(monkeypatch):
     monkeypatch.setenv("SLACK_CHANNEL", "slack_testing_sandbox")
     monkeypatch.setenv("SLACK_USERNAME", "notify_slack_test")
     monkeypatch.setenv("SLACK_EMOJI", ":aws:")
-    monkeypatch.setenv(
-        "SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL"
-    )
+    monkeypatch.setenv("SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL")
 
     text_message = os.path.join(os.path.join(DIRNAME, "./messages/text_message.json"))
     with open(text_message, "r") as efile:
@@ -105,9 +100,7 @@ def test_environment_variables_set(monkeypatch):
             message = sns["Message"]
             region = sns["TopicArn"].split(":")[3]
 
-            notify_slack.get_slack_message_payload(
-                message=message, region=region, subject=subject
-            )
+            notify_slack.get_slack_message_payload(message=message, region=region, subject=subject)
 
 
 def test_environment_variables_missing():
