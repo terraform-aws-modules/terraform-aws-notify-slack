@@ -8,7 +8,7 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
 
 ## Supported Features
 
-- AWS Lambda runtime Python 3.8
+- AWS Lambda runtime Python 3.9
 - Create new SNS topic or use existing one
 - Support plaintext and encrypted version of Slack webhook URL
 - Most of Slack message options are customizable
@@ -37,11 +37,11 @@ module "notify_slack" {
 
 [Terraform Cloud Agents](https://www.terraform.io/docs/cloud/workspaces/agent.html) are a paid feature, available as part of the Terraform Cloud for Business upgrade package.
 
-This module requires Python 3.8. You can customize [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent) to include Python using this sample `Dockerfile`:
+This module requires Python 3.9. You can customize [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent) to include Python using this sample `Dockerfile`:
 
 ```
 FROM hashicorp/tfc-agent:latest
-RUN apt-get -y update && apt-get -y install python3.8 python3-pip
+RUN apt-get -y update && apt-get -y install python3.9 python3-pip
 ENTRYPOINT ["/bin/tfc-agent"]
 ```
 
@@ -115,7 +115,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_lambda_function_vpc_subnet_ids"></a> [lambda\_function\_vpc\_subnet\_ids](#input\_lambda\_function\_vpc\_subnet\_ids) | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets | `list(string)` | `null` | no |
 | <a name="input_lambda_layers"></a> [lambda\_layers](#input\_lambda\_layers) | List of Lambda Layer Version ARNs to attach to your Lambda Function | `list(string)` | `[]` | no |
 | <a name="input_lambda_role"></a> [lambda\_role](#input\_lambda\_role) | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you | `string` | `""` | no |
-| <a name="input_lambda_runtime"></a> [lambda\_runtime](#input\_lambda\_runtime) | Lambda Function runtime | `string` | `"python3.8"` | no |
+| <a name="input_lambda_runtime"></a> [lambda\_runtime](#input\_lambda\_runtime) | Lambda Function runtime | `string` | `"python3.9"` | no |
 | <a name="input_lambda_timeout"></a> [lambda\_timeout](#input\_lambda\_timeout) | The amount of time your Lambda Function has to run in seconds | `number` | `30` | no |
 | <a name="input_log_events"></a> [log\_events](#input\_log\_events) | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
 | <a name="input_recreate_missing_package"></a> [recreate\_missing\_package](#input\_recreate\_missing\_package) | Whether to recreate missing Lambda package if it is missing locally or not | `bool` | `true` | no |
