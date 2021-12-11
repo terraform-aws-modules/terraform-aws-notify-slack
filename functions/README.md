@@ -37,10 +37,10 @@ If you add/change/modify any of the Pipfile dependencies, you can update your lo
 
 #### Sample Payloads
 
-In the `functions/` directory there are two folders that contain sample message payloads used for testing and validation:
+In the `tests/` directory there are two folders that contain sample message payloads used for testing and validation:
 
-1. `functions/events/` contains raw events as provided by AWS. You can see a more in-depth list of example events in the (AWS documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/EventTypes.html)
-2. `functions/messages/` contains SNS message payloads in the form that they are delivered to the Slack notify lambda function. The `Message` attribute field is where the payload is stored that will be parsed and sent to Slack; this can be events like those described above in #1, or any string/stringified-JSON
+1. `tests/events/` contains raw events as provided by AWS. You can see a more in-depth list of example events in the (AWS documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/EventTypes.html)
+2. `tests/messages/` contains SNS message payloads in the form that they are delivered to the Slack notify lambda function. The `Message` attribute field is where the payload is stored that will be parsed and sent to Slack; this can be events like those described above in #1, or any string/stringified-JSON
 
 #### Unit Tests
 
@@ -93,13 +93,13 @@ To run the unit tests:
   $ terraform init && terraform apply -y
 ```
 
-4.  From within the `functions/` directory, execute the integration tests locally:
+4.  From within the current directory, execute the integration tests locally:
 
 ```bash
   $ pipenv run python integration_test.py
 ```
 
-Within the Slack channel that is associated to the webhook URL provided, you should see all of the messages arriving. You can compared the messages to the payloads in the `functions/events/` and `functions/messages` directories; there should be one Slack message per event payload/file.
+Within the Slack channel that is associated to the webhook URL provided, you should see all of the messages arriving. You can compared the messages to the payloads in the `tests/events/` and `tests/messages` directories; there should be one Slack message per event payload/file.
 
 5. Do not forget to clean up your provisioned resources by returning to the `example/notify-slack-simple/` directory and destroying using Terraform:
 
@@ -111,8 +111,8 @@ Within the Slack channel that is associated to the webhook URL provided, you sho
 
 To add new events with custom message formatting, the general workflow will consist of (ignoring git actions for brevity):
 
-1. Add a new example event paylod to the `functions/events/` directory; please name the file, using snake casing, in the form `<service>_<event_type>.json` such as `guardduty_finding.json` or `cloudwatch_alarm.json`
-2. In the `functions/notify_slack.py` file, add the new formatting function, following a similar naming pattern like in step #1 where the function name is `format_<service>_<event_type>()` such as `format_guardduty_finding()` or `format_cloudwatch_alarm()`
+1. Add a new example event paylod to the `tests/events/` directory; please name the file, using snake casing, in the form `<service>_<event_type>.json` such as `guardduty_finding.json` or `cloudwatch_alarm.json`
+2. In the `notify_slack.py` file, add the new formatting function, following a similar naming pattern like in step #1 where the function name is `format_<service>_<event_type>()` such as `format_guardduty_finding()` or `format_cloudwatch_alarm()`
 3. (Optional) Ff there are different "severity" type levels that are to be mapped to Slack message color bars, create an enum that maps the possible serverity values to the appropriate colors. See the `CloudWatchAlarmState` and `GuardDutyFindingSeverity` for examples. The enum name should follow pascal case, Python standard, in the form of `<service><event_type><attribute_field>`
 4. Update the snapshots to include your new event payload and expected output. Note - the other snapshots should not be affected by your change, the snapshot diff should only show your new event:
 

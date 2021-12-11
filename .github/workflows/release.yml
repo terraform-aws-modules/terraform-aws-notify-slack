@@ -21,6 +21,9 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
+      - name: Create zip archive
+        run: zip -9 notify_slack.zip $(find ./functions/*.py -type f)
+
       - name: Release
         uses: cycjimmy/semantic-release-action@v2
         with:
