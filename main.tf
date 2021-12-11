@@ -79,6 +79,7 @@ module "lambda" {
 
   handler                        = "notify_slack.lambda_handler"
   source_path                    = "${path.module}/functions/notify_slack.py"
+  recreate_missing_package       = var.recreate_missing_package
   runtime                        = "python3.8"
   timeout                        = 30
   kms_key_arn                    = var.kms_key_arn
