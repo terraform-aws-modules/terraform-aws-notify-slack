@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# [4.23.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.22.0...v4.23.0) (2021-12-11)
+
+
+### Features
+
+* add support for recreating package locally if not missing/not present ([#158](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/158)) ([912e11d](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/912e11dc38416650ac07e0762a5e469a030032bd))
+
 # [4.22.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.21.0...v4.22.0) (2021-12-10)
 
 

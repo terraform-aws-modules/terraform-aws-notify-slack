@@ -60,9 +60,10 @@ module "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  handler                = "notify_slack.lambda_handler"
-  create_package         = false
-  local_existing_package = data.archive_file.lambda[0].output_path
+  handler                  = "notify_slack.lambda_handler"
+  create_package           = false
+  local_existing_package   = data.archive_file.lambda[0].output_path
+  recreate_missing_package = var.recreate_missing_package
 
   runtime = var.lambda_runtime
   timeout = var.lambda_timeout

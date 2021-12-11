@@ -128,6 +128,12 @@ variable "kms_key_arn" {
   default     = ""
 }
 
+variable "recreate_missing_package" {
+  description = "Whether to recreate missing Lambda package if it is missing locally or not"
+  type        = bool
+  default     = true
+}
+
 variable "log_events" {
   description = "Boolean flag to enabled/disable logging of incoming events"
   type        = bool
