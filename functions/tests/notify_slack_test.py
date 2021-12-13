@@ -21,10 +21,8 @@ DIRNAME = os.path.dirname(__file__)
 
 @pytest.fixture(autouse=True)
 def mock_settings_env_vars(monkeypatch):
-    monkeypatch.setenv("SLACK_CHANNEL", "slack_testing_sandbox")
     monkeypatch.setenv("SLACK_USERNAME", "notify_slack_test")
     monkeypatch.setenv("SLACK_EMOJI", ":aws:")
-    monkeypatch.setenv("SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/YOUR/WEBOOK/URL")
 
 
 def test_sns_get_slack_message_payload_snapshots(snapshot, monkeypatch):
@@ -99,10 +97,8 @@ def test_environment_variables_missing(monkeypatch):
     Should pass since environment variables are NOT provided and
     will raise a `KeyError`
     """
-    monkeypatch.delenv("SLACK_CHANNEL")
     monkeypatch.delenv("SLACK_USERNAME")
     monkeypatch.delenv("SLACK_EMOJI")
-    monkeypatch.delenv("SLACK_WEBHOOK_URL")
 
     with pytest.raises(KeyError):
         # will raise before parsing/validation

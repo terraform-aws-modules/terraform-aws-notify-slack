@@ -30,10 +30,14 @@ module "notify_slack" {
   sns_topic_name   = aws_sns_topic.example.name
   create_sns_topic = false
 
-  slack_webhook_url = "https://hooks.slack.com/services/AAA/BBB/CCC"
-  slack_channel     = "aws-notification"
-  slack_username    = "reporter"
-  log_events        = true
+  # Note: this needs to exist in your account already in SSM
+  # and should be set as a SecureString
+  slack_webhook_url_ssm_parameter_name = "/example/notify_slack/webhook_url"
+  environment_variables = {
+    SLACK_USERNAME = "reporter"
+    SLACK_EMOJI    = ":wave:"
+    LOG_EVENTS     = "True"
+  }
 
   tags = local.tags
 }

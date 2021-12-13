@@ -70,7 +70,6 @@ def publish_event_to_sns_topic():
         response = sns_client.publish(
             TopicArn=SNS_TOPIC_ARN,
             Message=msg,
-            Subject=event,
         )
         pprint(response)
 

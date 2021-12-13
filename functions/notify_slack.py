@@ -16,6 +16,7 @@ from typing import Any, Dict, Optional, Union, cast
 from urllib.error import HTTPError
 
 from aws_lambda_powertools import Logger  # type: ignore
+from aws_lambda_powertools.utilities import parameters
 from aws_lambda_powertools.utilities.data_classes import SNSEvent, event_source
 
 from cloudwatch import get_slack_attachment as get_cloudwatch_slack_attachment
@@ -66,12 +67,10 @@ def get_slack_message_payload(message: Union[str, Dict], region: str, subject: O
     :returns: Slack message payload
     """
 
-    slack_channel = os.environ["SLACK_CHANNEL"]
     slack_username = os.environ["SLACK_USERNAME"]
     slack_emoji = os.environ["SLACK_EMOJI"]
 
     payload = {
-        "channel": slack_channel,
         "username": slack_username,
         "icon_emoji": slack_emoji,
     }
@@ -111,9 +110,21 @@ def send_slack_notification(payload: Dict[str, Any]) -> str:
     :returns: response details from sending notification
     """
 
-    slack_url = os.environ["SLACK_WEBHOOK_URL"]
+    # Pull from SSM parameter
+    webhook_url_ssm_param_name = os.environ.get("SLACK_WEBHOOK_URL_SSM_PARAM_NAME")
+    if webhook_url_ssm_param_name:
+        slack_webhook_url = parameters.get_parameter(webhook_url_ssm_param_name, decrypt=True, max_age=300)
+
+    # Pull from Secrets Manager
+    webhook_url_secret_name = os.environ.get("SLACK_WEBHOOK_URL_SECRET_NAME")
+    if webhook_url_secret_name:
+        slack_webhook_url = parameters.get_secret(webhook_url_secret_name, max_age=300)
+
+    if not slack_webhook_url:
+        raise KeyError("One of `SLACK_WEBHOOK_URL_SSM_PARAM_NAME` or `SLACK_WEBHOOK_URL_SECRET_NAME` must be provided")
+
     data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
-    req = urllib.request.Request(slack_url)
+    req = urllib.request.Request(cast(str, slack_webhook_url))
 
     try:
         result = urllib.request.urlopen(req, data)

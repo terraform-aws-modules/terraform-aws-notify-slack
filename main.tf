@@ -3,13 +3,16 @@ data "aws_partition" "current" {}
 data "aws_region" "current" {}
 
 locals {
+  account_id   = data.aws_caller_identity.current.account_id
+  partition_id = data.aws_partition.current.id
+  region       = data.aws_region.current.name
   sns_topic_arn = try(
     aws_sns_topic.this[0].arn,
-    "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
+    "arn:${local.partition_id}:sns:${local.region}:${local.account_id}:${var.sns_topic_name}",
     ""
   )
 
-  aws_lambda_powertools_layer = substr(data.aws_region.current.name, 0, 6) != "us-gov-" ? "arn:aws:lambda:${data.aws_region.current.name}:017000801446:layer:AWSLambdaPowertoolsPython:4" : ""
+  aws_lambda_powertools_layer = contains(["aws-us-gov", "aws-cn"], local.partition_id) ? "" : "arn:${local.partition_id}:lambda:${local.region}:017000801446:layer:AWSLambdaPowertoolsPython:4"
 
   lambda_layers = compact(distinct(concat(var.lambda_layers, [local.aws_lambda_powertools_layer])))
 }
@@ -69,20 +72,16 @@ module "lambda" {
   timeout = var.lambda_timeout
   layers  = local.lambda_layers
 
+  environment_variables = merge(var.environment_variables, {
+    SLACK_WEBHOOK_URL_SSM_PARAM_NAME = var.slack_webhook_url_ssm_parameter_name
+    SLACK_WEBHOOK_URL_SECRET_NAME    = var.slack_webhook_url_secret_name
+  })
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
 
   # If publish is disabled, there will be "Error adding new Lambda Permission for notify_slack:
   # InvalidParameterValueException: We currently do not support adding policies for $LATEST."
   publish = true
-
-  environment_variables = {
-    SLACK_WEBHOOK_URL = var.slack_webhook_url
-    SLACK_CHANNEL     = var.slack_channel
-    SLACK_USERNAME    = var.slack_username
-    SLACK_EMOJI       = var.slack_emoji
-    LOG_EVENTS        = var.log_events ? "True" : "False"
-  }
 
   create_role               = var.lambda_role == ""
   lambda_role               = var.lambda_role
@@ -93,6 +92,30 @@ module "lambda" {
   policy_path               = var.iam_policy_path
 
   attach_network_policy = var.lambda_function_vpc_subnet_ids != null
+  attach_policy_json    = true
+  policy_json           = <<-EOT
+  {
+      "Version": "2012-10-17",
+      "Statement": [
+          %{if length(var.slack_webhook_url_ssm_parameter_name) > 1~}
+          {
+              "Sid": "GetSsmWebhookUrl",
+              "Effect": "Allow",
+              "Action": ["ssm:GetParameter"],
+              "Resource": ["arn:${local.partition_id}:ssm:${local.region}:${local.account_id}:parameter${var.slack_webhook_url_ssm_parameter_name}"]
+          }
+          %{endif~}
+          %{if length(var.slack_webhook_url_secret_name) > 1~}
+          {
+              "Sid": "GetSecretWebhookUrl",
+              "Effect": "Allow",
+              "Action": ["secretsmanager:GetSecretValue"],
+              "Resource": ["arn:${local.partition_id}:secretsmanager:${local.region}:${local.account_id}:secret:${var.slack_webhook_url_secret_name}-*"]
+          }
+          %{endif~}
+      ]
+  }
+  EOT
 
   allowed_triggers = {
     AllowExecutionFromSNS = {

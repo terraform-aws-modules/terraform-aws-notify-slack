@@ -16,12 +16,16 @@ module "notify_slack" {
 
   lambda_function_name = "notify_slack_${each.value}"
 
-  slack_webhook_url = "https://hooks.slack.com/services/AAA/BBB/CCC"
-  slack_channel     = "aws-notification"
-  slack_username    = "reporter"
+  # Note: this needs to exist in your account already in SSM
+  # and should be set as a SecureString
+  slack_webhook_url_ssm_parameter_name = "/example/notify_slack/webhook_url"
+  environment_variables = {
+    SLACK_USERNAME = "reporter"
+    SLACK_EMOJI    = ":wave:"
+    LOG_EVENTS     = "True"
+  }
 
   lambda_description = "Lambda function which sends notifications to Slack"
-  log_events         = true
 
   # VPC
   #  lambda_function_vpc_subnet_ids = module.vpc.intra_subnets

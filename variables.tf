@@ -101,25 +101,22 @@ variable "lambda_function_s3_bucket" {
   default     = null
 }
 
-variable "slack_webhook_url" {
-  description = "The URL of Slack webhook"
+variable "slack_webhook_url_ssm_parameter_name" {
+  description = "Name of SSM parameter that contains the Slack webhook URL (must be type `SecureString`). If not provided, `slack_webhook_url_secret_name` must be provided"
   type        = string
+  default     = ""
 }
 
-variable "slack_channel" {
-  description = "The name of the channel in Slack for notifications"
+variable "slack_webhook_url_secret_name" {
+  description = "Name of Secrets Manager secret that contains the Slack webhook URL. If not provided, `slack_webhook_url_ssm_parameter_name` must be provided"
   type        = string
+  default     = ""
 }
 
-variable "slack_username" {
-  description = "The username that will appear on Slack messages"
-  type        = string
-}
-
-variable "slack_emoji" {
-  description = "A custom emoji that will appear on Slack messages"
-  type        = string
-  default     = ":aws:"
+variable "environment_variables" {
+  description = "A map that defines environment variables for the Lambda Function"
+  type        = map(string)
+  default     = {}
 }
 
 variable "kms_key_arn" {
@@ -132,12 +129,6 @@ variable "recreate_missing_package" {
   description = "Whether to recreate missing Lambda package if it is missing locally or not"
   type        = bool
   default     = true
-}
-
-variable "log_events" {
-  description = "Boolean flag to enabled/disable logging of incoming events"
-  type        = bool
-  default     = false
 }
 
 variable "reserved_concurrent_executions" {
@@ -195,7 +186,7 @@ variable "iam_policy_path" {
 variable "cloudwatch_log_group_retention_in_days" {
   description = "Specifies the number of days you want to retain log events in log group for Lambda"
   type        = number
-  default     = 0
+  default     = 7
 }
 
 variable "cloudwatch_log_group_kms_key_id" {
