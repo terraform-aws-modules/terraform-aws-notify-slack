@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# [4.24.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.23.0...v4.24.0) (2021-12-14)
+
+
+### Features
+
+* Revert incorrectly removed output this_slack_topic_arn ([#159](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/159)) ([24ec027](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/24ec027e1b6fe708eb4a6d7788a64d9452ecbfe0))
+
 # [4.23.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.22.0...v4.23.0) (2021-12-11)
 
 
