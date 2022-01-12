@@ -37,8 +37,3 @@ output "notify_slack_lambda_function_version" {
   description = "Latest published version of your Lambda function"
   value       = module.notify_slack.notify_slack_lambda_function_version
 }
-
-output "lambda_cloudwatch_log_group_arn" {
-  description = "The Amazon Resource Name (ARN) specifying the log group"
-  value       = module.notify_slack.lambda_cloudwatch_log_group_arn
-}

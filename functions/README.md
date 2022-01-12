@@ -83,7 +83,6 @@ To run the unit tests:
 
 ```hcl
   slack_webhook_url = "https://hooks.slack.com/services/AAA/BBB/CCC"
-  slack_channel     = "aws-notification"
   slack_username    = "reporter"
 ```
 

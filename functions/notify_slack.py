@@ -7,193 +7,28 @@
 
 """
 
-import base64
 import json
 import logging
 import os
 import urllib.parse
 import urllib.request
-from enum import Enum
 from typing import Any, Dict, Optional, Union, cast
 from urllib.error import HTTPError
 
-import boto3
+from aws_lambda_powertools import Logger  # type: ignore
+from aws_lambda_powertools.utilities import parameters
+from aws_lambda_powertools.utilities.data_classes import SNSEvent, event_source
 
-# Set default region if not provided
-REGION = os.environ.get("AWS_REGION", "us-east-1")
+from cloudwatch import get_slack_attachment as get_cloudwatch_slack_attachment
+from guardduty import get_slack_attachment as get_guardduty_slack_attachment
 
-# Create client so its cached/frozen between invocations
-KMS_CLIENT = boto3.client("kms", region_name=REGION)
+logger = Logger(service="notify-slack")
 
-
-class AwsService(Enum):
-    """AWS service supported by function"""
-
-    cloudwatch = "cloudwatch"
-    guardduty = "guardduty"
+# https://awslabs.github.io/aws-lambda-powertools-python/latest/core/logger/#logging-incoming-event
+LOG_EVENTS = os.environ.get("LOG_EVENTS", "False") == "True"
 
 
-def decrypt_url(encrypted_url: str) -> str:
-    """Decrypt encrypted URL with KMS
-
-    :param encrypted_url: URL to decrypt with KMS
-    :returns: plaintext URL
-    """
-    try:
-        decrypted_payload = KMS_CLIENT.decrypt(
-            CiphertextBlob=base64.b64decode(encrypted_url)
-        )
-        return decrypted_payload["Plaintext"].decode()
-    except Exception:
-        logging.exception("Failed to decrypt URL with KMS")
-        return ""
-
-
-def get_service_url(region: str, service: str) -> str:
-    """Get the appropriate service URL for the region
-
-    :param region: name of the AWS region
-    :param service: name of the AWS service
-    :returns: AWS console url formatted for the region and service provided
-    """
-    try:
-        service_name = AwsService[service].value
-        if region.startswith("us-gov-"):
-            return f"https://console.amazonaws-us-gov.com/{service_name}/home?region={region}"
-        else:
-            return f"https://console.aws.amazon.com/{service_name}/home?region={region}"
-
-    except KeyError:
-        print(f"Service {service} is currently not supported")
-        raise
-
-
-class CloudWatchAlarmState(Enum):
-    """Maps CloudWatch notification state to Slack message format color"""
-
-    OK = "good"
-    INSUFFICIENT_DATA = "warning"
-    ALARM = "danger"
-
-
-def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, Any]:
-    """Format CloudWatch alarm event into Slack message format
-
-    :params message: SNS message body containing CloudWatch alarm event
-    :region: AWS region where the event originated from
-    :returns: formatted Slack message payload
-    """
-
-    cloudwatch_url = get_service_url(region=region, service="cloudwatch")
-    alarm_name = message["AlarmName"]
-
-    return {
-        "color": CloudWatchAlarmState[message["NewStateValue"]].value,
-        "fallback": f"Alarm {alarm_name} triggered",
-        "fields": [
-            {"title": "Alarm Name", "value": f"`{alarm_name}`", "short": True},
-            {
-                "title": "Alarm Description",
-                "value": f"`{message['AlarmDescription']}`",
-                "short": False,
-            },
-            {
-                "title": "Alarm reason",
-                "value": f"`{message['NewStateReason']}`",
-                "short": False,
-            },
-            {
-                "title": "Old State",
-                "value": f"`{message['OldStateValue']}`",
-                "short": True,
-            },
-            {
-                "title": "Current State",
-                "value": f"`{message['NewStateValue']}`",
-                "short": True,
-            },
-            {
-                "title": "Link to Alarm",
-                "value": f"{cloudwatch_url}#alarm:alarmFilter=ANY;name={urllib.parse.quote(alarm_name)}",
-                "short": False,
-            },
-        ],
-        "text": f"AWS CloudWatch notification - {message['AlarmName']}",
-    }
-
-
-class GuardDutyFindingSeverity(Enum):
-    """Maps GuardDuty finding severity to Slack message format color"""
-
-    Low = "#777777"
-    Medium = "warning"
-    High = "danger"
-
-
-def format_guardduty_finding(message: Dict[str, Any], region: str) -> Dict[str, Any]:
-    """
-    Format GuardDuty finding event into Slack message format
-
-    :params message: SNS message body containing GuardDuty finding event
-    :params region: AWS region where the event originated from
-    :returns: formatted Slack message payload
-    """
-
-    guardduty_url = get_service_url(region=region, service="guardduty")
-    detail = message["detail"]
-    service = detail.get("service", {})
-    severity_score = detail.get("severity")
-
-    if severity_score < 4.0:
-        severity = "Low"
-    elif severity_score < 7.0:
-        severity = "Medium"
-    else:
-        severity = "High"
-
-    return {
-        "color": GuardDutyFindingSeverity[severity].value,
-        "fallback": f"GuardDuty Finding: {detail.get('title')}",
-        "fields": [
-            {
-                "title": "Description",
-                "value": f"`{detail['description']}`",
-                "short": False,
-            },
-            {
-                "title": "Finding Type",
-                "value": f"`{detail['type']}`",
-                "short": False,
-            },
-            {
-                "title": "First Seen",
-                "value": f"`{service['eventFirstSeen']}`",
-                "short": True,
-            },
-            {
-                "title": "Last Seen",
-                "value": f"`{service['eventLastSeen']}`",
-                "short": True,
-            },
-            {"title": "Severity", "value": f"`{severity}`", "short": True},
-            {
-                "title": "Count",
-                "value": f"`{service['count']}`",
-                "short": True,
-            },
-            {
-                "title": "Link to Finding",
-                "value": f"{guardduty_url}#/findings?search=id%3D{detail['id']}",
-                "short": False,
-            },
-        ],
-        "text": f"AWS GuardDuty Finding - {detail.get('title')}",
-    }
-
-
-def format_default(
-    message: Union[str, Dict], subject: Optional[str] = None
-) -> Dict[str, Any]:
+def format_default(message: Union[str, Dict], subject: Optional[str] = None) -> Dict[str, Any]:
     """
     Default formatter, converting event into Slack message format
 
@@ -222,9 +57,7 @@ def format_default(
     return attachments
 
 
-def get_slack_message_payload(
-    message: Union[str, Dict], region: str, subject: Optional[str] = None
-) -> Dict:
+def get_slack_message_payload(message: Union[str, Dict], region: str, subject: Optional[str] = None) -> Dict:
     """
     Parse notification message and format into Slack message payload
 
@@ -234,12 +67,10 @@ def get_slack_message_payload(
     :returns: Slack message payload
     """
 
-    slack_channel = os.environ["SLACK_CHANNEL"]
     slack_username = os.environ["SLACK_USERNAME"]
     slack_emoji = os.environ["SLACK_EMOJI"]
 
     payload = {
-        "channel": slack_channel,
         "username": slack_username,
         "icon_emoji": slack_emoji,
     }
@@ -249,21 +80,15 @@ def get_slack_message_payload(
         try:
             message = json.loads(message)
         except json.JSONDecodeError:
-            logging.info("Not a structured payload, just a string message")
+            logger.info("Not a structured payload, just a string message")
 
     message = cast(Dict[str, Any], message)
 
     if "AlarmName" in message:
-        notification = format_cloudwatch_alarm(message=message, region=region)
-        attachment = notification
+        attachment = get_cloudwatch_slack_attachment(message=message, region=region)
 
-    elif (
-        isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding"
-    ):
-        notification = format_guardduty_finding(
-            message=message, region=message["region"]
-        )
-        attachment = notification
+    elif isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding":
+        attachment = get_guardduty_slack_attachment(message=message, region=message["region"])
 
     elif "attachments" in message or "text" in message:
         payload = {**payload, **message}
@@ -285,23 +110,34 @@ def send_slack_notification(payload: Dict[str, Any]) -> str:
     :returns: response details from sending notification
     """
 
-    slack_url = os.environ["SLACK_WEBHOOK_URL"]
-    if not slack_url.startswith("http"):
-        slack_url = decrypt_url(slack_url)
+    # Pull from SSM parameter
+    webhook_url_ssm_param_name = os.environ.get("SLACK_WEBHOOK_URL_SSM_PARAM_NAME")
+    if webhook_url_ssm_param_name:
+        slack_webhook_url = parameters.get_parameter(webhook_url_ssm_param_name, decrypt=True, max_age=300)
+
+    # Pull from Secrets Manager
+    webhook_url_secret_name = os.environ.get("SLACK_WEBHOOK_URL_SECRET_NAME")
+    if webhook_url_secret_name:
+        slack_webhook_url = parameters.get_secret(webhook_url_secret_name, max_age=300)
+
+    if not slack_webhook_url:
+        raise KeyError("One of `SLACK_WEBHOOK_URL_SSM_PARAM_NAME` or `SLACK_WEBHOOK_URL_SECRET_NAME` must be provided")
 
     data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
-    req = urllib.request.Request(slack_url)
+    req = urllib.request.Request(cast(str, slack_webhook_url))
 
     try:
         result = urllib.request.urlopen(req, data)
         return json.dumps({"code": result.getcode(), "info": result.info().as_string()})
 
-    except HTTPError as e:
-        logging.error(f"{e}: result")
-        return json.dumps({"code": e.getcode(), "info": e.info().as_string()})
+    except HTTPError as err:
+        logger.error(err)
+        return json.dumps({"code": err.getcode(), "info": err.info().as_string()})
 
 
-def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
+@logger.inject_lambda_context(log_event=LOG_EVENTS)
+@event_source(data_class=SNSEvent)
+def lambda_handler(event: SNSEvent, context: Dict[str, Any]) -> str:
     """
     Lambda function to parse notification events and forward to Slack
 
@@ -309,24 +145,17 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     :param context: lambda expected context object
     :returns: none
     """
-    if os.environ.get("LOG_EVENTS", "False") == "True":
-        logging.info(f"Event logging enabled: `{json.dumps(event)}`")
 
-    for record in event["Records"]:
-        sns = record["Sns"]
-        subject = sns["Subject"]
-        message = sns["Message"]
-        region = sns["TopicArn"].split(":")[3]
+    for record in event.records:
+        subject = record.sns.subject
+        message = record.sns.message
+        region = record.sns.topic_arn.split(":")[3]
 
-        payload = get_slack_message_payload(
-            message=message, region=region, subject=subject
-        )
+        payload = get_slack_message_payload(message=message, region=region, subject=subject)
         response = send_slack_notification(payload=payload)
 
     if json.loads(response)["code"] != 200:
         response_info = json.loads(response)["info"]
-        logging.error(
-            f"Error: received status `{response_info}` using event `{event}` and context `{context}`"
-        )
+        logging.error(f"Error: received status `{response_info}` using event `{event}` and context `{context}`")
 
     return response
