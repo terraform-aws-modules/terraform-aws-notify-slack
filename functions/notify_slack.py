@@ -248,6 +248,10 @@ def filter_message_from_slack(message):
         return True
       if re.match("Started copy of snapshot awsbackup\:*.+", message.get('Event Message', '')):
         return True
+      if re.match("Started copy of snapshot rds\:*.+", message.get('Event Message', '')):
+        return True
+      if re.match("Finished copy of snapshot rds\:*.+", message.get('Event Message', '')):
+        return True
     else:
       return False
 
