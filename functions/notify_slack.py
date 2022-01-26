@@ -244,13 +244,13 @@ def filter_message_from_slack(message):
     elif message.get('Event Source', "") in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]:
       if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance", "Automated snapshot created", "Creating automated snapshot", "Creating manual snapshot", "Manual snapshot created", "Deleted manual snapshot"]:
         return True
-      if re.match("Finished copy of snapshot awsbackup\:*.+", message.get('Event Message', '')):
+      if re.match("Finished copy of snapshot awsbackup\:.*", message.get('Event Message', '')):
         return True
-      if re.match("Started copy of snapshot awsbackup\:*.+", message.get('Event Message', '')):
+      if re.match("Started copy of snapshot awsbackup\:.*", message.get('Event Message', '')):
         return True
-      if re.match("Started copy of snapshot rds\:*.+", message.get('Event Message', '')):
+      if re.match("Started copy of snapshot rds\:.*", message.get('Event Message', '')):
         return True
-      if re.match("Finished copy of snapshot rds\:*.+", message.get('Event Message', '')):
+      if re.match("Finished copy of snapshot rds\:.*", message.get('Event Message', '')):
         return True
     else:
       return False
