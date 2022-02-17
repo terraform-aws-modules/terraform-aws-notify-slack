@@ -13,6 +13,8 @@ resource "aws_sns_topic" "this" {
 }
 
 locals {
+  lambda_filename = "${path.module}/functions/notify_slack.py"
+  lambda_archive  = "${path.module}/functions/notify_slack.zip"
   sns_topic_arn = element(
     concat(
       aws_sns_topic.this.*.arn,
@@ -41,24 +43,12 @@ resource "aws_lambda_permission" "sns_notify_slack" {
   source_arn    = local.sns_topic_arn
 }
 
-data "null_data_source" "lambda_file" {
-  inputs = {
-    filename = "${path.module}/functions/notify_slack.py"
-  }
-}
-
-data "null_data_source" "lambda_archive" {
-  inputs = {
-    filename = "${path.module}/functions/notify_slack.zip"
-  }
-}
-
 data "archive_file" "notify_slack" {
   count = var.create ? 1 : 0
 
   type        = "zip"
-  source_file = data.null_data_source.lambda_file.outputs.filename
-  output_path = data.null_data_source.lambda_archive.outputs.filename
+  source_file = local.lambda_filename
+  output_path = local.lambda_archive
 }
 
 resource "aws_lambda_function" "notify_slack" {
@@ -92,7 +82,7 @@ resource "aws_lambda_function" "notify_slack" {
   }
 
   tags = merge(var.tags, var.lambda_function_tags)
-  
+
   tracing_config {
     mode = "Active"
   }
