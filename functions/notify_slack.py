@@ -200,7 +200,7 @@ def default_notification(subject, message):
         }
 
 def filter_message_from_slack(message):
-    if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') in ["GenerateCredentialReport", "GenerateServiceLastAccessedDetails"]:
+    if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') in ["GenerateCredentialReport", "GenerateServiceLastAccessedDetails", "CreateServiceLinkedRole"]:
       return True
     elif message.get('source', "") == "aws.rds":
       if message.get('detail', {}).get('Message', '').startswith("Snapshot succeeded"):
