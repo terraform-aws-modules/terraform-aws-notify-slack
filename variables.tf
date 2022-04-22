@@ -71,3 +71,9 @@ variable "sns_topic_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "python_version" {
+  description = "The Runtime Python version"
+  type        = string
+  default     = "python3.9"
+}
