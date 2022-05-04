@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.1.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.0.0...v5.1.0) (2022-05-04)
+
+
+### Features
+
+* Added ephemeral_storage_size variable ([#167](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/167)) ([c82299a](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/c82299aaec22f301c62f220d8446675647168ff4))
+
 ## [5.0.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v4.24.0...v5.0.0) (2022-03-31)
 
 
