@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "lambda_basic" {
 data "aws_iam_policy_document" "lambda" {
   count = var.kms_key_arn != "" && var.create ? 1 : 0
 
-  source_json = data.aws_iam_policy_document.lambda_basic[0].json
+  source_policy_documents = data.aws_iam_policy_document.lambda_basic[0].json
 
   statement {
     sid = "AllowKMSDecrypt"
