@@ -22,6 +22,8 @@ locals {
     actions   = ["kms:Decrypt"]
     resources = [var.kms_key_arn]
   }
+
+  lambda_handler = split(".", basename(var.lambda_source_path))[0]
 }
 
 data "aws_iam_policy_document" "lambda" {
@@ -77,8 +79,8 @@ module "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  handler                        = "notify_slack.lambda_handler"
-  source_path                    = "${path.module}/functions/notify_slack.py"
+  handler                        = "${local.lambda_handler}.lambda_handler"
+  source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
   recreate_missing_package       = var.recreate_missing_package
   runtime                        = "python3.8"
   timeout                        = 30
