@@ -16,6 +16,20 @@ def decrypt(encrypted_url):
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
 
+def ecr_notification(message, region):
+    state = 'danger' if message.get("detail", {}).get('scan-status', 'FAILED') else 'good'
+    return {
+        "color": state,
+        "fallback": "ECR {} event".format(message['detail']),
+        "fields": [
+            { "title": "Status", "value": message.get('detail', {}).get('scan-status', ""), "short": True },
+            { "title": "Repo", "value": message.get('detail', {}).get('repository-name', ""), "short": True },
+            { "title": "Tags", "value": message.get('detail', {}).get('image-tags', ""), "short": True },
+            { "title": "SHA", "value": message.get('detail', {}).get('image-digest', ""), "short": True },
+            { "title": "Findings", "value": message.get('detail', {}).get('finding-severity-counts', ""), "short": True }
+        ]
+    }
+
 def asg_notification(message, regions):
     state = 'danger' if message.get("StatusCode", "") == 'Failed' else 'good'
     return {
@@ -297,6 +311,10 @@ def notify_slack(subject, message, region):
         if (message['source'] == "aws.ecs"):
             notification = ecs_notification(message, region)
             payload['text'] = "AWS ECS notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.ecr"):
+            notification = ecr_notification(message, region)
+            payload['text'] = "AWS ECR notification - " + message["detail-type"]
             payload['attachments'].append(notification)
         elif (message['source'] == "aws.ec2"):
             notification = ectwo_notification(message, region)
