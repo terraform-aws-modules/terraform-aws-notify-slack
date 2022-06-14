@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.2.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.1.0...v5.2.0) (2022-06-14)
+
+
+### Features
+
+* Added support for custom lambda function ([#172](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/172)) ([4a9d0b0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/4a9d0b02a9421ff52b392145aaa2aea0c7317a51))
+
 ## [5.1.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.0.0...v5.1.0) (2022-05-04)
 
 
