@@ -29,7 +29,7 @@ variable "lambda_description" {
 }
 
 variable "lambda_source_path" {
-  description = "The source path of the Lambda function"
+  description = "The source path of the custom Lambda function"
   type        = string
   default     = null
 }
