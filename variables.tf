@@ -28,6 +28,12 @@ variable "lambda_description" {
   default     = null
 }
 
+variable "lambda_source_path" {
+  description = "The source path of the custom Lambda function"
+  type        = string
+  default     = null
+}
+
 variable "sns_topic_name" {
   description = "The name of the SNS topic to create"
   type        = string
