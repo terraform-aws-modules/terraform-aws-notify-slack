@@ -23,7 +23,7 @@ locals {
     resources = [var.kms_key_arn]
   }
 
-  lambda_handler = split(".", basename(var.lambda_source_path))[0]
+  lambda_handler = try(split(".", basename(var.lambda_source_path))[0], "notify_slack")
 }
 
 data "aws_iam_policy_document" "lambda" {
