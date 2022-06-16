@@ -16,6 +16,26 @@ def decrypt(encrypted_url):
     except Exception:
         logging.exception("Failed to decrypt URL with KMS")
 
+def ecr_notification(message, region):
+    state = 'danger' if message.get('detail', {}).get('scan-status', "") == 'FAILED' else 'warning'
+    return {
+        "color": state,
+        "fallback": "ECR {} event".format(message['detail']),
+        "fields": [
+            { "title": "Status", "value": message.get('detail', {}).get('scan-status', ""), "short": True },
+            { "title": "Repo", "value": message.get('detail', {}).get('repository-name', ""), "short": True },
+            { "title": "Tags", "value": ",".join(message.get('detail', {}).get('image-tags', [])), "short": True },
+            { "title": "SHA", "value": message.get('detail', {}).get('image-digest', ""), "short": True },
+            { "title": "CRITICAL", "value": message.get('detail', {}).get('finding-severity-counts', {}).get('CRITICAL', ""), "short": True },
+            { "title": "HIGH", "value": message.get('detail', {}).get('finding-severity-counts', {}).get('HIGH', "0"), "short": True },
+            {
+                "title": "Link to Scan Results",
+                "value": "https://console.aws.amazon.com/ecr/repositories/private/" + message['account'] + "/" + message.get('detail', {}).get('repository-name', "") + "/image/" + message.get('detail', {}).get('image-digest', "") + "/scan-results/?region=" + region,
+                "short": False
+            }
+        ]
+    }        
+
 def asg_notification(message, regions):
     state = 'danger' if message.get("StatusCode", "") == 'Failed' else 'good'
     return {
@@ -202,6 +222,11 @@ def default_notification(subject, message):
 def filter_message_from_slack(message):
     if message.get('source', "") == "aws.iam" and message.get('detail', {}).get('eventName', '') in ["GenerateCredentialReport", "GenerateServiceLastAccessedDetails", "CreateServiceLinkedRole"]:
       return True
+    elif message.get('source', "") == "aws.ecr":
+      if message.get('detail', {}).get('finding-severity-counts', {}).get('CRITICAL', 0) != 0:
+        return False
+      else:
+        return True
     elif message.get('source', "") == "aws.rds":
       if message.get('detail', {}).get('Message', '').startswith("Snapshot succeeded"):
         return True
@@ -297,6 +322,10 @@ def notify_slack(subject, message, region):
         if (message['source'] == "aws.ecs"):
             notification = ecs_notification(message, region)
             payload['text'] = "AWS ECS notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.ecr"):
+            notification = ecr_notification(message, region)
+            payload['text'] = "AWS ECR notification - " + message["detail-type"]
             payload['attachments'].append(notification)
         elif (message['source'] == "aws.ec2"):
             notification = ectwo_notification(message, region)
