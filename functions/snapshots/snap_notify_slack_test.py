@@ -4,7 +4,55 @@ from __future__ import unicode_literals
 
 from snapshottest import Snapshot
 
+
 snapshots = Snapshot()
+
+snapshots[
+    "test_event_get_slack_message_payload_snapshots event_aws_health_event.json"
+] = [
+    {
+        "attachments": [
+            {
+                "color": "danger",
+                "fallback": "New AWS Health Event for EC2",
+                "fields": [
+                    {"short": True, "title": "Affected Service", "value": "`EC2`"},
+                    {"short": True, "title": "Affected Region", "value": "`us-west-2`"},
+                    {
+                        "short": False,
+                        "title": "Code",
+                        "value": "`AWS_EC2_INSTANCE_STORE_DRIVE_PERFORMANCE_DEGRADED`",
+                    },
+                    {
+                        "short": False,
+                        "title": "Event Description",
+                        "value": "`A description of the event will be provided here`",
+                    },
+                    {
+                        "short": False,
+                        "title": "Affected Resources",
+                        "value": "`i-abcd1111`",
+                    },
+                    {
+                        "short": True,
+                        "title": "Start Time",
+                        "value": "`Sat, 05 Jun 2016 15:10:09 GMT`",
+                    },
+                    {"short": True, "title": "End Time", "value": "`<unknown>`"},
+                    {
+                        "short": False,
+                        "title": "Link to Event",
+                        "value": "https://phd.aws.amazon.com/phd/home?region=us-west-2#/dashboard/open-issues",
+                    },
+                ],
+                "text": "New AWS Health Event for EC2",
+            }
+        ],
+        "channel": "slack_testing_sandbox",
+        "icon_emoji": ":aws:",
+        "username": "notify_slack_test",
+    }
+]
 
 snapshots[
     "test_event_get_slack_message_payload_snapshots event_cloudwatch_alarm.json"
