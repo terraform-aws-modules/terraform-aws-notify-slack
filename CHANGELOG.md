@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.3.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.2.0...v5.3.0) (2022-06-17)
+
+
+### Features
+
+* Added support for AWS Health events ([#170](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/170)) ([3d38bfa](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/3d38bfa524541a6497ebcc77051ef78253cc4a3e))
+
 ## [5.2.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.1.0...v5.2.0) (2022-06-14)
 
 
