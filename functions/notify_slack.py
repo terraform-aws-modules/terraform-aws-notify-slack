@@ -34,7 +34,7 @@ def ecr_notification(message, region):
                 "short": False
             }
         ]
-    }        
+    }
 
 def asg_notification(message, regions):
     state = 'danger' if message.get("StatusCode", "") == 'Failed' else 'good'
@@ -212,6 +212,20 @@ def iot_notification(message, region):
     "fields": fields
   }
 
+def systems_manager(message, region):
+  return {
+    "color": 'good',
+    "fallback": "SSM Session Manager {} event".format(message['detail']),
+    "fields": [
+      { "title": "account", "value": message.get('account', ""), "short": True },
+      { "title": "region", "value": message.get('region', ""), "short": True },
+      { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('arn', ""), "short": True },
+      { "title": "message", "value": message.get('detail', {}).get('eventName', ""), "short": True },
+      { "title": "sessionId", "value": message.get('detail', {}).get('responseElements', {}).get('sessionId', ""), "short": True },
+      { "title": "instance", "value": message.get('detail', {}).get('requestParameters', {}).get('target', ""), "short": True },
+      { "title": "time", "value": message['time'], "short": True}
+    ]
+  }
 
 def default_notification(subject, message):
     return {
@@ -346,6 +360,10 @@ def notify_slack(subject, message, region):
         elif (message['source'] == "deployment"):
             notification = deployment_notification(message, region)
             payload['text'] = "AWS Deployment - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.ssm"):
+            notification = systems_manager(message, region)
+            payload['text'] = "AWS Systems Manager Notification - " + message["detail-type"]
             payload['attachments'].append(notification)
         else:
             payload['text'] = "AWS notification"
