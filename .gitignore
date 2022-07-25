@@ -5,3 +5,4 @@ terraform.tfvars
 functions/*.zip
 *.iml
 .vscode/
+.idea/
