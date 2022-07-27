@@ -195,6 +195,40 @@ def rds_event_subscription_notification(message, region):
             ]
         }
 
+def glue_notification(message, region):
+    state = 'danger' if message.get('detail', {}).get('state', "") in ['FAILED', 'TIMEOUT'] else 'good'
+    fields = []
+    fields.append( { "title": "account", "value": message.get('account', ""), "short": True } )
+    if message.get('detail', {}).get('jobName', "") != "":
+      fields.append( { "title": "job", "value": message.get('detail', {}).get('jobName', ""), "short": True } )
+      fields.append( { "title": "job run", "value": message.get('detail', {}).get('jobRunId', ""), "short": True } )
+    if message.get('detail', {}).get('state', "") != "":
+      fields.append( { "title": "state", "value": message.get('detail', {}).get('state', ""), "short": True } )
+    if message.get('detail', {}).get('message', "") != "":
+      fields.append( { "title": "message", "value": message.get('detail', {}).get('message', ""), "short": True } )
+    return {
+        "color": state,
+        "fallback": "Glue {} event".format(message['detail']),
+        "fields": fields
+    }
+
+def dms_notification(message, region):
+
+    state = 'danger' if message.get('detail', {}).get('eventType', "") in ['REPLICATION_TASK_STOPPED'] else 'good'
+    fields = []
+    fields.append( { "title": "account", "value": message.get('account', ""), "short": True } )
+    fields.append( { "title": "message", "value": message.get('detail', {}).get('detailMessage', ""), "short": True } )
+    fields.append( { "title": "category", "value": message.get('detail', {}).get('category', ""), "short": True } )
+    if message.get('detail', {}).get('type', "") == 'REPLICATION_TASK':
+      fields.append( { "title": "task arn", "value": message.get('resources', [])[0], "short": True } )
+    if message.get('detail', {}).get('resourceLink', "") != "":
+      fields.append( { "title": "link", "value": '<{}|resource link>'.format(message.get('detail', {}).get('resourceLink', "")), "short": True } )
+    return {
+        "color": state,
+        "fallback": "DMS {} event".format(message['detail']),
+        "fields": fields
+    }
+
 def iam_notification(message, region):
     return {
             "color": 'good',
@@ -376,6 +410,14 @@ def notify_slack(subject, message, region):
         elif (message['source'] == "aws.iam"):
             notification = iam_notification(message, region)
             payload['text'] = "AWS IAM notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.dms"):
+            notification = dms_notification(message, region)
+            payload['text'] = "AWS DMS notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.glue"):
+            notification = glue_notification(message, region)
+            payload['text'] = "AWS Glue notification - " + message["detail-type"]
             payload['attachments'].append(notification)
         elif (message['source'] == "aws.iot"):
             notification = iot_notification(message, region)
