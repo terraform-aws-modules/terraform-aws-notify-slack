@@ -36,6 +36,26 @@ def ecr_notification(message, region):
         ]
     }
 
+def inspector_notification(message, region):
+  state = 'good' if message.get('detail', {}).get('status', "") == 'CLOSED' else 'danger'
+  return {
+    "color": state,
+    "fallback": "Inspector {} event".format(message['detail']),
+    "fields": [
+      { "title": "Title", "value": message.get('detail', {}).get('title', ""), "short": True },
+      { "title": "Resource", "value": message['resources'][0], "short": True },
+      { "title": "Severity", "value": message.get('detail', {}).get('severity', ""), "short": True },
+      { "title": "Region", "value": message['region'], "short": True },
+      { "title": "Account", "value": message.get('detail', {}).get('awsAccountId', ""), "short": True },
+      { "title": "Status", "value": message.get('detail', {}).get('status', ""), "short": True },
+      {
+        "title": "Link to Scan Results",
+        "value": "https://console.aws.amazon.com/inspector/v2/home?region=" + message['region'] + "#/findings/instances/" + message['resources'][0],
+        "short": False
+      }
+    ]
+  }
+
 def asg_notification(message, regions):
     state = 'danger' if message.get("StatusCode", "") == 'Failed' else 'good'
     return {
@@ -340,6 +360,10 @@ def notify_slack(subject, message, region):
         elif (message['source'] == "aws.ecr"):
             notification = ecr_notification(message, region)
             payload['text'] = "AWS ECR notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.inspector2"):
+            notification = inspector_notification(message, region)
+            payload['text'] = "AWS Inspector notification - " + message["detail-type"]
             payload['attachments'].append(notification)
         elif (message['source'] == "aws.ec2"):
             notification = ectwo_notification(message, region)
