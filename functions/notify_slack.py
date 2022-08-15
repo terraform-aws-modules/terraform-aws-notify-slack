@@ -266,6 +266,31 @@ def iot_notification(message, region):
     "fields": fields
   }
 
+def security_hub_notification(message, region):
+  for finding in message.get('detail', {}).get('findings', []):
+    title = finding['Title']
+    status = finding['Compliance'].get('Status', "")
+    product = finding['ProductName']
+    severity = finding['Severity'].get('Label', "")
+    state = finding['RecordState']
+    resource = finding['ProductFields'].get('Resources:0/Id', "")
+
+  return {
+    "color": 'danger',
+    "fallback": "{} event".format(message['detail']),
+    "fields": [
+      { "title": "Title", "value": title, "short": True },
+      { "title": "Standard", "value": message['resources'][0], "short": True },
+      { "title": "Severity", "value": severity, "short": True },
+      { "title": "Region", "value": message['region'], "short": True },
+      { "title": "Account", "value": message.get('account', ""), "short": True },
+      { "title": "Status", "value": status, "short": True },
+      { "title": "State", "value": state, "short": True },
+      { "title": "Product", "value": product, "short": True },
+      { "title": "Resource", "value": resource, "short": True }
+    ]
+  }
+
 def systems_manager(message, region):
   return {
     "color": 'good',
@@ -430,6 +455,10 @@ def notify_slack(subject, message, region):
         elif (message['source'] == "aws.ssm"):
             notification = systems_manager(message, region)
             payload['text'] = "AWS Systems Manager Notification - " + message["detail-type"]
+            payload['attachments'].append(notification)
+        elif (message['source'] == "aws.securityhub"):
+            notification = security_hub_notification(message, region)
+            payload['text'] = "AWS Security Hub Notification - " + message["detail-type"]
             payload['attachments'].append(notification)
         else:
             payload['text'] = "AWS notification"
