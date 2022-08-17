@@ -34,6 +34,12 @@ variable "lambda_source_path" {
   default     = null
 }
 
+variable "lamdba_package_path" {
+  description = "The source path of the pre-built Lambda package. If this is set then lambda_source_path will be ignored."
+  type        = string
+  default     = null
+}
+
 variable "sns_topic_name" {
   description = "The name of the SNS topic to create"
   type        = string

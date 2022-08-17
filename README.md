@@ -12,7 +12,7 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
 - Create new SNS topic or use existing one
 - Support plaintext and encrypted version of Slack webhook URL
 - Most of Slack message options are customizable
-- Custom Lambda function
+- Custom Lambda function, or pre-built package
 - Various event types are supported, even generic messages:
   - AWS CloudWatch Alarms
   - AWS CloudWatch LogMetrics Alarms
@@ -116,6 +116,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_lambda_function_vpc_subnet_ids"></a> [lambda\_function\_vpc\_subnet\_ids](#input\_lambda\_function\_vpc\_subnet\_ids) | List of subnet ids when Lambda Function should run in the VPC. Usually private or intra subnets. | `list(string)` | `null` | no |
 | <a name="input_lambda_role"></a> [lambda\_role](#input\_lambda\_role) | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you. | `string` | `""` | no |
 | <a name="input_lambda_source_path"></a> [lambda\_source\_path](#input\_lambda\_source\_path) | The source path of the custom Lambda function | `string` | `null` | no |
+| <a name="input_lamdba_package_path"></a> [lamdba\_package\_path](#input\_lamdba\_package\_path) | The source path of the pre-built Lambda package. If this is set then lambda\_source\_path will be ignored. | `string` | `null` | no |
 | <a name="input_log_events"></a> [log\_events](#input\_log\_events) | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
 | <a name="input_recreate_missing_package"></a> [recreate\_missing\_package](#input\_recreate\_missing\_package) | Whether to recreate missing Lambda package if it is missing locally or not | `bool` | `true` | no |
 | <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | `number` | `-1` | no |

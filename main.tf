@@ -79,8 +79,12 @@ module "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  handler                        = "${local.lambda_handler}.lambda_handler"
-  source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
+  handler = "${local.lambda_handler}.lambda_handler"
+
+  create_package         = var.lamdba_package_path != null ? false : true
+  local_existing_package = var.lamdba_package_path != null ? var.lamdba_package_path : null
+  source_path            = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
+
   recreate_missing_package       = var.recreate_missing_package
   runtime                        = "python3.8"
   timeout                        = 30
