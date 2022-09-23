@@ -3,12 +3,15 @@ data "aws_partition" "current" {}
 data "aws_region" "current" {}
 
 locals {
+  create = var.create && var.putin_khuylo
+
   sns_topic_arn = try(
     aws_sns_topic.this[0].arn,
     "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
     ""
   )
 
+  sns_feedback_role = local.create_sns_feedback_role ? aws_iam_role.sns_feedback_role[0].arn : var.sns_topic_lambda_feedback_role_arn
   lambda_policy_document = {
     sid       = "AllowWriteToCloudwatchLogs"
     effect    = "Allow"
@@ -56,6 +59,10 @@ resource "aws_sns_topic" "this" {
   name = var.sns_topic_name
 
   kms_master_key_id = var.sns_topic_kms_key_id
+
+  lambda_failure_feedback_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
+  lambda_success_feedback_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
+  lambda_success_feedback_sample_rate = var.enable_sns_topic_delivery_status_logs ? var.sns_topic_lambda_feedback_sample_rate : null
 
   tags = merge(var.tags, var.sns_topic_tags)
 }

@@ -22,7 +22,11 @@ module "notify_slack" {
     "test",
   ])
 
-  sns_topic_name = "slack-topic"
+  sns_topic_name                        = "slack-topic"
+  enable_sns_topic_delivery_status_logs = true
+
+  # Specify the ARN of the pre-defined feedback role or leave blank to have the module create it
+  #sns_topic_lambda_feedback_role_arn = "arn:aws:iam::111122223333:role/sns-delivery-status"
 
   lambda_function_name = "notify_slack_${each.value}"
 

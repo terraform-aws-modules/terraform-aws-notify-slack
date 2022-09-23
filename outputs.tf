@@ -48,3 +48,8 @@ output "lambda_cloudwatch_log_group_arn" {
   description = "The Amazon Resource Name (ARN) specifying the log group"
   value       = try(aws_cloudwatch_log_group.lambda[0].arn, "")
 }
+
+output "sns_topic_feedback_role_arn" {
+  description = "The Amazon Resource Name (ARN) of the IAM role used for SNS delivery status logging"
+  value       = try(local.sns_feedback_role, "")
+}

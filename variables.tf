@@ -1,3 +1,9 @@
+variable "putin_khuylo" {
+  description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
+  type        = bool
+  default     = true
+}
+
 variable "create" {
   description = "Whether to create all resources"
   type        = bool
@@ -43,6 +49,60 @@ variable "sns_topic_kms_key_id" {
   description = "ARN of the KMS key used for enabling SSE on the topic"
   type        = string
   default     = ""
+}
+
+variable "enable_sns_topic_delivery_status_logs" {
+  description = "Whether to enable SNS topic delivery status logs"
+  type        = bool
+  default     = false
+}
+
+variable "sns_topic_lambda_feedback_role_arn" {
+  description = "IAM role for SNS topic delivery status logs.  If this is set then a role will not be created for you."
+  type        = string
+  default     = ""
+}
+
+variable "sns_topic_feedback_role_name" {
+  description = "Name of the IAM role to use for SNS topic delivery status logging"
+  type        = string
+  default     = null
+}
+
+variable "sns_topic_feedback_role_description" {
+  description = "Description of IAM role to use for SNS topic delivery status logging"
+  type        = string
+  default     = null
+}
+
+variable "sns_topic_feedback_role_path" {
+  description = "Path of IAM role to use for SNS topic delivery status logging"
+  type        = string
+  default     = null
+}
+
+variable "sns_topic_feedback_role_force_detach_policies" {
+  description = "Specifies to force detaching any policies the IAM role has before destroying it."
+  type        = bool
+  default     = true
+}
+
+variable "sns_topic_feedback_role_permissions_boundary" {
+  description = "The ARN of the policy that is used to set the permissions boundary for the IAM role used by SNS topic delivery status logging"
+  type        = string
+  default     = null
+}
+
+variable "sns_topic_feedback_role_tags" {
+  description = "A map of tags to assign to IAM the SNS topic feedback role"
+  type        = map(string)
+  default     = {}
+}
+
+variable "sns_topic_lambda_feedback_sample_rate" {
+  description = "The percentage of successful deliveries to log"
+  type        = number
+  default     = 100
 }
 
 variable "slack_webhook_url" {
