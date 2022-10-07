@@ -118,6 +118,9 @@ module "lambda" {
   use_existing_cloudwatch_log_group = true
   attach_network_policy             = var.lambda_function_vpc_subnet_ids != null
 
+  dead_letter_target_arn    = var.lambda_dead_letter_target_arn
+  attach_dead_letter_policy = var.lambda_attach_dead_letter_policy
+
   allowed_triggers = {
     AllowExecutionFromSNS = {
       principal  = "sns.amazonaws.com"

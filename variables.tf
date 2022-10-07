@@ -34,6 +34,18 @@ variable "lambda_source_path" {
   default     = null
 }
 
+variable "lambda_dead_letter_target_arn" {
+  description = "The ARN of an SNS topic or SQS queue to notify when an invocation fails."
+  type        = string
+  default     = null
+}
+
+variable "lambda_attach_dead_letter_policy" {
+  description = "Controls whether SNS/SQS dead letter notification policy should be added to IAM role for Lambda Function"
+  type        = bool
+  default     = false
+}
+
 variable "sns_topic_name" {
   description = "The name of the SNS topic to create"
   type        = string
