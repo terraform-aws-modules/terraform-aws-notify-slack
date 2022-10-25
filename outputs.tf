@@ -51,5 +51,5 @@ output "lambda_cloudwatch_log_group_arn" {
 
 output "sns_topic_feedback_role_arn" {
   description = "The Amazon Resource Name (ARN) of the IAM role used for SNS delivery status logging"
-  value       = try(local.sns_feedback_role, "")
+  value       = local.sns_feedback_role
 }
