@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.4.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.3.0...v5.4.0) (2022-10-21)
+
+
+### Features
+
+* Add lambda dead-letter queue variables ([#180](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/180)) ([010aa89](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/010aa89147f91eeb95e7d842d90eccc3beac6265))
+
 ## [5.3.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.2.0...v5.3.0) (2022-06-17)
 
 
