@@ -357,7 +357,7 @@ def filter_message_from_slack(message):
             continue
         return True
     elif message.get('source', "") == "aws.iot":
-      if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex", "RegisterCertificate", "RegisterCertificateWithoutCA"]:
+      if message.get('detail', {}).get('eventName', '') in ["AttachPrincipalPolicy", "CreateTopicRule", "AttachThingPrincipal", "UpdateCertificate", "SearchIndex", "RegisterCertificate", "RegisterCertificateWithoutCA", "AttachPolicy", "CreateThing"]:
         return True
     elif message.get('Event Source', "") in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]:
       if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance", "Automated snapshot created", "Creating automated snapshot", "Creating manual snapshot", "Manual snapshot created", "Deleted manual snapshot"]:
