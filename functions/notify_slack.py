@@ -367,7 +367,7 @@ def send_slack_notification(payload: Dict[str, Any]) -> str:
     if not slack_url.startswith("http"):
         slack_url = decrypt_url(slack_url)
 
-    data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
+    data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(slack_url)
 
     try:
