@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [5.4.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.4.0...v5.4.1) (2022-11-07)
+
+
+### Bug Fixes
+
+* Update CI configuration files to use latest version ([#181](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/181)) ([6ca4605](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/6ca4605be57c4dd17c3daf87867b6e98136b0914))
+
 ## [5.4.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.3.0...v5.4.0) (2022-10-21)
 
 
