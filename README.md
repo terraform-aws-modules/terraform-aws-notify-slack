@@ -84,10 +84,12 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | Name | Type |
 |------|------|
 | [aws_cloudwatch_log_group.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_iam_role.sns_feedback_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_subscription.sns_notify_slack](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.sns_feedback](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
@@ -100,6 +102,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_cloudwatch_log_group_tags"></a> [cloudwatch\_log\_group\_tags](#input\_cloudwatch\_log\_group\_tags) | Additional tags for the Cloudwatch log group | `map(string)` | `{}` | no |
 | <a name="input_create"></a> [create](#input\_create) | Whether to create all resources | `bool` | `true` | no |
 | <a name="input_create_sns_topic"></a> [create\_sns\_topic](#input\_create\_sns\_topic) | Whether to create new SNS topic | `bool` | `true` | no |
+| <a name="input_enable_sns_topic_delivery_status_logs"></a> [enable\_sns\_topic\_delivery\_status\_logs](#input\_enable\_sns\_topic\_delivery\_status\_logs) | Whether to enable SNS topic delivery status logs | `bool` | `false` | no |
 | <a name="input_iam_policy_path"></a> [iam\_policy\_path](#input\_iam\_policy\_path) | Path of policies to that should be added to IAM role for Lambda Function | `string` | `null` | no |
 | <a name="input_iam_role_boundary_policy_arn"></a> [iam\_role\_boundary\_policy\_arn](#input\_iam\_role\_boundary\_policy\_arn) | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `null` | no |
 | <a name="input_iam_role_name_prefix"></a> [iam\_role\_name\_prefix](#input\_iam\_role\_name\_prefix) | A unique role name beginning with the specified prefix | `string` | `"lambda"` | no |
@@ -119,13 +122,22 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_lambda_role"></a> [lambda\_role](#input\_lambda\_role) | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you. | `string` | `""` | no |
 | <a name="input_lambda_source_path"></a> [lambda\_source\_path](#input\_lambda\_source\_path) | The source path of the custom Lambda function | `string` | `null` | no |
 | <a name="input_log_events"></a> [log\_events](#input\_log\_events) | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
+| <a name="input_putin_khuylo"></a> [putin\_khuylo](#input\_putin\_khuylo) | Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo! | `bool` | `true` | no |
 | <a name="input_recreate_missing_package"></a> [recreate\_missing\_package](#input\_recreate\_missing\_package) | Whether to recreate missing Lambda package if it is missing locally or not | `bool` | `true` | no |
 | <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | `number` | `-1` | no |
 | <a name="input_slack_channel"></a> [slack\_channel](#input\_slack\_channel) | The name of the channel in Slack for notifications | `string` | n/a | yes |
 | <a name="input_slack_emoji"></a> [slack\_emoji](#input\_slack\_emoji) | A custom emoji that will appear on Slack messages | `string` | `":aws:"` | no |
 | <a name="input_slack_username"></a> [slack\_username](#input\_slack\_username) | The username that will appear on Slack messages | `string` | n/a | yes |
 | <a name="input_slack_webhook_url"></a> [slack\_webhook\_url](#input\_slack\_webhook\_url) | The URL of Slack webhook | `string` | n/a | yes |
+| <a name="input_sns_topic_feedback_role_description"></a> [sns\_topic\_feedback\_role\_description](#input\_sns\_topic\_feedback\_role\_description) | Description of IAM role to use for SNS topic delivery status logging | `string` | `null` | no |
+| <a name="input_sns_topic_feedback_role_force_detach_policies"></a> [sns\_topic\_feedback\_role\_force\_detach\_policies](#input\_sns\_topic\_feedback\_role\_force\_detach\_policies) | Specifies to force detaching any policies the IAM role has before destroying it. | `bool` | `true` | no |
+| <a name="input_sns_topic_feedback_role_name"></a> [sns\_topic\_feedback\_role\_name](#input\_sns\_topic\_feedback\_role\_name) | Name of the IAM role to use for SNS topic delivery status logging | `string` | `null` | no |
+| <a name="input_sns_topic_feedback_role_path"></a> [sns\_topic\_feedback\_role\_path](#input\_sns\_topic\_feedback\_role\_path) | Path of IAM role to use for SNS topic delivery status logging | `string` | `null` | no |
+| <a name="input_sns_topic_feedback_role_permissions_boundary"></a> [sns\_topic\_feedback\_role\_permissions\_boundary](#input\_sns\_topic\_feedback\_role\_permissions\_boundary) | The ARN of the policy that is used to set the permissions boundary for the IAM role used by SNS topic delivery status logging | `string` | `null` | no |
+| <a name="input_sns_topic_feedback_role_tags"></a> [sns\_topic\_feedback\_role\_tags](#input\_sns\_topic\_feedback\_role\_tags) | A map of tags to assign to IAM the SNS topic feedback role | `map(string)` | `{}` | no |
 | <a name="input_sns_topic_kms_key_id"></a> [sns\_topic\_kms\_key\_id](#input\_sns\_topic\_kms\_key\_id) | ARN of the KMS key used for enabling SSE on the topic | `string` | `""` | no |
+| <a name="input_sns_topic_lambda_feedback_role_arn"></a> [sns\_topic\_lambda\_feedback\_role\_arn](#input\_sns\_topic\_lambda\_feedback\_role\_arn) | IAM role for SNS topic delivery status logs.  If this is set then a role will not be created for you. | `string` | `""` | no |
+| <a name="input_sns_topic_lambda_feedback_sample_rate"></a> [sns\_topic\_lambda\_feedback\_sample\_rate](#input\_sns\_topic\_lambda\_feedback\_sample\_rate) | The percentage of successful deliveries to log | `number` | `100` | no |
 | <a name="input_sns_topic_name"></a> [sns\_topic\_name](#input\_sns\_topic\_name) | The name of the SNS topic to create | `string` | n/a | yes |
 | <a name="input_sns_topic_tags"></a> [sns\_topic\_tags](#input\_sns\_topic\_tags) | Additional tags for the SNS topic | `map(string)` | `{}` | no |
 | <a name="input_subscription_filter_policy"></a> [subscription\_filter\_policy](#input\_subscription\_filter\_policy) | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
@@ -144,6 +156,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="output_notify_slack_lambda_function_name"></a> [notify\_slack\_lambda\_function\_name](#output\_notify\_slack\_lambda\_function\_name) | The name of the Lambda function |
 | <a name="output_notify_slack_lambda_function_version"></a> [notify\_slack\_lambda\_function\_version](#output\_notify\_slack\_lambda\_function\_version) | Latest published version of your Lambda function |
 | <a name="output_slack_topic_arn"></a> [slack\_topic\_arn](#output\_slack\_topic\_arn) | The ARN of the SNS topic from which messages will be sent to Slack |
+| <a name="output_sns_topic_feedback_role_arn"></a> [sns\_topic\_feedback\_role\_arn](#output\_sns\_topic\_feedback\_role\_arn) | The Amazon Resource Name (ARN) of the IAM role used for SNS delivery status logging |
 | <a name="output_this_slack_topic_arn"></a> [this\_slack\_topic\_arn](#output\_this\_slack\_topic\_arn) | The ARN of the SNS topic from which messages will be sent to Slack (backward compatibility for version 4.x) |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
