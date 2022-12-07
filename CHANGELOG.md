@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.5.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.4.1...v5.5.0) (2022-12-07)
+
+
+### Features
+
+* Add SNS topic delivery status IAM role ([#178](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/178)) ([2863105](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/2863105fd6e07ea0f16500928242968c4b4873cb))
+
 ### [5.4.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.4.0...v5.4.1) (2022-11-07)
 
 
