@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from snapshottest import Snapshot
 
-
 snapshots = Snapshot()
 
 snapshots[
@@ -121,6 +120,7 @@ snapshots[
                         "value": "`2020-01-03T01:02:03Z`",
                     },
                     {"short": True, "title": "Severity", "value": "`High`"},
+                    {"short": True, "title": "Account ID", "value": "`123456789`"},
                     {"short": True, "title": "Count", "value": "`1234`"},
                     {
                         "short": False,
@@ -167,6 +167,7 @@ snapshots[
                         "value": "`2020-01-03T01:02:03Z`",
                     },
                     {"short": True, "title": "Severity", "value": "`Low`"},
+                    {"short": True, "title": "Account ID", "value": "`123456789`"},
                     {"short": True, "title": "Count", "value": "`1234`"},
                     {
                         "short": False,
@@ -213,6 +214,7 @@ snapshots[
                         "value": "`2020-01-03T01:02:03Z`",
                     },
                     {"short": True, "title": "Severity", "value": "`Medium`"},
+                    {"short": True, "title": "Account ID", "value": "`123456789`"},
                     {"short": True, "title": "Count", "value": "`1234`"},
                     {
                         "short": False,
@@ -387,6 +389,7 @@ snapshots[
                         "value": "`2020-01-03T01:02:03Z`",
                     },
                     {"short": True, "title": "Severity", "value": "`High`"},
+                    {"short": True, "title": "Account ID", "value": "`123456789`"},
                     {"short": True, "title": "Count", "value": "`1234`"},
                     {
                         "short": False,
