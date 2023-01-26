@@ -176,6 +176,7 @@ def format_guardduty_finding(message: Dict[str, Any], region: str) -> Dict[str, 
                 "short": True,
             },
             {"title": "Severity", "value": f"`{severity}`", "short": True},
+            {"title": "Account ID", "value": f"`{detail['accountId']}`", "short": True},
             {
                 "title": "Count",
                 "value": f"`{service['count']}`",
