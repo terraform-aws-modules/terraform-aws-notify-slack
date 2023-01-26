@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [5.6.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.5.0...v5.6.0) (2023-01-26)
+
+
+### Features
+
+* Add account ID to GuardDuty event notification ([#187](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/187)) ([e3452b4](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/e3452b424a0e5ccdaf69935094e9fb7785fb315b))
+
 ## [5.5.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.4.1...v5.5.0) (2022-12-07)
 
 
