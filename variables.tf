@@ -263,3 +263,9 @@ variable "subscription_filter_policy" {
   type        = string
   default     = null
 }
+
+variable "subscription_filter_policy_scope" {
+  description = "(Optional) A valid filter policy scope MessageAttributes|MessageBody"
+  type        = string
+  default     = null
+}

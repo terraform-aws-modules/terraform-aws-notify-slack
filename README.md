@@ -64,7 +64,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.1 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.8 |
 
 ## Providers
@@ -141,6 +141,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_sns_topic_name"></a> [sns\_topic\_name](#input\_sns\_topic\_name) | The name of the SNS topic to create | `string` | n/a | yes |
 | <a name="input_sns_topic_tags"></a> [sns\_topic\_tags](#input\_sns\_topic\_tags) | Additional tags for the SNS topic | `map(string)` | `{}` | no |
 | <a name="input_subscription_filter_policy"></a> [subscription\_filter\_policy](#input\_subscription\_filter\_policy) | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
+| <a name="input_subscription_filter_policy_scope"></a> [subscription\_filter\_policy\_scope](#input\_subscription\_filter\_policy\_scope) | (Optional) A valid filter policy scope MessageAttributes\|MessageBody | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
 
 ## Outputs

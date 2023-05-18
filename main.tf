@@ -71,10 +71,11 @@ resource "aws_sns_topic" "this" {
 resource "aws_sns_topic_subscription" "sns_notify_slack" {
   count = var.create ? 1 : 0
 
-  topic_arn     = local.sns_topic_arn
-  protocol      = "lambda"
-  endpoint      = module.lambda.lambda_function_arn
-  filter_policy = var.subscription_filter_policy
+  topic_arn           = local.sns_topic_arn
+  protocol            = "lambda"
+  endpoint            = module.lambda.lambda_function_arn
+  filter_policy       = var.subscription_filter_policy
+  filter_policy_scope = var.subscription_filter_policy_scope
 }
 
 module "lambda" {
