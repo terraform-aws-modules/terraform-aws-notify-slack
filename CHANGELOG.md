@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.0.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.6.0...v6.0.0) (2023-05-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* Added variable to filter body of message on SNS level and bumped min Terraform version to 1.0 (#196)
+
+### Features
+
+* Added variable to filter body of message on SNS level and bumped min Terraform version to 1.0 ([#196](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/196)) ([ab660f7](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/ab660f7e86aec7a4f134036460b98eeb92c6c4c8))
+
 ## [5.6.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.5.0...v5.6.0) (2023-01-26)
 
 
