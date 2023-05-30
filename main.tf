@@ -69,10 +69,10 @@ module "sns_topic" {
     success_sample_rate = var.enable_sns_topic_delivery_status_logs ? var.sns_topic_lambda_feedback_sample_rate : null
   }
 
-  create_topic_policy = var.create_sns_topic_policy
-  topic_policy = var.sns_topic_policy
+  create_topic_policy         = var.create_sns_topic_policy
+  topic_policy                = var.sns_topic_policy
   enable_default_topic_policy = var.enable_default_sns_topic_policy
-  topic_policy_statements = var.sns_topic_policy_statements
+  topic_policy_statements     = var.sns_topic_policy_statements
 
   tags = merge(var.tags, var.sns_topic_tags)
 }
