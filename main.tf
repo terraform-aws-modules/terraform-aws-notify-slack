@@ -6,7 +6,7 @@ locals {
   create = var.create && var.putin_khuylo
 
   sns_topic_arn = try(
-    aws_sns_topic.this[0].arn,
+    module.sns_topic.topic_arn,
     "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
     ""
   )
@@ -53,20 +53,29 @@ resource "aws_cloudwatch_log_group" "lambda" {
   tags = merge(var.tags, var.cloudwatch_log_group_tags)
 }
 
-resource "aws_sns_topic" "this" {
-  count = var.create_sns_topic && var.create ? 1 : 0
+module "sns_topic" {
+  source  = "terraform-aws-modules/sns/aws"
+  version = "5.3.0"
+
+  create = var.create_sns_topic && var.create
 
   name = var.sns_topic_name
 
   kms_master_key_id = var.sns_topic_kms_key_id
 
-  lambda_failure_feedback_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
-  lambda_success_feedback_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
-  lambda_success_feedback_sample_rate = var.enable_sns_topic_delivery_status_logs ? var.sns_topic_lambda_feedback_sample_rate : null
+  lambda_feedback = {
+    failure_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
+    success_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
+    success_sample_rate = var.enable_sns_topic_delivery_status_logs ? var.sns_topic_lambda_feedback_sample_rate : null
+  }
+
+  create_topic_policy = var.create_sns_topic_policy
+  topic_policy = var.sns_topic_policy
+  enable_default_topic_policy = var.enable_default_sns_topic_policy
+  topic_policy_statements = var.sns_topic_policy_statements
 
   tags = merge(var.tags, var.sns_topic_tags)
 }
-
 
 resource "aws_sns_topic_subscription" "sns_notify_slack" {
   count = var.create ? 1 : 0

@@ -269,3 +269,27 @@ variable "subscription_filter_policy_scope" {
   type        = string
   default     = null
 }
+
+variable "create_sns_topic_policy" {
+  description = "Determines whether an SNS topic policy is created"
+  type        = bool
+  default     = true
+}
+
+variable "sns_topic_policy" {
+  description = "An externally created fully-formed AWS policy as JSON"
+  type        = string
+  default     = null
+}
+
+variable "sns_topic_policy_statements" {
+  description = "A map of IAM policy [statements](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document#statement) for custom permission usage"
+  type        = any
+  default     = {}
+}
+
+variable "enable_default_sns_topic_policy" {
+  description = "Specifies whether to enable the default topic policy. Defaults to `true`"
+  type        = bool
+  default     = true
+}
