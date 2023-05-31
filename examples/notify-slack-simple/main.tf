@@ -34,6 +34,16 @@ module "notify_slack" {
   slack_channel     = "aws-notification"
   slack_username    = "reporter"
 
+  sns_topic_policy_statements = {
+    eventbridge_publish = {
+      actions = ["sns:Publish"]
+      principals = [{
+        type        = "Service"
+        identifiers = ["events.amazonaws.com"]
+      }]
+    }
+  }
+
   tags = local.tags
 }
 
