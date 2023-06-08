@@ -1,0 +1,57 @@
+{
+  "detail-type": "Security Hub Findings - Imported",
+  "source": "aws.securityhub",
+  "region": "us-west-2",
+  "detail": {
+    "findings": [
+      {
+        "ProductArn": "arn:aws:securityhub:us-west-2::product/aws/macie",
+        "AwsAccountId": "123456789012",
+        "Types": [
+          "Sensitive Data Identifications/Passwords/Google Suite Two-factor backup codes in S3"
+        ],
+        "FirstObservedAt": "2019-04-11T21:52:15.900Z",
+        "LastObservedAt": "2019-04-11T21:52:15.900Z",
+        "CreatedAt": "2019-04-11T21:52:15.900Z",
+        "UpdatedAt": "2019-04-11T21:52:15.900Z",
+        "Severity": {
+          "Product": 6,
+          "Normalized": 60
+        },
+        "Confidence": 5,
+        "Title": "Google Suite Two-Factor Backup Codes uploaded to S3",
+        "Description": "Google Suite two-factor backup codes uploaded to S3....",
+        "Remediation": {
+          "Recommendation": {
+            "Text": "v2 Release"
+          }
+        },
+        "ProductFields": {
+          "rule-arn": "arn:aws:macie:us-west-2:123456789012:trigger/6214d71b927c41cbab015159a8f316a3",
+          "tags:0": "DATA_COMPLIANCE",
+          "tags:1": "BASIC_ALERT",
+          "themes:0/theme": "google_two_factor_backup",
+          "themes:0/count": "1",
+          "dlpRisk:0/risk": "8",
+          "dlpRisk:0/count": "1",
+          "owner:0/name": "vchin",
+          "owner:0/count": "1",
+          "aws/securityhub/FindingId": "arn:aws:securityhub:us-west-2::product/aws/macie/arn:aws:macie:us-west-2:123456789012:integtest/trigger/6214d71b927c41cbab015159a8f316a3/alert/f2893b211841467198cc1201e9031ee4",
+          "aws/securityhub/SeverityLabel": "LOW",
+          "aws/securityhub/ProductName": "Macie",
+          "aws/securityhub/CompanyName": "Amazon"
+        },
+        "Resources": [
+          {
+            "Type": "AwsS3Bucket",
+            "Id": "arn:aws:s3:::test-bucket-12",
+            "Partition": "aws",
+            "Region": "us-west-2"
+          }
+        ],
+        "RecordState": "ACTIVE",
+        "WorkflowState": "NEW"
+      }
+    ]
+  }
+}

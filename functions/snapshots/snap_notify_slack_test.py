@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from snapshottest import Snapshot
 
+
 snapshots = Snapshot()
 
 snapshots[
@@ -223,6 +224,147 @@ snapshots[
                     },
                 ],
                 "text": "AWS GuardDuty Finding - SAMPLE Unprotected port on EC2 instance i-123123123 is being probed",
+            }
+        ],
+        "channel": "slack_testing_sandbox",
+        "icon_emoji": ":aws:",
+        "username": "notify_slack_test",
+    }
+]
+
+snapshots[
+    "test_event_get_slack_message_payload_snapshots event_securityhub_finding_low.json"
+] = [
+    {
+        "attachments": [
+            {
+                "color": "#777777",
+                "fallback": "Security Hub Finding: Google Suite Two-Factor Backup Codes uploaded to S3",
+                "fields": [
+                    {
+                        "short": False,
+                        "title": "Description",
+                        "value": "`Google Suite two-factor backup codes uploaded to S3....`",
+                    },
+                    {
+                        "short": False,
+                        "title": "Finding Type",
+                        "value": "`['Sensitive Data Identifications/Passwords/Google Suite Two-factor backup codes in S3']`",
+                    },
+                    {
+                        "short": True,
+                        "title": "First Seen",
+                        "value": "`<!date^1555033936^{date} at {time} | 2019-04-11T21:52:15.900Z>`",
+                    },
+                    {
+                        "short": True,
+                        "title": "Last Seen",
+                        "value": "`<!date^1555033936^{date} at {time} | 2019-04-11T21:52:15.900Z>`",
+                    },
+                    {"short": True, "title": "Severity", "value": "`Low`"},
+                    {"short": True, "title": "Account ID", "value": "`123456789012`"},
+                    {"short": True, "title": "Resource Type", "value": "`AwsS3Bucket`"},
+                    {
+                        "short": False,
+                        "title": "Link to Finding",
+                        "value": "https://console.aws.amazon.com/securityhub/home?region=us-west-2#/findings?search=AwsAccountId%3D%255Coperator%255C%253AEQUALS%255C%253A123456789012%26Id%3D%255Coperator%255C%253AEQUALS%255C%253Aarn:aws:macie:us-west-2:123456789012:integtest/trigger/6214d71b927c41cbab015159a8f316a3/alert/f2893b211841467198cc1201e9031ee4",
+                    },
+                ],
+                "text": "AWS Security Hub Finding - Google Suite Two-Factor Backup Codes uploaded to S3",
+            }
+        ],
+        "channel": "slack_testing_sandbox",
+        "icon_emoji": ":aws:",
+        "username": "notify_slack_test",
+    }
+]
+
+snapshots[
+    "test_event_get_slack_message_payload_snapshots event_securityhub_finding_no_id_high.json"
+] = [
+    {
+        "attachments": [
+            {
+                "color": "danger",
+                "fallback": "Security Hub Finding: Google Suite Two-Factor Backup Codes uploaded to S3",
+                "fields": [
+                    {
+                        "short": False,
+                        "title": "Description",
+                        "value": "`Google Suite two-factor backup codes uploaded to S3....`",
+                    },
+                    {
+                        "short": False,
+                        "title": "Finding Type",
+                        "value": "`['Sensitive Data Identifications/Passwords/Google Suite Two-factor backup codes in S3']`",
+                    },
+                    {
+                        "short": True,
+                        "title": "First Seen",
+                        "value": "`<!date^1555033936^{date} at {time} | 2019-04-11T21:52:15.900Z>`",
+                    },
+                    {
+                        "short": True,
+                        "title": "Last Seen",
+                        "value": "`<!date^1555033936^{date} at {time} | 2019-04-11T21:52:15.900Z>`",
+                    },
+                    {"short": True, "title": "Severity", "value": "`High`"},
+                    {"short": True, "title": "Account ID", "value": "`123456789012`"},
+                    {"short": True, "title": "Resource Type", "value": "`AwsS3Bucket`"},
+                    {
+                        "short": False,
+                        "title": "Link to Finding",
+                        "value": "https://console.aws.amazon.com/securityhub/home?region=us-west-2#/findings?search=GeneratorId%3D%255Coperator%255C%253AEQUALS%255C%253Aarn:aws:macie:us-west-2:123456789012:integtest/trigger/6214d71b927c41cbab015159a8f316a3",
+                    },
+                ],
+                "text": "AWS Security Hub Finding - Google Suite Two-Factor Backup Codes uploaded to S3",
+            }
+        ],
+        "channel": "slack_testing_sandbox",
+        "icon_emoji": ":aws:",
+        "username": "notify_slack_test",
+    }
+]
+
+snapshots[
+    "test_event_get_slack_message_payload_snapshots event_securityhub_finding_no_id_no_generator_medium.json"
+] = [
+    {
+        "attachments": [
+            {
+                "color": "warning",
+                "fallback": "Security Hub Finding: Google Suite Two-Factor Backup Codes uploaded to S3",
+                "fields": [
+                    {
+                        "short": False,
+                        "title": "Description",
+                        "value": "`Google Suite two-factor backup codes uploaded to S3....`",
+                    },
+                    {
+                        "short": False,
+                        "title": "Finding Type",
+                        "value": "`['Sensitive Data Identifications/Passwords/Google Suite Two-factor backup codes in S3']`",
+                    },
+                    {
+                        "short": True,
+                        "title": "First Seen",
+                        "value": "`<!date^1555033936^{date} at {time} | 2019-04-11T21:52:15.900Z>`",
+                    },
+                    {
+                        "short": True,
+                        "title": "Last Seen",
+                        "value": "`<!date^1555033936^{date} at {time} | 2019-04-11T21:52:15.900Z>`",
+                    },
+                    {"short": True, "title": "Severity", "value": "`Medium`"},
+                    {"short": True, "title": "Account ID", "value": "`123456789012`"},
+                    {"short": True, "title": "Resource Type", "value": "`AwsS3Bucket`"},
+                    {
+                        "short": False,
+                        "title": "Link to Finding",
+                        "value": "https://console.aws.amazon.com/securityhub/home?region=us-west-2#/findings?search=AwsAccountId%3D%255Coperator%255C%253AEQUALS%255C%253A123456789012%26Id%3D%255Coperator%255C%253AEQUALS%255C%253Aarn:aws:s3:::test-bucket-12",
+                    },
+                ],
+                "text": "AWS Security Hub Finding - Google Suite Two-Factor Backup Codes uploaded to S3",
             }
         ],
         "channel": "slack_testing_sandbox",
