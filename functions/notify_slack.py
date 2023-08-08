@@ -30,7 +30,7 @@ def ecr_notification(message, region):
             { "title": "HIGH", "value": message.get('detail', {}).get('finding-severity-counts', {}).get('HIGH', "0"), "short": True },
             {
                 "title": "Link to Scan Results",
-                "value": "https://console.aws.amazon.com/ecr/repositories/private/" + message['account'] + "/" + message.get('detail', {}).get('repository-name', "") + "/image/" + message.get('detail', {}).get('image-digest', "") + "/scan-results/?region=" + region,
+                "value": "https://console.aws.amazon.com/ecr/repositories/private/" + message['account'] + "/" + message.get('detail', {}).get('repository-name', "") + "/_/image/" + message.get('detail', {}).get('image-digest', "") + "/scan-results/?region=" + region,
                 "short": False
             }
         ]
