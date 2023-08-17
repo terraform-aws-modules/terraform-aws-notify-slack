@@ -25,6 +25,9 @@ REGION = os.environ.get("AWS_REGION", "us-east-1")
 # Create client so its cached/frozen between invocations
 KMS_CLIENT = boto3.client("kms", region_name=REGION)
 
+# Set root logger log level
+level = logging.getLevelName(os.environ["LOG_LEVEL"])
+logging.getLogger().setLevel(level)
 
 class AwsService(Enum):
     """AWS service supported by function"""

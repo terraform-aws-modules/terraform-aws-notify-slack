@@ -156,6 +156,16 @@ variable "log_events" {
   default     = false
 }
 
+variable "log_level" {
+  description = "The log level of the Lambda function. Allowed values are DEBUG, INFO, WARNING, ERROR, CRITICAL"
+  type        = string
+  default     = "WARNING"
+  validation {
+    condition     = contains(["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], var.log_level)
+    error_message = "Invalid log level. Allowed values are DEBUG, INFO, WARNING, ERROR, CRITICAL"
+  }
+}
+
 variable "reserved_concurrent_executions" {
   description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations"
   type        = number
