@@ -26,8 +26,9 @@ REGION = os.environ.get("AWS_REGION", "us-east-1")
 KMS_CLIENT = boto3.client("kms", region_name=REGION)
 
 # Set root logger log level
-level = logging.getLevelName(os.environ["LOG_LEVEL"])
+level = logging.getLevelName(os.environ.get("LOG_LEVEL", "WARNING"))
 logging.getLogger().setLevel(level)
+
 
 class AwsService(Enum):
     """AWS service supported by function"""
