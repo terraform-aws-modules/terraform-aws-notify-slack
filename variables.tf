@@ -120,7 +120,7 @@ variable "sns_topic_lambda_feedback_sample_rate" {
 variable "slack_webhook_url" {
   description = "The URL of Slack webhook"
   type        = string
-  sensitive   : true
+  sensitive   = true
 }
 
 variable "slack_channel" {
