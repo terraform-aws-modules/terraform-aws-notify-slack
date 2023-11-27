@@ -1,0 +1,17 @@
+{
+  "detail-type": "GuardDuty Finding",
+  "region": "us-east-1",
+  "detail": {
+    "id": "sample-id-2",
+    "title": "SAMPLE Unprotected port on EC2 instance i-123123123 is being probed",
+    "severity": 5,
+    "accountId": "123456789",
+    "description": "EC2 instance has an unprotected port which is being probed by a known malicious host.",
+    "type": "Recon:EC2 PortProbeUnprotectedPort",
+    "service": {
+      "eventFirstSeen": "2020-01-02T01:02:03Z",
+      "eventLastSeen": "2020-01-03T01:02:03Z",
+      "count": 1234
+    }
+  }
+}

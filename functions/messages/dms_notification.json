@@ -1,0 +1,20 @@
+{
+  "Records": [{
+    "EventSource": "aws:sns",
+    "EventVersion": "1.0",
+    "EventSubscriptionArn": "arn:aws:sns:eu-west-1::ExampleTopic",
+    "Sns": {
+      "Type": "Notification",
+      "MessageId": "f86e3c5b-cd17-1ab8-80e9-c0776d4f1e7a",
+      "TopicArn": "arn:aws:sns:eu-west-1:123456789012:ExampleTopic",
+      "Subject": "DMS Notification Message",
+      "Message": "{\"Event Source\": \"replication-task\",\"Event Time\": \"2019-02-12 15:45:24.091\",\"Identifier Link\": \"https:\/\/console.aws.amazon.com\/dms\/home?region=us-east-1#tasks:ids=hello-world\",\"SourceId\": \"hello-world\",\"Event ID\": \"http:\/\/docs.aws.amazon.com\/dms\/latest\/userguide\/CHAP_Events.html#DMS-EVENT-0079 \",\"Event Message\": \"Replication task has stopped.\"}",
+      "Timestamp": "2019-02-12T15:45:24.091Z",
+      "SignatureVersion": "1",
+      "Signature": "EXAMPLE",
+      "SigningCertUrl": "EXAMPLE",
+      "UnsubscribeUrl": "EXAMPLE",
+      "MessageAttributes": {}
+    }
+  }]
+}

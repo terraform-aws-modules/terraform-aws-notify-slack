@@ -1,0 +1,10 @@
+[flake8]
+max-complexity = 10
+max-line-length = 120
+exclude =
+    .pytest_cache
+    __pycache__/
+    *tests/
+    events/
+    messages/
+    snapshots/
