@@ -245,6 +245,7 @@ def iam_notification(message, region):
 
 
 def iot_notification(message, region):
+  state = 'danger' if message.get('detail', {}).get('errorCode', 'NOTFOUND') != 'NOTFOUND' else 'good'
   fields = []
   if message.get("account", 'NOTFOUND') != 'NOTFOUND':
     fields.append( { "title": "account", "value": message.get('account', ""), "short": True })
@@ -252,16 +253,23 @@ def iot_notification(message, region):
   if message.get("detail", {}).get('eventName', 'NOTFOUND') != 'NOTFOUND':
     fields.append( { "title": "name", "value": message.get('detail', {}).get('eventName', ""), "short": True })
 
-  if message.get("detail", {}).get('requestParameters', {}).get('parameters', {}).get('AWS::IoT::Certificate::CommonName', "NOTFOUND") != 'NOTFOUND':
-    fields.append( { "title": "name", "CommonName": message.get("detail", {}).get('requestParameters', {}).get('parameters', {}).get('AWS::IoT::Certificate::CommonName', ""), "short": True })
+  if message.get("detail", {}).get('requestParameters', {}):
+    if message.get("detail", {}).get('requestParameters', {}).get('parameters', {}).get('AWS::IoT::Certificate::CommonName', "NOTFOUND") != 'NOTFOUND':
+      fields.append( { "title": "name", "CommonName": message.get("detail", {}).get('requestParameters', {}).get('parameters', {}).get('AWS::IoT::Certificate::CommonName', ""), "short": True })
 
-  if message.get("detail", {}).get('requestParameters', {}).get('requestParameters', {}).get('thingName', "NOTFOUND") != 'NOTFOUND':
-    fields.append( { "title": "ThingName", "CommonName": message.get("detail", {}).get('requestParameters', {}).get('requestParameters', {}).get('thingName', "NOTFOUND"), "short": True })
+    if message.get("detail", {}).get('requestParameters', {}).get('requestParameters', {}).get('thingName', "NOTFOUND") != 'NOTFOUND':
+      fields.append( { "title": "ThingName", "CommonName": message.get("detail", {}).get('requestParameters', {}).get('requestParameters', {}).get('thingName', "NOTFOUND"), "short": True })
+
+  if message.get('detail', {}).get('errorCode', 'NOTFOUND') != 'NOTFOUND':
+    fields.append( { "title": "errorCode", "value": message.get('detail', {}).get('errorCode', ""), "short": True } )
+
+  if message.get('detail', {}).get('errorMessage', 'NOTFOUND') != 'NOTFOUND':
+    fields.append( { "title": "errorMessage", "value": message.get('detail', {}).get('errorMessage', ""), "short": True } )
 
   fields.append({ "title": "time", "value": message['time'], "short": True})
 
   return {
-    "color": 'good',
+    "color": state,
     "fallback": "IoT {} event ".format(message['detail']),
     "fields": fields
   }
@@ -292,18 +300,26 @@ def security_hub_notification(message, region):
   }
 
 def systems_manager(message, region):
+  state = 'danger' if message.get('detail', {}).get('errorCode', 'NOTFOUND') != 'NOTFOUND' else 'good'
+  fields = [
+    { "title": "account", "value": message.get('account', ""), "short": True },
+    { "title": "region", "value": message.get('region', ""), "short": True },
+    { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('arn', ""), "short": True },
+    { "title": "message", "value": message.get('detail', {}).get('eventName', ""), "short": True },
+    { "title": "instance", "value": message.get('detail', {}).get('requestParameters', {}).get('target', ""), "short": True },
+    { "title": "time", "value": message['time'], "short": True}
+  ]
+  if message.get('detail', {}).get('responseElements', {}):
+    if message.get('detail', {}).get('responseElements', {}).get('sessionId', 'NOTFOUND') != 'NOTFOUND':
+  	  fields.append( { "title": "sessionId", "value": message.get('detail', {}).get('responseElements', {}).get('sessionId', ""), "short": True } )
+  if message.get('detail', {}).get('errorCode', 'NOTFOUND') != 'NOTFOUND':
+    fields.append( { "title": "errorCode", "value": message.get('detail', {}).get('errorCode', ""), "short": True } )
+  if message.get('detail', {}).get('errorMessage', 'NOTFOUND') != 'NOTFOUND':
+    fields.append( { "title": "errorMessage", "value": message.get('detail', {}).get('errorMessage', ""), "short": True } )
   return {
-    "color": 'good',
+    "color": state,
     "fallback": "SSM Session Manager {} event".format(message['detail']),
-    "fields": [
-      { "title": "account", "value": message.get('account', ""), "short": True },
-      { "title": "region", "value": message.get('region', ""), "short": True },
-      { "title": "user", "value": message.get('detail', {}).get('userIdentity',{}).get('arn', ""), "short": True },
-      { "title": "message", "value": message.get('detail', {}).get('eventName', ""), "short": True },
-      { "title": "sessionId", "value": message.get('detail', {}).get('responseElements', {}).get('sessionId', ""), "short": True },
-      { "title": "instance", "value": message.get('detail', {}).get('requestParameters', {}).get('target', ""), "short": True },
-      { "title": "time", "value": message['time'], "short": True}
-    ]
+    "fields": fields
   }
 
 def default_notification(subject, message):
