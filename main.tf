@@ -87,6 +87,7 @@ module "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
+  hash_extra                     = var.hash_extra
   handler                        = "${local.lambda_handler}.lambda_handler"
   source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
   recreate_missing_package       = var.recreate_missing_package
