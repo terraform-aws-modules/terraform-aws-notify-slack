@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.1.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.0.0...v6.1.0) (2023-12-11)
+
+
+### Features
+
+* Expose `hash_extra` variable from Lambda module ([#211](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/211)) ([ee30bb3](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/ee30bb3f5c0da7c118c8c09fbb195a7c0e607f73))
+
 ## [6.0.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.6.0...v6.0.0) (2023-05-18)
 
 
