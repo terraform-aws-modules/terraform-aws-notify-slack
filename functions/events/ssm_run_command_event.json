@@ -1,9 +1,0 @@
-{
-    "commandId": "6f69316a-e502-5a20-99bc-2408825b6dee",
-    "documentName": "AWS-RunPatchBaseline",
-    "instanceId": "i-99999999999999999",
-    "requestedDateTime": "2023-12-14T10:48:47.127Z",
-    "status": "Success",
-    "detailedStatus": "Success",
-    "eventTime": "2023-12-14T10:52:22.114Z"
-}
