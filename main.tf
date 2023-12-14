@@ -87,15 +87,16 @@ module "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  hash_extra                     = var.hash_extra
-  handler                        = "${local.lambda_handler}.lambda_handler"
-  source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
-  recreate_missing_package       = var.recreate_missing_package
-  runtime                        = "python3.8"
-  timeout                        = 30
-  kms_key_arn                    = var.kms_key_arn
-  reserved_concurrent_executions = var.reserved_concurrent_executions
   ephemeral_storage_size         = var.lambda_function_ephemeral_storage_size
+  handler                        = "${local.lambda_handler}.lambda_handler"
+  hash_extra                     = var.hash_extra
+  ignore_source_code_hash        = var.ignore_source_code_hash
+  kms_key_arn                    = var.kms_key_arn
+  recreate_missing_package       = var.recreate_missing_package
+  reserved_concurrent_executions = var.reserved_concurrent_executions
+  runtime                        = "python3.8"
+  source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
+  timeout                        = 30
 
   # If publish is disabled, there will be "Error adding new Lambda Permission for notify_slack:
   # InvalidParameterValueException: We currently do not support adding policies for $LATEST."

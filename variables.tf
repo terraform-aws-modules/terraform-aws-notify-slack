@@ -22,6 +22,12 @@ variable "hash_extra" {
   default     = ""
 }
 
+variable "ignore_source_code_hash" {
+  description = "Whether to ignore changes to the function's source code hash. Set to true if you manage infrastructure and code deployments separately."
+  type        = bool
+  default     = false
+}
+
 variable "lambda_role" {
   description = "IAM role attached to the Lambda Function.  If this is set then a role will not be created for you."
   type        = string
