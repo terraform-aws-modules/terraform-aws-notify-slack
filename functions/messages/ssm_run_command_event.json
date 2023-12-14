@@ -1,0 +1,22 @@
+{
+    "Records": [
+        {
+            "EventSource": "aws:sns",
+            "EventVersion": "1.0",
+            "EventSubscriptionArn": "arn:aws:sns:us-east-1::ExampleTopic",
+            "Sns": {
+                "Type": "Notification",
+                "MessageId": "d3cece60-336d-5967-844b-9394d3cb44ba",
+                "TopicArn": "arn:aws:sns:us-east-1:123456789012:ExampleTopic",
+                "Subject": "EC2 Run Command Notification us-east-1",
+                "Message": "{\"commandId\":\"6f69316a-e502-5a20-99bc-2408825b6dee\",\"documentName\":\"AWS-RunPatchBaseline\",\"instanceId\":\"i-99999999999999999\",\"requestedDateTime\":\"2023-12-14T10:48:47.127Z\",\"status\":\"Success\",\"detailedStatus\":\"Success\",\"eventTime\":\"2023-12-14T10:52:22.114Z\"}",
+                "Timestamp": "2023-12-14T10:52:22.173Z",
+                "SignatureVersion": "1",
+                "Signature": "EXAMPLE",
+                "SigningCertUrl": "EXAMPLE",
+                "UnsubscribeUrl": "EXAMPLE",
+                "MessageAttributes": {}
+            }
+        }
+    ]
+}

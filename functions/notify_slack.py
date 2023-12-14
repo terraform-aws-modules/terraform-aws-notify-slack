@@ -265,6 +265,70 @@ def format_aws_health(message: Dict[str, Any], region: str) -> Dict[str, Any]:
         ],
     }
 
+class SSMRunCommandStatus(Enum):
+    """Maps System Manager Run Command status to Slack message format color"""
+
+    Success = "good"
+    TimedOut = "danger"
+    Failed = "danger"
+
+def format_ssm_run_command(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """
+    Format AWS System Manager Run Document event into Slack message format
+
+    :params message: SNS message body containing AWS Health event
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+
+    return {
+        "color": SSMRunCommandStatus[message.get('status')].value,
+        "text": f"EC2 Run Command Notification {region}",
+        "fallback": f"EC2 Run Command Notification  {region}",
+        "fields": [
+            {   
+                "title": "Command Id", 
+                "value": f"`{message.get('commandId')}`",
+                "short": True
+            },
+            {
+                "title": "Region",
+                "value": f"`{region}`",
+                "short": True,
+            },
+            {
+                "title": "Document Name",
+                "value": f"`{message.get('documentName')}`",
+                "short": False,
+            },
+            {
+                "title": "Instance Id",
+                "value": f"`{message.get('instanceId')}`",
+                "short": False,
+            },
+            {
+                "title": "Requested Time",
+                "value": f"`{message.get('requestedDateTime')}`",
+                "short": True,
+            },
+            {
+                "title": "Event Time",
+                "value": f"`{message.get('eventTime')}`",
+                "short": True,
+            },
+            {
+                "title": "Status",
+                "value": f"`{message.get('status')}`",
+                "short": False,
+            },
+            {
+                "title": "Detailed Status",
+                "value": f"`{message.get('detailedStatus')}`",
+                "short": False,
+            }
+        ],
+    }
+
 
 def format_default(
     message: Union[str, Dict], subject: Optional[str] = None
@@ -342,6 +406,10 @@ def get_slack_message_payload(
 
     elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         notification = format_aws_health(message=message, region=message["region"])
+        attachment = notification
+
+    elif "documentName" in message:
+        notification = format_ssm_run_command(message=message, region=region)
         attachment = notification
 
     elif "attachments" in message or "text" in message:
