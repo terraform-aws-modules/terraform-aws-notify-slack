@@ -22,6 +22,12 @@ variable "hash_extra" {
   default     = ""
 }
 
+variable "lambda_function_code_signing_config_arn" {
+  description = "Amazon Resource Name (ARN) for a Code Signing Configuration"
+  type        = string
+  default     = null
+}
+
 variable "lambda_role" {
   description = "IAM role attached to the Lambda Function.  If this is set then a role will not be created for you."
   type        = string
@@ -142,6 +148,12 @@ variable "slack_emoji" {
   description = "A custom emoji that will appear on Slack messages"
   type        = string
   default     = ":aws:"
+}
+
+variable "s3_existing_package" {
+  description = "The path to the existing Lambda package in S3"
+  type        = map(string)
+  default     = null
 }
 
 variable "kms_key_arn" {

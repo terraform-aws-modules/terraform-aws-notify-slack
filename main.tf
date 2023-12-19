@@ -80,7 +80,7 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "3.2.0"
+  version = "6.5.0"
 
   create = var.create
 
@@ -96,6 +96,8 @@ module "lambda" {
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
   ephemeral_storage_size         = var.lambda_function_ephemeral_storage_size
+  code_signing_config_arn        = var.lambda_function_code_signing_config_arn
+  s3_existing_package            = var.s3_existing_package
 
   # If publish is disabled, there will be "Error adding new Lambda Permission for notify_slack:
   # InvalidParameterValueException: We currently do not support adding policies for $LATEST."
