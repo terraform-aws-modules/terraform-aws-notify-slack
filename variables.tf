@@ -23,7 +23,7 @@ variable "hash_extra" {
 }
 
 variable "lambda_function_code_signing_config_arn" {
-  description = "Amazon Resource Name (ARN) for a Code Signing Configuration"
+  description = "Amazon Resource Name (ARN) of the Lambda Code Signing Configuration"
   type        = string
   default     = null
 }
