@@ -151,7 +151,7 @@ variable "slack_emoji" {
 }
 
 variable "s3_existing_package" {
-  description = "The path to the existing Lambda package in S3"
+  description = "The S3 bucket object with keys bucket, key, version pointing to an existing zip-file to use"
   type        = map(string)
   default     = null
 }
