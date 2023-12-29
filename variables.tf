@@ -52,6 +52,12 @@ variable "lambda_source_path" {
   default     = null
 }
 
+variable "custom_lambda_source_name" {
+  description = "The name of the custom Lambda function source file without the extension when using s3_existing_package."
+  type        = string
+  default     = null
+}
+
 variable "lambda_dead_letter_target_arn" {
   description = "The ARN of an SNS topic or SQS queue to notify when an invocation fails."
   type        = string

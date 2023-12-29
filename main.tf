@@ -26,7 +26,7 @@ locals {
     resources = [var.kms_key_arn]
   }
 
-  lambda_handler = try(split(".", basename(var.lambda_source_path))[0], "notify_slack")
+  lambda_handler = try(split(".", basename(var.lambda_source_path))[0], var.custom_lambda_source_name != null ? var.custom_lambda_source_name : "notify_slack")
 }
 
 data "aws_iam_policy_document" "lambda" {
@@ -91,6 +91,7 @@ module "lambda" {
   handler                        = "${local.lambda_handler}.lambda_handler"
   source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : (var.s3_existing_package != null ? null : "${path.module}/functions/notify_slack.py")
   s3_existing_package            = var.s3_existing_package
+  create_package                 = var.s3_existing_package == null
   recreate_missing_package       = var.recreate_missing_package
   runtime                        = "python3.8"
   timeout                        = 30

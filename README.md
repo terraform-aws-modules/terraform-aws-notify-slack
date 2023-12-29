@@ -102,6 +102,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_cloudwatch_log_group_tags"></a> [cloudwatch\_log\_group\_tags](#input\_cloudwatch\_log\_group\_tags) | Additional tags for the Cloudwatch log group | `map(string)` | `{}` | no |
 | <a name="input_create"></a> [create](#input\_create) | Whether to create all resources | `bool` | `true` | no |
 | <a name="input_create_sns_topic"></a> [create\_sns\_topic](#input\_create\_sns\_topic) | Whether to create new SNS topic | `bool` | `true` | no |
+| <a name="input_custom_lambda_source_name"></a> [custom\_lambda\_source\_name](#input\_custom\_lambda\_source\_name) | The name of the custom Lambda function source file without the extension when using s3\_existing\_package. | `string` | `null` | no |
 | <a name="input_enable_sns_topic_delivery_status_logs"></a> [enable\_sns\_topic\_delivery\_status\_logs](#input\_enable\_sns\_topic\_delivery\_status\_logs) | Whether to enable SNS topic delivery status logs | `bool` | `false` | no |
 | <a name="input_hash_extra"></a> [hash\_extra](#input\_hash\_extra) | The string to add into hashing function. Useful when building same source path for different functions. | `string` | `""` | no |
 | <a name="input_iam_policy_path"></a> [iam\_policy\_path](#input\_iam\_policy\_path) | Path of policies to that should be added to IAM role for Lambda Function | `string` | `null` | no |
