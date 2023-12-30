@@ -26,7 +26,7 @@ locals {
     resources = [var.kms_key_arn]
   }
 
-  lambda_handler = try(split(".", basename(var.lambda_source_path))[0], "notify_slack")
+  lambda_handler = try(split(".", basename(var.lambda_source_path))[0], var.custom_lambda_source_name != null ? var.custom_lambda_source_name : "notify_slack")
 }
 
 data "aws_iam_policy_document" "lambda" {
@@ -80,7 +80,7 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "3.2.0"
+  version = "6.5.0"
 
   create = var.create
 
@@ -89,13 +89,16 @@ module "lambda" {
 
   hash_extra                     = var.hash_extra
   handler                        = "${local.lambda_handler}.lambda_handler"
-  source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
+  source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : (var.s3_existing_package != null ? null : "${path.module}/functions/notify_slack.py")
+  s3_existing_package            = var.s3_existing_package
+  create_package                 = var.s3_existing_package == null
   recreate_missing_package       = var.recreate_missing_package
   runtime                        = "python3.8"
   timeout                        = 30
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
   ephemeral_storage_size         = var.lambda_function_ephemeral_storage_size
+  code_signing_config_arn        = var.lambda_function_code_signing_config_arn
 
   # If publish is disabled, there will be "Error adding new Lambda Permission for notify_slack:
   # InvalidParameterValueException: We currently do not support adding policies for $LATEST."
