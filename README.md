@@ -53,6 +53,7 @@ If you want to subscribe the AWS Lambda Function created by this module to an ex
 ## Examples
 
 - [notify-slack-simple](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-simple) - Creates SNS topic which sends messages to Slack channel.
+- [notify-slack-signed-code](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/notify-slack-signed-code) - Creates SNS topic and lambda with signed code which sends messages to Slack channel.
 - [cloudwatch-alerts-to-slack](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/examples/cloudwatch-alerts-to-slack) - End to end example which shows how to send AWS Cloudwatch alerts to Slack channel and use KMS to encrypt webhook URL.
 
 ## Local Development and Testing
