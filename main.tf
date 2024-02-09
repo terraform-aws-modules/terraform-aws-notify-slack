@@ -30,7 +30,7 @@ locals {
 }
 
 data "aws_secretsmanager_secret_version" "slack_webhook_url" {
-  count = var.slack_webhook_url_secret_arn != "" ? 1 : 0
+  count     = var.slack_webhook_url_secret_arn != "" ? 1 : 0
   secret_id = var.slack_webhook_url_secret_arn
 }
 

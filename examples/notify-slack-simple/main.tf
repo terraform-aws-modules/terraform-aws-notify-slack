@@ -30,9 +30,10 @@ module "notify_slack" {
   sns_topic_name   = aws_sns_topic.example.name
   create_sns_topic = false
 
-  slack_webhook_url = "https://hooks.slack.com/services/AAA/BBB/CCC"
-  slack_channel     = "aws-notification"
-  slack_username    = "reporter"
+  slack_webhook_url            = ""
+  slack_webhook_url_secret_arn = "arn:aws:secretsmanager:us-east-1:123456789000:secret:slack-webhook-url-XXXXXX"
+  slack_channel                = "aws-notification"
+  slack_username               = "reporter"
 
   tags = local.tags
 }
