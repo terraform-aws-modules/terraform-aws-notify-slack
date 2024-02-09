@@ -29,6 +29,11 @@ locals {
   lambda_handler = try(split(".", basename(var.lambda_source_path))[0], "notify_slack")
 }
 
+data "aws_secretsmanager_secret_version" "slack_webhook_url" {
+  count = var.slack_webhook_url_secret_arn != "" ? 1 : 0
+  secret_id = var.slack_webhook_url_secret_arn
+}
+
 data "aws_iam_policy_document" "lambda" {
   count = var.create ? 1 : 0
 
@@ -102,7 +107,7 @@ module "lambda" {
   publish = true
 
   environment_variables = {
-    SLACK_WEBHOOK_URL = var.slack_webhook_url
+    SLACK_WEBHOOK_URL = var.slack_webhook_url != "" ? var.slack_webhook_url : data.aws_secretsmanager_secret_version.slack_webhook_url[0].secret_string
     SLACK_CHANNEL     = var.slack_channel
     SLACK_USERNAME    = var.slack_username
     SLACK_EMOJI       = var.slack_emoji

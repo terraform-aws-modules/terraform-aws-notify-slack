@@ -124,8 +124,16 @@ variable "sns_topic_lambda_feedback_sample_rate" {
 }
 
 variable "slack_webhook_url" {
-  description = "The URL of Slack webhook"
+  description = "The Slack webhook URL directly provided. Leave empty if using secret ARN."
   type        = string
+  sensitive   = true
+}
+
+variable "slack_webhook_url_secret_arn" {
+  description = "The ARN of the secret in AWS Secrets Manager containing the Slack webhook URL. Leave empty if the URL is directly provided."
+  type        = string
+  default     = ""
+  sensitive   = true
 }
 
 variable "slack_channel" {
