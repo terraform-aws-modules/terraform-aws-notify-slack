@@ -31,7 +31,16 @@ resource "aws_iam_role" "sns_feedback_role" {
   path                  = var.sns_topic_feedback_role_path
   force_detach_policies = var.sns_topic_feedback_role_force_detach_policies
   permissions_boundary  = var.sns_topic_feedback_role_permissions_boundary
-  assume_role_policy    = data.aws_iam_policy_document.sns_feedback[0].json
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect    = "Allow",
+      Principal = {
+        Service = "sns.amazonaws.com"
+      },
+      Action    = "sts:AssumeRole"
+    }]
+  })
 
   tags = merge(var.tags, var.sns_topic_feedback_role_tags)
 }
