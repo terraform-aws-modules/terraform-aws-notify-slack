@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.1.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.1...v6.1.2) (2024-03-26)
+
+
+### Bug Fixes
+
+* Correct assume role permissions for SNS service to assume IAM role ([#220](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/220)) ([dae0c0f](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/dae0c0f49d41cf98c5e31af7912ed406eea81c83))
+
 ## [6.1.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.0...v6.1.1) (2024-03-06)
 
 
