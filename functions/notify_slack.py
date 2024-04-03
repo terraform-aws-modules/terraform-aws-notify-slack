@@ -266,6 +266,80 @@ def format_aws_health(message: Dict[str, Any], region: str) -> Dict[str, Any]:
     }
 
 
+def aws_backup_field_parser(message: str) -> Dict[str, Any]:
+    """
+    Parser for AWS Backup event message. It extracts the fields from the message and returns a dictionary.
+
+    :params message: message containing AWS Backup event
+    :returns: dictionary containing the fields extracted from the message
+    """
+    field_names = ["Recovery point ARN", "Resource ARN", "BackupJob ID", "Backup Job Id", "Backed up Resource ARN", "Status Message"]
+
+    first = None
+    field_match = None
+    
+    for field in field_names:
+        index = message.find(field)
+        if index != -1 and (first == None or index < first):
+            first = index
+            field_match = field
+
+    if first is not None:
+        next = None
+        for field in field_names:
+            index = message.find(field, first + len(field_match) + 1)
+            if index != -1 and (next == None or index < next):
+                next = index
+
+        if next is None:
+            next = len(message)
+        
+        rem_message = message[next:]
+        fields = aws_backup_field_parser(rem_message)
+
+        text = message[first+len(field_match)+1:next]
+        while text.startswith(" ") or text.startswith(":"):
+            text = text[1:]
+
+        fields[field_match] = text
+        return fields
+    else:
+        return {}
+        
+
+def format_aws_backup(message: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Format AWS Backup event into Slack message format
+
+    :params message: SNS message body containing AWS Backup event
+    :returns: formatted Slack message payload
+    """
+
+    fields = []
+    attachments = {}
+    
+    title = message.split(".")[0]
+    
+    
+    if "failed" in title:
+        title = title + " ⚠️"
+    
+    if "completed" in title:
+        title = title + " ✅"
+    
+    fields.append({"title": title})
+
+    list_items = aws_backup_field_parser(message)
+
+    for k,v in list_items.items():
+        fields.append({"value": k , "short": False})
+        fields.append({"value": "```\n" + v +"\n```" , "short": False})
+
+    attachments["fields"] = fields  # type: ignore
+
+    return attachments
+
+
 def format_default(
     message: Union[str, Dict], subject: Optional[str] = None
 ) -> Dict[str, Any]:
@@ -342,6 +416,10 @@ def get_slack_message_payload(
 
     elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         notification = format_aws_health(message=message, region=message["region"])
+        attachment = notification
+
+    elif subject == "Notification from AWS Backup":
+        notification = format_aws_backup(message=message)
         attachment = notification
 
     elif "attachments" in message or "text" in message:
