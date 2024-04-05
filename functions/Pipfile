@@ -18,7 +18,7 @@ radon = "*"
 snapshottest = "~=0.6"
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"
 
 [scripts]
 test = "python3 -m pytest --cov --cov-report=term"

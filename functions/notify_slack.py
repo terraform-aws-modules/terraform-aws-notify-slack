@@ -273,11 +273,18 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
     :params message: message containing AWS Backup event
     :returns: dictionary containing the fields extracted from the message
     """
-    field_names = ["Recovery point ARN", "Resource ARN", "BackupJob ID", "Backup Job Id", "Backed up Resource ARN", "Status Message"]
+    field_names = [
+        "Recovery point ARN",
+        "Resource ARN",
+        "BackupJob ID",
+        "Backup Job Id",
+        "Backed up Resource ARN",
+        "Status Message",
+    ]
 
     first = None
     field_match = None
-    
+
     for field in field_names:
         index = message.find(field)
         if index != -1 and (first == None or index < first):
@@ -293,11 +300,11 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
 
         if next is None:
             next = len(message)
-        
+
         rem_message = message[next:]
         fields = aws_backup_field_parser(rem_message)
 
-        text = message[first+len(field_match)+1:next]
+        text = message[first + len(field_match) + 1 : next]
         while text.startswith(" ") or text.startswith(":"):
             text = text[1:]
 
@@ -305,7 +312,7 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
         return fields
     else:
         return {}
-        
+
 
 def format_aws_backup(message: Dict[str, Any]) -> Dict[str, Any]:
     """
@@ -317,23 +324,22 @@ def format_aws_backup(message: Dict[str, Any]) -> Dict[str, Any]:
 
     fields = []
     attachments = {}
-    
+
     title = message.split(".")[0]
-    
-    
+
     if "failed" in title:
         title = title + " ⚠️"
-    
+
     if "completed" in title:
         title = title + " ✅"
-    
+
     fields.append({"title": title})
 
     list_items = aws_backup_field_parser(message)
 
-    for k,v in list_items.items():
-        fields.append({"value": k , "short": False})
-        fields.append({"value": "```\n" + v +"\n```" , "short": False})
+    for k, v in list_items.items():
+        fields.append({"value": k, "short": False})
+        fields.append({"value": "```\n" + v + "\n```", "short": False})
 
     attachments["fields"] = fields  # type: ignore
 
