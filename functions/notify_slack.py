@@ -37,23 +37,47 @@ def ecr_notification(message, region):
     }
 
 def inspector_notification(message, region):
-  state = 'good' if message.get('detail', {}).get('status', "") == 'CLOSED' else 'danger'
+  if message.get('detail', {}).get('status', "") == 'CLOSED':
+    state = 'good'
+  elif message.get('detail', {}).get('finding-severity-counts', {}).get('CRITICAL', 0) != 0:
+    state = 'warning'
+  else:
+    state = 'danger'
+
+
+  fields=[]
+
+  if message.get('detail', {}).get('title', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "Title", "value": message.get('detail', {}).get('title', ""), "short": True })
+
+  if message.get('detail', {}).get('severity', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "Severity", "value": message.get('detail', {}).get('severity', ""), "short": True })
+
+  if message.get('detail', {}).get('status', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "Status", "value": message.get('detail', {}).get('status', ""), "short": True })
+
+  if message.get('detail', {}).get('scan-status', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "Scan Status", "value": message.get('detail', {}).get('scan-status', ""), "short": True })
+
+  if message.get('detail', {}).get('finding-severity-counts', {}).get('CRITICAL', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "CRITICAL", "value": message.get('detail', {}).get('finding-severity-counts', {}).get('CRITICAL', ""), "short": True })
+
+  if message.get('detail', {}).get('image-tags', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "Image Tag", "value": ",".join(message.get('detail', {}).get('image-tags', [])), "short": True } )
+
+  if message.get('detail', {}).get('awsAccountId', "NOTFOUND") != 'NOTFOUND':
+    fields.append( { "title": "Account", "value": message.get('detail', {}).get('awsAccountId', ""), "short": True })
+
+  if 'repository' in message['resources'][0] and message.get('detail').get('image-digest', "NOTFOUND") != 'NOTFOUND' :
+    fields.append( { "title": "Link to Scan Results", "value": "https://console.aws.amazon.com/inspector/v2/home?region=" + message['region'] + "#/findings/container-image/" + urllib.parse.quote_plus(message['resources'][0] + "/" + message.get('detail').get('image-digest')) } )
+
+  fields.append( { "title": "Resource", "value": message['resources'][0], "short": True })
+  fields.append( { "title": "Region", "value": message['region'], "short": True })
+
   return {
     "color": state,
-    "fallback": "Inspector {} event".format(message['detail']),
-    "fields": [
-      { "title": "Title", "value": message.get('detail', {}).get('title', ""), "short": True },
-      { "title": "Resource", "value": message['resources'][0], "short": True },
-      { "title": "Severity", "value": message.get('detail', {}).get('severity', ""), "short": True },
-      { "title": "Region", "value": message['region'], "short": True },
-      { "title": "Account", "value": message.get('detail', {}).get('awsAccountId', ""), "short": True },
-      { "title": "Status", "value": message.get('detail', {}).get('status', ""), "short": True },
-      {
-        "title": "Link to Scan Results",
-        "value": "https://console.aws.amazon.com/inspector/v2/home?region=" + message['region'] + "#/findings/instances/" + message['resources'][0],
-        "short": False
-      }
-    ]
+    "fields": fields,
+    "short": False
   }
 
 def asg_notification(message, regions):
@@ -333,6 +357,13 @@ def filter_message_from_slack(message):
       return True
     elif message.get('source', "") == "aws.ecr":
       if message.get('detail', {}).get('finding-severity-counts', {}).get('CRITICAL', 0) != 0:
+        return False
+      else:
+        return True
+    elif message.get('source', "") == "aws.inspector2":
+      if message.get('detail', {}).get('finding-severity-counts', {}).get('CRITICAL', 0) != 0:
+        return False
+      elif message.get('detail', {}).get('scan-status', {}) in ["INTERNAL_ERROR", "ACCESS_DENIED"]:
         return False
       else:
         return True
