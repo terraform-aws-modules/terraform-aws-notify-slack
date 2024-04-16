@@ -287,7 +287,7 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
 
     for field in field_names:
         index = message.find(field)
-        if index != -1 and (first == None or index < first):
+        if index != -1 and (first is None or index < first):
             first = index
             field_match = field
 
@@ -295,7 +295,7 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
         next = None
         for field in field_names:
             index = message.find(field, first + len(field_match) + 1)
-            if index != -1 and (next == None or index < next):
+            if index != -1 and (next is None or index < next):
                 next = index
 
         if next is None:
@@ -304,7 +304,7 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
         rem_message = message[next:]
         fields = aws_backup_field_parser(rem_message)
 
-        text = message[first + len(field_match) + 1 : next]
+        text = message[first + len(field_match) + 1:next]
         while text.startswith(" ") or text.startswith(":"):
             text = text[1:]
 
