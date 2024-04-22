@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.2.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.2...v6.2.0) (2024-04-22)
+
+
+### Features
+
+* Added architecture variable ([#224](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/224)) ([1ae3ab7](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/1ae3ab7e084341e7a1fd3acccb15d2971020fce5))
+
 ## [6.1.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.1...v6.1.2) (2024-03-26)
 
 
