@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.3.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.2.0...v6.3.0) (2024-04-22)
+
+
+### Features
+
+* Update Python lambda runtime from `3.8` to `3.11` ([#225](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/225)) ([b4ef4e4](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/b4ef4e45e9f3dafb774ccf62d9473b338de68f3f))
+
 ## [6.2.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.2...v6.2.0) (2024-04-22)
 
 
