@@ -283,7 +283,7 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
     ]
 
     first = None
-    field_match = None
+    field_match = ""
 
     for field in field_names:
         index = message.find(field)
@@ -314,7 +314,7 @@ def aws_backup_field_parser(message: str) -> Dict[str, Any]:
         return {}
 
 
-def format_aws_backup(message: Dict[str, Any]) -> Dict[str, Any]:
+def format_aws_backup(message: str) -> Dict[str, Any]:
     """
     Format AWS Backup event into Slack message format
 
@@ -322,7 +322,7 @@ def format_aws_backup(message: Dict[str, Any]) -> Dict[str, Any]:
     :returns: formatted Slack message payload
     """
 
-    fields = []
+    fields : list[Dict[str, Any]] = []
     attachments = {}
 
     title = message.split(".")[0]
@@ -425,7 +425,7 @@ def get_slack_message_payload(
         attachment = notification
 
     elif subject == "Notification from AWS Backup":
-        notification = format_aws_backup(message=message)
+        notification = format_aws_backup(message=str(message))
         attachment = notification
 
     elif "attachments" in message or "text" in message:

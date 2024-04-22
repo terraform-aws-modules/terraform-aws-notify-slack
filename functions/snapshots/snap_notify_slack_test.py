@@ -249,14 +249,14 @@ snapshots["test_sns_get_slack_message_payload_snapshots message_backup.json"] = 
                     {
                         "short": False,
                         "value": """```
-arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012e. 
+arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012e.
 ```""",
                     },
                     {"short": False, "value": "Recovery point ARN"},
                     {
                         "short": False,
                         "value": """```
-arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012d. 
+arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012d.
 ```""",
                     },
                 ]
