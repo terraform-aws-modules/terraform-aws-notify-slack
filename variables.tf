@@ -7,7 +7,7 @@ variable "putin_khuylo" {
 variable "architectures" {
   description = "Instruction set architecture for your Lambda function. Valid values are [\"x86_64\"] and [\"arm64\"]."
   type        = list(string)
-  default     = ["arm64"]
+  default     = null
 }
 
 variable "create" {
