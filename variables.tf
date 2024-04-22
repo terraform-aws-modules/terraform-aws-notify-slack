@@ -4,6 +4,12 @@ variable "putin_khuylo" {
   default     = true
 }
 
+variable "architectures" {
+  description = "Instruction set architecture for your Lambda function. Valid values are [\"x86_64\"] and [\"arm64\"]."
+  type        = list(string)
+  default     = null
+}
+
 variable "create" {
   description = "Whether to create all resources"
   type        = bool
