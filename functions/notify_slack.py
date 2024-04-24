@@ -11,6 +11,7 @@ import base64
 import json
 import logging
 import os
+import re
 import urllib.parse
 import urllib.request
 from enum import Enum
@@ -266,52 +267,32 @@ def format_aws_health(message: Dict[str, Any], region: str) -> Dict[str, Any]:
     }
 
 
-def aws_backup_field_parser(message: str) -> Dict[str, Any]:
+def aws_backup_field_parser(message: str) -> Dict[str, str]:
     """
     Parser for AWS Backup event message. It extracts the fields from the message and returns a dictionary.
 
     :params message: message containing AWS Backup event
     :returns: dictionary containing the fields extracted from the message
     """
-    field_names = [
-        "Recovery point ARN",
-        "Resource ARN",
-        "BackupJob ID",
-        "Backup Job Id",
-        "Backed up Resource ARN",
-        "Status Message",
-    ]
+    # Order is somewhat important, working in reverse order of the message payload
+    # to reduce right most matched values
+    field_names = {
+        "BackupJob ID": r"(BackupJob ID : ).*",
+        "Resource ARN": r"(Resource ARN : ).*[.]",
+        "Recovery point ARN": r"(Recovery point ARN: ).*[.]",
+    }
+    fields = {}
 
-    first = None
-    field_match = ""
+    for fname, freg in field_names.items():
+        match = re.search(freg, message)
+        if match:
+            value = match.group(0).split(" ")[-1]
+            fields[fname] = value.removesuffix(".")
 
-    for field in field_names:
-        index = message.find(field)
-        if index != -1 and (first is None or index < first):
-            first = index
-            field_match = field
+            # Remove the matched field from the message
+            message = message.replace(match.group(0), "")
 
-    if first is not None:
-        next = None
-        for field in field_names:
-            index = message.find(field, first + len(field_match) + 1)
-            if index != -1 and (next is None or index < next):
-                next = index
-
-        if next is None:
-            next = len(message)
-
-        rem_message = message[next:]
-        fields = aws_backup_field_parser(rem_message)
-
-        text = message[first + len(field_match) + 1:next]
-        while text.startswith(" ") or text.startswith(":"):
-            text = text[1:]
-
-        fields[field_match] = text
-        return fields
-    else:
-        return {}
+    return fields
 
 
 def format_aws_backup(message: str) -> Dict[str, Any]:
@@ -328,18 +309,18 @@ def format_aws_backup(message: str) -> Dict[str, Any]:
     title = message.split(".")[0]
 
     if "failed" in title:
-        title = title + " ⚠️"
+        title = f"⚠️ {title}"
 
     if "completed" in title:
-        title = title + " ✅"
+        title = f"✅ {title}"
 
     fields.append({"title": title})
 
-    list_items = aws_backup_field_parser(message)
+    backup_fields = aws_backup_field_parser(message)
 
-    for k, v in list_items.items():
+    for k, v in backup_fields.items():
         fields.append({"value": k, "short": False})
-        fields.append({"value": "```\n" + v + "\n```", "short": False})
+        fields.append({"value": f"`{v}`", "short": False})
 
     attachments["fields"] = fields  # type: ignore
 
