@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.4.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.3.0...v6.4.0) (2024-04-24)
+
+
+### Features
+
+* Improved AWS backup notification readability ([#222](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/222)) ([27d1c46](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/27d1c464f80708740d8d155e7cb11367b41bab6c))
+
 ## [6.3.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.2.0...v6.3.0) (2024-04-22)
 
 
