@@ -322,7 +322,7 @@ def format_aws_backup(message: str) -> Dict[str, Any]:
     :returns: formatted Slack message payload
     """
 
-    fields : list[Dict[str, Any]] = []
+    fields:list[Dict[str, Any]] = []
     attachments = {}
 
     title = message.split(".")[0]
