@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.5.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.4.1...v6.5.0) (2024-09-03)
+
+
+### Features
+
+* Add variable to allow disabling the package timestamp trigger ([#233](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/233)) ([b3016e2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/b3016e2f059ffa4ce12745acd4c131c3744faf44))
+
 ## [6.4.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.4.0...v6.4.1) (2024-09-03)
 
 
