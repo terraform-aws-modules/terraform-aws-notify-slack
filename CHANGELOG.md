@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.4.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.4.0...v6.4.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* Update `aws_sns_topic_subscription` endpoint to use qualified arn ([#231](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/231)) ([e95cde8](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/e95cde8acdaf221e74595daa2238b75f0682ea06)), closes [#230](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/230)
+
 ## [6.4.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.3.0...v6.4.0) (2024-04-24)
 
 
