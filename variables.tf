@@ -281,3 +281,9 @@ variable "subscription_filter_policy_scope" {
   type        = string
   default     = null
 }
+
+variable "trigger_on_package_timestamp" {
+  description = "(Optional) Whether or not to ignore the file timestamp when deciding to create the archive"
+  type        = bool
+  default     = false
+}
