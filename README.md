@@ -144,6 +144,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_subscription_filter_policy"></a> [subscription\_filter\_policy](#input\_subscription\_filter\_policy) | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
 | <a name="input_subscription_filter_policy_scope"></a> [subscription\_filter\_policy\_scope](#input\_subscription\_filter\_policy\_scope) | (Optional) A valid filter policy scope MessageAttributes\|MessageBody | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
+| <a name="input_trigger_on_package_timestamp"></a> [trigger\_on\_package\_timestamp](#input\_trigger\_on\_package\_timestamp) | (Optional) Whether or not to ignore the file timestamp when deciding to create the archive | `bool` | `false` | no |
 
 ## Outputs
 
