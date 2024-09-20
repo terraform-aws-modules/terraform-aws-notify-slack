@@ -21,6 +21,7 @@ data "aws_iam_policy_document" "sns_feedback" {
   }
 }
 
+// See https://repost.aws/knowledge-center/monitor-sns-texts-cloudwatch for required permissions to deliver status logs
 data "aws_iam_policy_document" "sns_feedback_allow_log_creation" {
   count = local.create_sns_feedback_role ? 1 : 0
 
@@ -47,13 +48,16 @@ resource "aws_iam_role" "sns_feedback_role" {
   permissions_boundary  = var.sns_topic_feedback_role_permissions_boundary
   assume_role_policy    = data.aws_iam_policy_document.sns_feedback[0].json
 
-  inline_policy {
-    name   = "allow-log-creation"
-    policy = data.aws_iam_policy_document.sns_feedback_allow_log_creation[0].json
-  }
-
   tags = merge(
     var.tags,
     var.sns_topic_feedback_role_tags,
   )
+}
+
+resource "aws_iam_role_policy" "sns_feedback_role" {
+  count = local.create_sns_feedback_role ? 1 : 0
+
+  role   = aws_iam_role.sns_feedback_role[0].name
+  name   = "allow-cloudwatch-log-delivery"
+  policy = data.aws_iam_policy_document.sns_feedback_allow_log_creation[0].json
 }
