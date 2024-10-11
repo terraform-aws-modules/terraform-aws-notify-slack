@@ -58,7 +58,7 @@ If you want to subscribe the AWS Lambda Function created by this module to an ex
 
 See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/functions) for further details.
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -161,7 +161,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="output_slack_topic_arn"></a> [slack\_topic\_arn](#output\_slack\_topic\_arn) | The ARN of the SNS topic from which messages will be sent to Slack |
 | <a name="output_sns_topic_feedback_role_arn"></a> [sns\_topic\_feedback\_role\_arn](#output\_sns\_topic\_feedback\_role\_arn) | The Amazon Resource Name (ARN) of the IAM role used for SNS delivery status logging |
 | <a name="output_this_slack_topic_arn"></a> [this\_slack\_topic\_arn](#output\_this\_slack\_topic\_arn) | The ARN of the SNS topic from which messages will be sent to Slack (backward compatibility for version 4.x) |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 ## Authors
 
