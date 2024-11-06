@@ -67,6 +67,13 @@ resource "aws_sns_topic" "this" {
   tags = merge(var.tags, var.sns_topic_tags)
 }
 
+resource "aws_sns_topic_policy" "access_policy" {
+  count = var.create && var.sns_topic_access_policy != "" ? 1 : 0
+
+  arn    = local.sns_topic_arn
+  policy = var.sns_topic_access_policy
+}
+
 
 resource "aws_sns_topic_subscription" "sns_notify_slack" {
   count = var.create ? 1 : 0

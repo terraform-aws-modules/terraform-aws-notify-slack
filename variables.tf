@@ -69,6 +69,12 @@ variable "sns_topic_name" {
   type        = string
 }
 
+variable "sns_topic_access_policy" {
+  description = "The JSON of the SNS topic policy, if any"
+  type        = string
+  default     = ""
+}
+
 variable "sns_topic_kms_key_id" {
   description = "ARN of the KMS key used for enabling SSE on the topic"
   type        = string
