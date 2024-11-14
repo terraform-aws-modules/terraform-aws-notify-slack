@@ -123,13 +123,25 @@ def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, A
     }
 
 
+def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, Any]
+    """
+    Format AWS Secuirty Hub finding event into Slack message format
+
+    :params message: SNS message body containing SecurityHub finding event
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+
+    service_url = get_service_url(region=region, service="security_hub")
+    findings = message["detail"]["findings"]
+
+
 class GuardDutyFindingSeverity(Enum):
     """Maps GuardDuty finding severity to Slack message format color"""
 
     Low = "#777777"
     Medium = "warning"
     High = "danger"
-
 
 def format_guardduty_finding(message: Dict[str, Any], region: str) -> Dict[str, Any]:
     """
@@ -400,6 +412,9 @@ def get_slack_message_payload(
             message=message, region=message["region"]
         )
         attachment = notification
+
+    elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
+      notification = format_aws_security_hub(message=message, region=message["region"])
 
     elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         notification = format_aws_health(message=message, region=message["region"])
