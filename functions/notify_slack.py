@@ -123,18 +123,18 @@ def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, A
     }
 
 
-def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, Any]
-    """
-    Format AWS Secuirty Hub finding event into Slack message format
-
-    :params message: SNS message body containing SecurityHub finding event
-    :params region: AWS region where the event originated from
-    :returns: formatted Slack message payload
-    """
-
-    service_url = get_service_url(region=region, service="security_hub")
-    findings = message["detail"]["findings"]
-
+#def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, Any]
+#    """
+#    Format AWS Secuirty Hub finding event into Slack message format
+#
+#    :params message: SNS message body containing SecurityHub finding event
+#    :params region: AWS region where the event originated from
+#    :returns: formatted Slack message payload
+#    """
+#
+#    service_url = get_service_url(region=region, service="security_hub")
+#    findings = message["detail"]["findings"]
+#
 
 class GuardDutyFindingSeverity(Enum):
     """Maps GuardDuty finding severity to Slack message format color"""
@@ -413,8 +413,8 @@ def get_slack_message_payload(
         )
         attachment = notification
 
-    elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
-      notification = format_aws_security_hub(message=message, region=message["region"])
+    # elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
+    #   notification = format_aws_security_hub(message=message, region=message["region"])
 
     elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         notification = format_aws_health(message=message, region=message["region"])
@@ -468,8 +468,7 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     :param context: lambda expected context object
     :returns: none
     """
-    if os.environ.get("LOG_EVENTS", "False") == "True":
-        logging.info(f"Event logging enabled: `{json.dumps(event)}`")
+    logging.warning(f"Event logging enabled: `{json.dumps(event)}`")
 
     for record in event["Records"]:
         sns = record["Sns"]
