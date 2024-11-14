@@ -489,7 +489,8 @@ def get_slack_message_payload(
         attachment = notification
 
     elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
-      notification = format_aws_security_hub(message=message, region=message["region"])
+        notification = format_aws_security_hub(message=message, region=message["region"])
+        attachment = notification
 
     elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         notification = format_aws_health(message=message, region=message["region"])
