@@ -161,8 +161,12 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     double_encoded_id = urllib.parse.quote(urllib.parse.quote(Id, safe=''), safe='')
     finding_url = f"{service_url}{finding_base_path}{double_encoded_id}"
 
+    color = SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value
+    if compliance_status == "PASSED":
+      color = "#4BB543"
+
     slack_message = {
-        "color": SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value,
+        "color": color,
         "fallback": f"Security Hub Finding: {title}",
         "fields": [
             {"title": "Title", "value": f"{status_emoji} `{title}`", "short": False},
