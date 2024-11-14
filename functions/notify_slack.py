@@ -151,7 +151,7 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     affected_resource = finding['Resources'][0].get('Id', 'Unknown Resource')
     remediation_url = finding.get("Remediation", {}).get("Recommendation", {}).get("Url", "#")
 
-    return {
+    slack_message = {
         "color": SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value,
         "fallback": f"Security Hub Finding: {title}",
         "fields": [
@@ -168,6 +168,9 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
         ],
         "text": f"AWS Security Hub Finding - {title}",
     }
+
+    logging.warning(f"slack message: `{json.dumps(slack_message)}`")
+    return slack_message
 
 class SecurityHubSeverity(Enum):
     """Maps Security Hub finding severity to Slack message format color"""
