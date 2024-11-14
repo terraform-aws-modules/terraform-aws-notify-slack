@@ -132,6 +132,8 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     :returns: formatted Slack message payload
     """
 
+
+    service_url = get_service_url(region=region, service="securityhub")
     finding = message["detail"]["findings"][0]
 
     if finding.get("ProductName") != "Security Hub":
@@ -142,14 +144,21 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
 
     status_emoji = "✅" if compliance_status == "PASSED" else "⚠️"
 
+    Id = finding.get("Id", "No ID Provided")
     title = finding.get("Title", "No Title Provided")
     description = finding.get("Description", "No Description Provided")
     control_id = finding['ProductFields'].get('ControlId', 'N/A')
+    control_url = service_url + f"#/control/{control_id}"
     aws_account_id = finding.get('AwsAccountId', 'Unknown Account')
     first_observed = finding.get('FirstObservedAt', 'Unknown Date')
     last_updated = finding.get('UpdatedAt', 'Unknown Date')
     affected_resource = finding['Resources'][0].get('Id', 'Unknown Resource')
     remediation_url = finding.get("Remediation", {}).get("Recommendation", {}).get("Url", "#")
+    generator_id = finding.get("GeneratorId", "Unknown Generator")
+
+    finding_base_path = "#/findings?search=Id%3D%255Coperator%255C%253AEQUALS%255C%253A"
+    encoded_id = urllib.parse.quote(Id, safe='')
+    finding_url = f"{service_url}{finding_base_path}{encoded_id}"
 
     slack_message = {
         "color": SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value,
@@ -164,12 +173,14 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
             {"title": "First Observed", "value": f"`{first_observed}`", "short": True},
             {"title": "Last Updated", "value": f"`{last_updated}`", "short": True},
             {"title": "Affected Resource", "value": f"`{affected_resource}`", "short": False},
-            {"title": "Remediation", "value": f"<{remediation_url}|Click here for remediation steps>", "short": False},
+            {"title": "Generator", "value": f"`{generator_id}`", "short": False},
+            {"title": "Control Url", "value": f"`{control_url}`", "short": False},
+            {"title": "Finding Url", "value": f"`{finding_url}`", "short": False},
+            {"title": "Remediation", "value": f"`{remediation_url}`", "short": False},
         ],
         "text": f"AWS Security Hub Finding - {title}",
     }
 
-    logging.warning(f"slack message: `{json.dumps(slack_message)}`")
     return slack_message
 
 class SecurityHubSeverity(Enum):
