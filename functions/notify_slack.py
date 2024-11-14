@@ -32,6 +32,7 @@ class AwsService(Enum):
 
     cloudwatch = "cloudwatch"
     guardduty = "guardduty"
+    securityhub = "securityhub"
 
 
 def decrypt_url(encrypted_url: str) -> str:
