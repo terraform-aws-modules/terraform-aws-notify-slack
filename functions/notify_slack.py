@@ -132,75 +132,42 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     :returns: formatted Slack message payload
     """
 
-    finding = message["detail"]["findings"][0]  # Get first finding
+    finding = message["detail"]["findings"][0]
 
-    # Check if the finding is from Security Hub
     if finding.get("ProductName") != "Security Hub":
         return format_default(message=message)
 
-    severity = finding["Severity"]["Label"]
-    compliance_status = finding["Compliance"]["Status"]
+    severity = finding["Severity"].get("Label", "INFORMATIONAL")
+    compliance_status = finding["Compliance"].get("Status", "UNKNOWN")
 
     status_emoji = "✅" if compliance_status == "PASSED" else "⚠️"
 
-    return {
-        "color": SecurityHubSeverity[severity].value,
-        "fallback": f"Security Hub Finding: {finding.get('Title')}",
-        "fields": [
-            {
-                "title": "Title",
-                "value": f"{status_emoji} `{finding['Title']}`",
-                "short": False,
-            },
-            {
-                "title": "Description",
-                "value": f"`{finding['Description']}`",
-                "short": False,
-            },
-            {
-                "title": "Compliance Status",
-                "value": f"`{compliance_status}`",
-                "short": True,
-            },
-            {
-                "title": "Severity",
-                "value": f"`{severity}`",
-                "short": True,
-            },
-            {
-                "title": "Control ID",
-                "value": f"`{finding['ProductFields'].get('ControlId', 'N/A')}`",
-                "short": True,
-            },
-            {
-                "title": "Account ID",
-                "value": f"`{finding['AwsAccountId']}`",
-                "short": True,
-            },
-            {
-                "title": "First Observed",
-                "value": f"`{finding['FirstObservedAt']}`",
-                "short": True,
-            },
-            {
-                "title": "Last Updated",
-                "value": f"`{finding['UpdatedAt']}`",
-                "short": True,
-            },
-            {
-                "title": "Affected Resource",
-                "value": f"`{finding['Resources'][0]['Id']}`",
-                "short": False,
-            },
-            {
-                "title": "Remediation",
-                "value": f"<{finding['Remediation']['Recommendation']['Url']}|Click here for remediation steps>",
-                "short": False,
-            }
-        ],
-        "text": f"AWS Security Hub Finding - {finding.get('Title')}",
-    }
+    title = finding.get("Title", "No Title Provided")
+    description = finding.get("Description", "No Description Provided")
+    control_id = finding['ProductFields'].get('ControlId', 'N/A')
+    aws_account_id = finding.get('AwsAccountId', 'Unknown Account')
+    first_observed = finding.get('FirstObservedAt', 'Unknown Date')
+    last_updated = finding.get('UpdatedAt', 'Unknown Date')
+    affected_resource = finding['Resources'][0].get('Id', 'Unknown Resource')
+    remediation_url = finding.get("Remediation", {}).get("Recommendation", {}).get("Url", "#")
 
+    return {
+        "color": SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value,
+        "fallback": f"Security Hub Finding: {title}",
+        "fields": [
+            {"title": "Title", "value": f"{status_emoji} `{title}`", "short": False},
+            {"title": "Description", "value": f"`{description}`", "short": False},
+            {"title": "Compliance Status", "value": f"`{compliance_status}`", "short": True},
+            {"title": "Severity", "value": f"`{severity}`", "short": True},
+            {"title": "Control ID", "value": f"`{control_id}`", "short": True},
+            {"title": "Account ID", "value": f"`{aws_account_id}`", "short": True},
+            {"title": "First Observed", "value": f"`{first_observed}`", "short": True},
+            {"title": "Last Updated", "value": f"`{last_updated}`", "short": True},
+            {"title": "Affected Resource", "value": f"`{affected_resource}`", "short": False},
+            {"title": "Remediation", "value": f"<{remediation_url}|Click here for remediation steps>", "short": False},
+        ],
+        "text": f"AWS Security Hub Finding - {title}",
+    }
 
 class SecurityHubSeverity(Enum):
     """Maps Security Hub finding severity to Slack message format color"""
@@ -210,6 +177,13 @@ class SecurityHubSeverity(Enum):
     MEDIUM = "warning"
     LOW = "#777777"
     INFORMATIONAL = "#439FE0"
+
+    @staticmethod
+    def get(name, default):
+        try:
+            return SecurityHubSeverity[name]
+        except KeyError:
+            return default
 
 class GuardDutyFindingSeverity(Enum):
     """Maps GuardDuty finding severity to Slack message format color"""
