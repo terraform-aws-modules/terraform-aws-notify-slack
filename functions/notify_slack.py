@@ -143,8 +143,6 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     severity = finding["Severity"].get("Label", "INFORMATIONAL")
     compliance_status = finding["Compliance"].get("Status", "UNKNOWN")
 
-    status_emoji = "✅" if compliance_status == "PASSED" else "⚠️"
-
     Id = finding.get("Id", "No ID Provided")
     title = finding.get("Title", "No Title Provided")
     description = finding.get("Description", "No Description Provided")
@@ -169,7 +167,7 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
         "color": color,
         "fallback": f"Security Hub Finding: {title}",
         "fields": [
-            {"title": "Title", "value": f"{status_emoji} `{title}`", "short": False},
+            {"title": "Title", "value": f"`{title}`", "short": False},
             {"title": "Description", "value": f"`{description}`", "short": False},
             {"title": "Compliance Status", "value": f"`{compliance_status}`", "short": True},
             {"title": "Severity", "value": f"`{severity}`", "short": True},
