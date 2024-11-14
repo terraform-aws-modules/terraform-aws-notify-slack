@@ -149,7 +149,7 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     title = finding.get("Title", "No Title Provided")
     description = finding.get("Description", "No Description Provided")
     control_id = finding['ProductFields'].get('ControlId', 'N/A')
-    control_url = service_url + f"#/control/{control_id}"
+    control_url = service_url + f"#/controls/{control_id}"
     aws_account_id = finding.get('AwsAccountId', 'Unknown Account')
     first_observed = finding.get('FirstObservedAt', 'Unknown Date')
     last_updated = finding.get('UpdatedAt', 'Unknown Date')
@@ -158,8 +158,8 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     generator_id = finding.get("GeneratorId", "Unknown Generator")
 
     finding_base_path = "#/findings?search=Id%3D%255Coperator%255C%253AEQUALS%255C%253A"
-    encoded_id = urllib.parse.quote(Id, safe='')
-    finding_url = f"{service_url}{finding_base_path}{encoded_id}"
+    double_encoded_id = urllib.parse.quote(urllib.parse.quote(Id, safe=''), safe='')
+    finding_url = f"{service_url}{finding_base_path}{double_encoded_id}"
 
     slack_message = {
         "color": SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value,
