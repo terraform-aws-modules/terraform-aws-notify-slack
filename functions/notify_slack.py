@@ -123,18 +123,93 @@ def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, A
     }
 
 
-#def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, Any]
-#    """
-#    Format AWS Secuirty Hub finding event into Slack message format
-#
-#    :params message: SNS message body containing SecurityHub finding event
-#    :params region: AWS region where the event originated from
-#    :returns: formatted Slack message payload
-#    """
-#
-#    service_url = get_service_url(region=region, service="security_hub")
-#    findings = message["detail"]["findings"]
-#
+def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """
+    Format AWS Security Hub finding event into Slack message format
+
+    :params message: SNS message body containing SecurityHub finding event
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+
+    finding = message["detail"]["findings"][0]  # Get first finding
+
+    # Check if the finding is from Security Hub
+    if finding.get("ProductName") != "Security Hub":
+        return format_default(message=message)
+
+    severity = finding["Severity"]["Label"]
+    compliance_status = finding["Compliance"]["Status"]
+
+    status_emoji = "✅" if compliance_status == "PASSED" else "⚠️"
+
+    return {
+        "color": SecurityHubSeverity[severity].value,
+        "fallback": f"Security Hub Finding: {finding.get('Title')}",
+        "fields": [
+            {
+                "title": "Title",
+                "value": f"{status_emoji} `{finding['Title']}`",
+                "short": False,
+            },
+            {
+                "title": "Description",
+                "value": f"`{finding['Description']}`",
+                "short": False,
+            },
+            {
+                "title": "Compliance Status",
+                "value": f"`{compliance_status}`",
+                "short": True,
+            },
+            {
+                "title": "Severity",
+                "value": f"`{severity}`",
+                "short": True,
+            },
+            {
+                "title": "Control ID",
+                "value": f"`{finding['ProductFields'].get('ControlId', 'N/A')}`",
+                "short": True,
+            },
+            {
+                "title": "Account ID",
+                "value": f"`{finding['AwsAccountId']}`",
+                "short": True,
+            },
+            {
+                "title": "First Observed",
+                "value": f"`{finding['FirstObservedAt']}`",
+                "short": True,
+            },
+            {
+                "title": "Last Updated",
+                "value": f"`{finding['UpdatedAt']}`",
+                "short": True,
+            },
+            {
+                "title": "Affected Resource",
+                "value": f"`{finding['Resources'][0]['Id']}`",
+                "short": False,
+            },
+            {
+                "title": "Remediation",
+                "value": f"<{finding['Remediation']['Recommendation']['Url']}|Click here for remediation steps>",
+                "short": False,
+            }
+        ],
+        "text": f"AWS Security Hub Finding - {finding.get('Title')}",
+    }
+
+
+class SecurityHubSeverity(Enum):
+    """Maps Security Hub finding severity to Slack message format color"""
+
+    CRITICAL = "danger"
+    HIGH = "danger"
+    MEDIUM = "warning"
+    LOW = "#777777"
+    INFORMATIONAL = "#439FE0"
 
 class GuardDutyFindingSeverity(Enum):
     """Maps GuardDuty finding severity to Slack message format color"""
@@ -413,8 +488,8 @@ def get_slack_message_payload(
         )
         attachment = notification
 
-    # elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
-    #   notification = format_aws_security_hub(message=message, region=message["region"])
+    elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
+      notification = format_aws_security_hub(message=message, region=message["region"])
 
     elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         notification = format_aws_health(message=message, region=message["region"])
