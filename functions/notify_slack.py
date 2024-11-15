@@ -147,7 +147,7 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
                }],
                Workflow={"Status": "NOTIFIED"}
            )
-           logging.info(f"Successfully updated finding status to NOTIFIED: {json.dumps(notified)}")
+           logging.warning(f"Successfully updated finding status to NOTIFIED: {json.dumps(notified)}")
     except Exception as e:
         logging.error(f"Failed to update finding status: {str(e)}")
         pass
