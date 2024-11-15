@@ -134,16 +134,19 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     :returns: formatted Slack message payload
     """
 
-    # Switch Status From New To Notified To Prevent Repeated Messaages
-    notified = SECURITY_HUB_CLIENT.update_findings(
-        FindingIdentifiers=[{
-          'Id': message["details"]["findings"][0].get("Id"),
-          'ProductArn': message["details"]["findings"][0].get("ProductArn")}],
-        Workflow={"Status": "NOTIFIED"}
-    )
-
-    logging.warning(f"Update Notified Status: `{json.dumps(notified)}`")
-    print(notified)
+    # Switch Status From New To Notified To Prevent Repeated Messages
+    try:
+        notified = SECURITY_HUB_CLIENT.update_findings(
+            FindingIdentifiers=[{
+                'Id': message["detail"]["findings"][0]["Id"],
+                'ProductArn': message["detail"]["findings"][0]["ProductArn"]
+            }],
+            Workflow={"Status": "NOTIFIED"}
+        )
+        logging.info(f"Successfully updated finding status to NOTIFIED: {json.dumps(notified)}")
+    except Exception as e:
+        logging.error(f"Failed to update finding status: {str(e)}")
+        pass
 
 
     service_url = get_service_url(region=region, service="securityhub")
