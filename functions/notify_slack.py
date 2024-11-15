@@ -138,8 +138,8 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
 
     # Switch Status From New To Notified To Prevent Repeated Messages
     try:
-        severity = finding["Severity"].get("Label", "INFORMATIONAL")
-        if severity == "FAILED":
+        compliance_status = finding["Compliance"].get("Status", "UNKNOWN")
+        if compliance_status == "FAILED":
            notified = SECURITY_HUB_CLIENT.batch_update_findings(
                FindingIdentifiers=[{
                   'Id': finding.get('Id'),
