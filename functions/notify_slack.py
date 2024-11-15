@@ -26,6 +26,7 @@ REGION = os.environ.get("AWS_REGION", "us-east-1")
 # Create client so its cached/frozen between invocations
 KMS_CLIENT = boto3.client("kms", region_name=REGION)
 
+SECURITY_HUB_CLIENT = boto3.client('securityhub', region_name=REGION)
 
 class AwsService(Enum):
     """AWS service supported by function"""
@@ -132,6 +133,17 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     :params region: AWS region where the event originated from
     :returns: formatted Slack message payload
     """
+
+    # Switch Status From New To Notified To Prevent Repeated Messaages
+    notified = SECURITY_HUB_CLIENT.update_findings(
+        FindingIdentifiers=[{
+          'Id': message["details"]["findings"][0].get("Id"),
+          'ProductArn': message["details"]["findings"][0].get("ProductArn")}],
+        Workflow={"Status": "NOTIFIED"}
+    )
+
+    logging.warning(f"Update Notified Status: `{json.dumps(notified)}`")
+    print(notified)
 
 
     service_url = get_service_url(region=region, service="securityhub")
