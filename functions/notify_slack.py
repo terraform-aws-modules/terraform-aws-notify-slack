@@ -133,24 +133,27 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
     :params region: AWS region where the event originated from
     :returns: formatted Slack message payload
     """
+    service_url = get_service_url(region=region, service="securityhub")
+    finding = message["detail"]["findings"][0]
 
     # Switch Status From New To Notified To Prevent Repeated Messages
     try:
-        notified = SECURITY_HUB_CLIENT.update_findings(
-            FindingIdentifiers=[{
-                'Id': message["detail"]["findings"][0]["Id"],
-                'ProductArn': message["detail"]["findings"][0]["ProductArn"]
-            }],
-            Workflow={"Status": "NOTIFIED"}
-        )
-        logging.info(f"Successfully updated finding status to NOTIFIED: {json.dumps(notified)}")
+        severity = finding["Severity"].get("Label", "INFORMATIONAL")
+        if severity == "FAILED":
+           notified = SECURITY_HUB_CLIENT.batch_update_findings(
+               FindingIdentifiers=[{
+                  'Id': finding.get('Id'),
+                   'ProductArn': finding.get("ProductArn")
+               }],
+               Workflow={"Status": "NOTIFIED"}
+           )
+           logging.info(f"Successfully updated finding status to NOTIFIED: {json.dumps(notified)}")
     except Exception as e:
         logging.error(f"Failed to update finding status: {str(e)}")
         pass
 
 
-    service_url = get_service_url(region=region, service="securityhub")
-    finding = message["detail"]["findings"][0]
+
 
     if finding.get("ProductName") == "Inspector":
         severity = finding["Severity"].get("Label", "INFORMATIONAL")
