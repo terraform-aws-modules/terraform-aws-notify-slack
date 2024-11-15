@@ -29,7 +29,7 @@ locals {
   lambda_policy_document_securityhub = {
     sid       = "AllowSecurityHub"
     effect    = "Allow"
-    actions   = ["securityhub:BatchImportFindings"]
+    actions   = ["securityhub:BatchUpdateFindings"]
     resources = ["*"]
   }
 
