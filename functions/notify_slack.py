@@ -184,7 +184,7 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
 
         return slack_message
 
-    elif finding.get("ProductName") == "Security Hub":
+    if finding.get("ProductName") == "Security Hub":
         severity = finding["Severity"].get("Label", "INFORMATIONAL")
         compliance_status = finding["Compliance"].get("Status", "UNKNOWN")
 
