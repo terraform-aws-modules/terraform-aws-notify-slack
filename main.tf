@@ -27,6 +27,8 @@ locals {
   }
 
   lambda_handler = try(split(".", basename(var.lambda_source_path))[0], "notify_slack")
+
+  lambda_role_name = var.iam_role_name_prefix != "" ? "${var.iam_role_name_prefix}-${var.lambda_function_name}" : var.lambda_function_name
 }
 
 data "aws_iam_policy_document" "lambda" {
@@ -120,7 +122,7 @@ module "lambda" {
 
   create_role               = var.lambda_role == ""
   lambda_role               = var.lambda_role
-  role_name                 = "${var.iam_role_name_prefix}-${var.lambda_function_name}"
+  role_name                 = local.lambda_role_name
   role_permissions_boundary = var.iam_role_boundary_policy_arn
   role_tags                 = var.iam_role_tags
   role_path                 = var.iam_role_path
