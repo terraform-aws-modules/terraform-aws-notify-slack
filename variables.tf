@@ -264,6 +264,12 @@ variable "lambda_function_ephemeral_storage_size" {
   default     = 512
 }
 
+variable "lambda_extra_allowed_triggers" {
+  description = "To allow other resources to trigger this lambda"
+  type        = map(any)
+  default     = {}
+}
+
 variable "sns_topic_tags" {
   description = "Additional tags for the SNS topic"
   type        = map(string)

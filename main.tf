@@ -141,12 +141,12 @@ module "lambda" {
   dead_letter_target_arn    = var.lambda_dead_letter_target_arn
   attach_dead_letter_policy = var.lambda_attach_dead_letter_policy
 
-  allowed_triggers = {
+  allowed_triggers = merge({
     AllowExecutionFromSNS = {
       principal  = "sns.amazonaws.com"
       source_arn = local.sns_topic_arn
     }
-  }
+  }, var.lambda_extra_allowed_triggers)
 
   store_on_s3 = var.lambda_function_store_on_s3
   s3_bucket   = var.lambda_function_s3_bucket
