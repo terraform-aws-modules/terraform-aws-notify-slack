@@ -30,7 +30,7 @@ module "notify_slack" {
   sns_topic_name   = aws_sns_topic.example.name
   create_sns_topic = false
 
-  slack_webhook_url = "https://hooks.slack.com/services/AAA/BBB/CCC"
+  slack_webhook_url = "https://hooks.slack.com/services/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"
   slack_channel     = "aws-notification"
   slack_username    = "reporter"
 

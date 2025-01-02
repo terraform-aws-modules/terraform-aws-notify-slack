@@ -1,0 +1,39 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "eu-west-1",
+            "eventTime": "2024-12-12T14:44:56.042Z",
+            "eventName": "ObjectCreated:CompleteMultipartUpload",
+            "userIdentity": {
+                "principalId": "AWS:AXXXXXXXXXXXXXXXXXXXX:test"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "1.1.1.1"
+            },
+            "responseElements": {
+                "x-amz-request-id": "22HVMTY7K7BZEANW",
+                "x-amz-id-2": "7JNov8pldcSneqm8P52a3uaVaI5E+X3EPgnFcHUOta5iC2VHORDQlkOHa3pghQY9Px5p7RgphoJAu6EZFzKVWft3PHccuUhC"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "backup",
+                "bucket": {
+                    "name": "test",
+                    "ownerIdentity": {
+                        "principalId": "AXXXXXXXXXXXXX"
+                    },
+                    "arn": "arn:aws:s3:::test"
+                },
+                "object": {
+                    "key": "test.png",
+                    "size": 557056,
+                    "eTag": "7d347f0d62d856c4dceef44b413b5bb2-1",
+                    "versionId": "2EkRWHmQowiCXIVHSfD48cKVfS87iBZ4",
+                    "sequencer": "00657871E7BEB1C11D"
+                }
+            }
+        }
+    ]
+}

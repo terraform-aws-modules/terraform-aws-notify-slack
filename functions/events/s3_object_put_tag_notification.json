@@ -1,0 +1,37 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.3",
+            "eventSource": "aws:s3",
+            "awsRegion": "eu-west-1",
+            "eventTime": "2024-12-12T16:57:37.808Z",
+            "eventName": "ObjectTagging:Put",
+            "userIdentity": {
+                "principalId": "AWS:AXXXXXXXXXXXXXXXXXXXX:test"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "1.1.1.1"
+            },
+            "responseElements": {
+                "x-amz-request-id": "CC3E1ZWK9W1X12HF",
+                "x-amz-id-2": "aXF6jUEXS9805Oa5ZTQgoXJCzUMt0ZCi/vRaB8EQK9O/b723Ct9A/oeAiF/U92GEnA5/cJ1ZUcyo0NSmOqVyaHq1jKz+rSF+"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "backup",
+                "bucket": {
+                    "name": "test",
+                    "ownerIdentity": {
+                        "principalId": "AXXXXXXXXXXXXX"
+                    },
+                    "arn": "arn:aws:s3:::test"
+                },
+                "object": {
+                    "key": "test.png",
+                    "eTag": "6dfa2bd9148dd380b5d56bd1366787f6",
+                    "versionId": "wzGflBz2kJXzspA4UQ0Ik333dbvePdnP"
+                }
+            }
+        }
+    ]
+}

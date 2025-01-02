@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "eu-west-1",
+            "eventTime": "2024-12-12T15:43:47.889Z",
+            "eventName": "ObjectRemoved:DeleteMarkerCreated",
+            "userIdentity": {
+                "principalId": "AWS:AXXXXXXXXXXXXXXXXXXXX:test"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "1.1.1.1"
+            },
+            "responseElements": {
+                "x-amz-request-id": "FSFTKP0F7F4GAYJ7",
+                "x-amz-id-2": "DLuIxXz8rgdn14lRySy0xePLTs+LL+3Azm4bpGudx7Bqax+t7bWUdKMUuJQf/lmXDaaUEnG+e67kEI4/kdI2LzAI/D+XXUnK"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "backup",
+                "bucket": {
+                    "name": "test",
+                    "ownerIdentity": {
+                        "principalId": "AXXXXXXXXXXXXX"
+                    },
+                    "arn": "arn:aws:s3:::test"
+                },
+                "object": {
+                    "key": "test.png",
+                    "eTag": "d41d8cd98f00b204e9800998ecf8427e",
+                    "versionId": "4hWOOw8KrqaXtuiI9NpQzoFNDmnnlJlw",
+                    "sequencer": "0065787FB3DCA9D828"
+                }
+            }
+        }
+    ]
+}
