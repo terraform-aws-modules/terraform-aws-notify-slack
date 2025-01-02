@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "sns_feedback" {
 
     principals {
       type        = "Service"
-      identifiers = ["sns.amazonaws.com"]
+      identifiers = ["sns.${data.aws_partition.current.dns_suffix}"]
     }
   }
 }
