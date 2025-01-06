@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.5.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.0...v6.5.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* Reverts endpoint variable change from e95cde8 ([#240](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/240)) ([81e4b81](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/81e4b816f39c34fab8a5d78e8b854c43aed7dbd2))
+* Update CI workflow versions to latest ([#239](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/239)) ([50b951a](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/50b951a333ebab734c5afba984f0584fd1b43dd7))
+
 ## [6.5.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.4.1...v6.5.0) (2024-09-03)
 
 
