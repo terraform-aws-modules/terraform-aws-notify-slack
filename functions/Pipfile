@@ -4,8 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-boto3 = "*"
-pytest = "*"
 
 [dev-packages]
 boto3 = "~=1.34"
@@ -20,7 +18,7 @@ radon = "*"
 snapshottest = "~=0.6"
 
 [requires]
-python_version = "3.12"
+python_version = "3.11"
 
 [scripts]
 test = "python3 -m pytest --cov --cov-report=term"
