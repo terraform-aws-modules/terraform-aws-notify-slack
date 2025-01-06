@@ -1,0 +1,46 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.2",
+            "eventSource": "aws:s3",
+            "awsRegion": "eu-west-1",
+            "eventTime": "2024-12-12T17:04:56.129Z",
+            "eventName": "Replication:OperationFailedReplication",
+            "userIdentity": {
+                "principalId": "s3.amazonaws.com"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "s3.amazonaws.com"
+            },
+            "responseElements": {
+                "x-amz-request-id": "a8f51c21-9f7d-4619-b54f-eb6577b67a82",
+                "x-amz-id-2": "4cWlLlh7RJD8eHJfb7EKfNnnSiDiZjvRBUMPl5rq5wsCSiRF+QePRr0nW9ku2wd2eOJc0TBxf27AxAbL9Irl0A=="
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "backup",
+                "bucket": {
+                    "name": "test",
+                    "ownerIdentity": {
+                        "principalId": "111222333444"
+                    },
+                    "arn": "arn:aws:s3:::test"
+                },
+                "object": {
+                    "key": "test.png",
+                    "size": 1024,
+                    "eTag": "d41d8cd98f00b204e9800998ecf8427e",
+                    "versionId": "sSHvWiZd1mM73EqLISh8ammc3JresZcC",
+                    "sequencer": "00657892A0790CB714"
+                }
+            },
+            "replicationEventData": {
+                "replicationRuleId": "Replication",
+                "destinationBucket": "arn:aws:s3:::test-replica",
+                "s3Operation": "OBJECT_DELETE",
+                "requestTime": "2024-12-12T17:04:32.489Z",
+                "failureReason": "SrcObjectNotFound"
+            }
+        }
+    ]
+}

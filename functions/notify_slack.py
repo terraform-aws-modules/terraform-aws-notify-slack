@@ -326,6 +326,105 @@ def format_aws_backup(message: str) -> Dict[str, Any]:
 
     return attachments
 
+class S3ObjectNotificationCategory(Enum):
+    """Maps S3 Object notification Cateogry to Slack message format color
+        https://docs.aws.amazon.com/AmazonS3/latest/userguide/notification-content-structure.html
+        https://docs.aws.amazon.com/AmazonS3/latest/userguide/notification-how-to-event-types-and-destinations.html
+    """
+
+    TestEvent = "good"
+    ObjectCreated_Put = "good"
+    ObjectCreated_Post = "good"
+    ObjectCreated_Copy = "good"
+    ObjectCreated_CompleteMultipartUpload = "good"
+    ObjectRemoved_Delete = "danger"
+    ObjectRemoved_DeleteMarkerCreated = "danger"
+    ObjectRestore_Post = "good"
+    ObjectRestore_Completed = "good"
+    ObjectRestore_Delete = "danger"
+    ReducedRedundancyLostObject = "danger"
+    Replication_OperationFailedReplication = "danger"
+    Replication_OperationMissedThreshold = "danger"
+    Replication_OperationReplicatedAfterThreshold = "warning"
+    Replication_OperationNotTracked = "danger"
+    LifecycleExpiration_Delete = "danger"
+    LifecycleExpiration_DeleteMarkerCreated = "danger"
+    LifecycleTransition = "warning"
+    IntelligentTiering = "warning"
+    ObjectTagging_Put = "warning"
+    ObjectTagging_Delete = "warning"
+    ObjectAcl_Put = "warning"
+
+def format_s3_object_notification(message: Dict[str, Any]) -> Dict[str, Any]:
+    """Format S3 Object notification event into Slack message format
+
+    :params message: message body containing S3 Object Notification event
+    :region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+    record = message["Records"][0]
+    event_name = record["eventName"]
+    event_time = record["eventTime"]
+    bucket_name = record["s3"]["bucket"]["name"]
+    region = record["awsRegion"]
+    object_key = record["s3"]["object"]["key"]
+    object_url = f"https://s3.console.aws.amazon.com/s3/object/{bucket_name}?region={region}&prefix={object_key}"
+    source_ip_address = record["requestParameters"]["sourceIPAddress"]
+    user_identity = record["userIdentity"]["principalId"].split(":")[-1]
+
+    output = {
+        "color": S3ObjectNotificationCategory[record["eventName"].replace(":", "_")].value,
+        "fallback": f"Alarm {event_name} triggered",
+        "fields": [
+            {"title": "Event Name", "value": f"`{event_name}`", "short": True},
+            {"title": "Event Time", "value": f"`{event_time}`", "short": True},
+            {"title": "Region", "value": f"`{region}`", "short": True},
+            {"title": "Bucket Name", "value": f"`{bucket_name}`", "short": True},
+            {"title": "Object Key", "value": f"`{object_key}`", "short": False},
+
+            {"title": "Object URL", "value": f"<{object_url}|Link>", "short": False},
+            {"title": "Source IP Address", "value": f"`{source_ip_address}`", "short": True},
+            {"title": "User Identity", "value": f"`{user_identity}`", "short": True},
+        ],
+        "text": f"*New Amazon S3 Object Notification Event*",
+    }
+
+    if "size" in record["s3"]["object"]:
+        object_size = record["s3"]["object"]["size"]
+        output["fields"].append({"title": "Object Size (Bytes)", "value": f"`{object_size}`", "short": False})
+
+    if "glacierEventData" in record:
+        glacier_restore_event_data = record["glacierEventData"]["restoreEventData"]["lifecycleRestorationExpiryTime"]
+        lifecycle_restoration_expiry_time = glacier_restore_event_data["lifecycleRestorationExpiryTime"]
+        lifecycle_restore_storage_class = glacier_restore_event_data["lifecycleRestoreStorageClass"]
+        output["fields"].append({"title": "Lifecycle Restoration Expiry Time", "value": f"`{lifecycle_restoration_expiry_time}`", "short": False})
+        output["fields"].append({"title": "Lifecycle Restore Storage Class", "value": f"`{lifecycle_restore_storage_class}`", "short": False})
+
+    if "replicationEventData" in record:
+        replication_rule_name = record["replicationEventData"]["replicationRuleId"]
+        destination_bucket = record["replicationEventData"]["destinationBucket"].split(":")[-1]
+        request_time = record["replicationEventData"]["requestTime"]
+        operation = record["replicationEventData"]["s3Operation"]
+        failureReason = record["replicationEventData"]["failureReason"]
+        output["fields"].append({"title": "Replication Rule Name", "value": f"`{replication_rule_name}`", "short": True})
+        output["fields"].append({"title": "Destination Bucket", "value": f"`{destination_bucket}`", "short": True})
+        output["fields"].append({"title": "Request Time", "value": f"`{request_time}`", "short": False})
+        output["fields"].append({"title": "Operation", "value": f"`{operation}`", "short": True})
+        output["fields"].append({"title": "Failure Reason", "value": f"`{failureReason}`", "short": False})
+
+    if "intelligentTieringEventData" in record:
+        tiering_name = record["intelligentTieringEventData"]["tieringId"]
+        tiering_status = record["intelligentTieringEventData"]["tieringStatus"]
+        output["fields"].append({"title": "Tiering Name", "value": f"`{tiering_name}`", "short": True})
+        output["fields"].append({"title": "Tiering Status", "value": f"`{tiering_status}`", "short": True})
+
+    if "lifecycleEventData" in record:
+        lifecycle_transition_days = record["lifecycleEventData"]["lifecycleTransitionAgeDays"]
+        lifecycle_transition_storage_class = record["lifecycleEventData"]["lifecycleTransitionStorageClass"]
+        output["fields"].append({"title": "Lifecycle Transition Age Days", "value": f"`{lifecycle_transition_days}`", "short": True})
+        output["fields"].append({"title": "Lifecycle Transition Storage Class", "value": f"`{lifecycle_transition_storage_class}`", "short": True})
+
+    return output
 
 def format_default(
     message: Union[str, Dict], subject: Optional[str] = None
@@ -409,6 +508,11 @@ def get_slack_message_payload(
         notification = format_aws_backup(message=str(message))
         attachment = notification
 
+
+    elif isinstance(message, Dict) and message.get("Records")[0].get("eventSource") == "aws:s3":
+        notification = format_s3_object_notification(message=message)
+        attachment = notification
+
     elif "attachments" in message or "text" in message:
         payload = {**payload, **message}
 
@@ -457,10 +561,15 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
         logging.info(f"Event logging enabled: `{json.dumps(event)}`")
 
     for record in event["Records"]:
-        sns = record["Sns"]
-        subject = sns["Subject"]
-        message = sns["Message"]
-        region = sns["TopicArn"].split(":")[3]
+        try:
+            sns = record["Sns"]
+            subject = sns["Subject"]
+            message = sns["Message"]
+            region = sns["TopicArn"].split(":")[3]
+        except KeyError:
+            region = record["awsRegion"]
+            subject = "New Amazon S3 Object Event Notification"
+            message = record
 
         payload = get_slack_message_payload(
             message=message, region=region, subject=subject
