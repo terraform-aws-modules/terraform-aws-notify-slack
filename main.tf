@@ -134,7 +134,7 @@ module "lambda" {
 
   allowed_triggers = {
     AllowExecutionFromSNS = {
-      principal  = "sns.${data.aws_partition.current.dns_suffix}"
+      principal  = "sns.amazonaws.com"
       source_arn = local.sns_topic_arn
     }
   }
