@@ -26,12 +26,15 @@ REGION = os.environ.get("AWS_REGION", "us-east-1")
 # Create client so its cached/frozen between invocations
 KMS_CLIENT = boto3.client("kms", region_name=REGION)
 
+SECURITY_HUB_CLIENT = boto3.client('securityhub', region_name=REGION)
+
 
 class AwsService(Enum):
     """AWS service supported by function"""
 
     cloudwatch = "cloudwatch"
     guardduty = "guardduty"
+    securityhub = "securityhub"
 
 
 def decrypt_url(encrypted_url: str) -> str:
@@ -121,6 +124,148 @@ def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, A
         ],
         "text": f"AWS CloudWatch notification - {message['AlarmName']}",
     }
+
+
+def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """
+    Format AWS Security Hub finding event into Slack message format
+
+    :params message: SNS message body containing SecurityHub finding event
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+    service_url = get_service_url(region=region, service="securityhub")
+    finding = message["detail"]["findings"][0]
+
+    # Switch Status From New To Notified To Prevent Repeated Messages
+    try:
+        compliance_status = finding["Compliance"].get("Status", "UNKNOWN")
+        workflow_status = finding["Workflow"].get("Status", "UNKNOWN")
+        if compliance_status == "FAILED" and workflow_status == "NEW":
+            notified = SECURITY_HUB_CLIENT.batch_update_findings(
+                FindingIdentifiers=[{
+                    'Id': finding.get('Id'),
+                    'ProductArn': finding.get("ProductArn")
+                }],
+                Workflow={"Status": "NOTIFIED"}
+            )
+            logging.warning(f"Successfully updated finding status to NOTIFIED: {json.dumps(notified)}")
+    except Exception as e:
+        logging.error(f"Failed to update finding status: {str(e)}")
+        pass
+
+    if finding.get("ProductName") == "Inspector":
+        severity = finding["Severity"].get("Label", "INFORMATIONAL")
+        compliance_status = finding["Compliance"].get("Status", "UNKNOWN")
+
+        Id = finding.get("Id", "No ID Provided")
+        title = finding.get("Title", "No Title Provided")
+        description = finding.get("Description", "No Description Provided")
+        control_id = finding['ProductFields'].get('ControlId', 'N/A')
+        control_url = service_url + f"#/controls/{control_id}"
+        aws_account_id = finding.get('AwsAccountId', 'Unknown Account')
+        first_observed = finding.get('FirstObservedAt', 'Unknown Date')
+        last_updated = finding.get('UpdatedAt', 'Unknown Date')
+        affected_resource = finding['Resources'][0].get('Id', 'Unknown Resource')
+        remediation_url = finding.get("Remediation", {}).get("Recommendation", {}).get("Url", "#")
+
+        finding_base_path = "#/findings?search=Id%3D%255Coperator%255C%253AEQUALS%255C%253A"
+        double_encoded_id = urllib.parse.quote(urllib.parse.quote(Id, safe=''), safe='')
+        finding_url = f"{service_url}{finding_base_path}{double_encoded_id}"
+        generator_id = finding.get("GeneratorId", "Unknown Generator")
+
+        color = SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value
+        if compliance_status == "PASSED":
+            color = "#4BB543"
+
+        slack_message = {
+            "color": color,
+            "fallback": f"Inspector Finding: {title}",
+            "fields": [
+                {"title": "Title", "value": f"`{title}`", "short": False},
+                {"title": "Description", "value": f"`{description}`", "short": False},
+                {"title": "Compliance Status", "value": f"`{compliance_status}`", "short": True},
+                {"title": "Severity", "value": f"`{severity}`", "short": True},
+                {"title": "Control ID", "value": f"`{control_id}`", "short": True},
+                {"title": "Account ID", "value": f"`{aws_account_id}`", "short": True},
+                {"title": "First Observed", "value": f"`{first_observed}`", "short": True},
+                {"title": "Last Updated", "value": f"`{last_updated}`", "short": True},
+                {"title": "Affected Resource", "value": f"`{affected_resource}`", "short": False},
+                {"title": "Generator", "value": f"`{generator_id}`", "short": False},
+                {"title": "Control Url", "value": f"`{control_url}`", "short": False},
+                {"title": "Finding Url", "value": f"`{finding_url}`", "short": False},
+                {"title": "Remediation", "value": f"`{remediation_url}`", "short": False},
+            ],
+            "text": f"AWS Inspector Finding - {title}",
+        }
+
+        return slack_message
+
+    if finding.get("ProductName") == "Security Hub":
+        severity = finding["Severity"].get("Label", "INFORMATIONAL")
+        compliance_status = finding["Compliance"].get("Status", "UNKNOWN")
+
+        Id = finding.get("Id", "No ID Provided")
+        title = finding.get("Title", "No Title Provided")
+        description = finding.get("Description", "No Description Provided")
+        control_id = finding['ProductFields'].get('ControlId', 'N/A')
+        control_url = service_url + f"#/controls/{control_id}"
+        aws_account_id = finding.get('AwsAccountId', 'Unknown Account')
+        first_observed = finding.get('FirstObservedAt', 'Unknown Date')
+        last_updated = finding.get('UpdatedAt', 'Unknown Date')
+        affected_resource = finding['Resources'][0].get('Id', 'Unknown Resource')
+        remediation_url = finding.get("Remediation", {}).get("Recommendation", {}).get("Url", "#")
+        generator_id = finding.get("GeneratorId", "Unknown Generator")
+
+        finding_base_path = "#/findings?search=Id%3D%255Coperator%255C%253AEQUALS%255C%253A"
+        double_encoded_id = urllib.parse.quote(urllib.parse.quote(Id, safe=''), safe='')
+        finding_url = f"{service_url}{finding_base_path}{double_encoded_id}"
+
+        color = SecurityHubSeverity.get(severity.upper(), SecurityHubSeverity.INFORMATIONAL).value
+        if compliance_status == "PASSED":
+            color = "#4BB543"
+
+        slack_message = {
+            "color": color,
+            "fallback": f"Security Hub Finding: {title}",
+            "fields": [
+                {"title": "Title", "value": f"`{title}`", "short": False},
+                {"title": "Description", "value": f"`{description}`", "short": False},
+                {"title": "Compliance Status", "value": f"`{compliance_status}`", "short": True},
+                {"title": "Severity", "value": f"`{severity}`", "short": True},
+                {"title": "Control ID", "value": f"`{control_id}`", "short": True},
+                {"title": "Account ID", "value": f"`{aws_account_id}`", "short": True},
+                {"title": "First Observed", "value": f"`{first_observed}`", "short": True},
+                {"title": "Last Updated", "value": f"`{last_updated}`", "short": True},
+                {"title": "Affected Resource", "value": f"`{affected_resource}`", "short": False},
+                {"title": "Generator", "value": f"`{generator_id}`", "short": False},
+                {"title": "Control Url", "value": f"`{control_url}`", "short": False},
+                {"title": "Finding Url", "value": f"`{finding_url}`", "short": False},
+                {"title": "Remediation", "value": f"`{remediation_url}`", "short": False},
+            ],
+            "text": f"AWS Security Hub Finding - {title}",
+        }
+
+        return slack_message
+
+    return format_default(message=message)
+
+
+class SecurityHubSeverity(Enum):
+    """Maps Security Hub finding severity to Slack message format color"""
+
+    CRITICAL = "danger"
+    HIGH = "danger"
+    MEDIUM = "warning"
+    LOW = "#777777"
+    INFORMATIONAL = "#439FE0"
+
+    @staticmethod
+    def get(name, default):
+        try:
+            return SecurityHubSeverity[name]
+        except KeyError:
+            return default
 
 
 class GuardDutyFindingSeverity(Enum):
@@ -401,6 +546,10 @@ def get_slack_message_payload(
         )
         attachment = notification
 
+    elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
+        notification = format_aws_security_hub(message=message, region=message["region"])
+        attachment = notification
+
     elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         notification = format_aws_health(message=message, region=message["region"])
         attachment = notification
@@ -453,8 +602,7 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     :param context: lambda expected context object
     :returns: none
     """
-    if os.environ.get("LOG_EVENTS", "False") == "True":
-        logging.info(f"Event logging enabled: `{json.dumps(event)}`")
+    logging.warning(f"Event logging enabled: `{json.dumps(event)}`")
 
     for record in event["Records"]:
         sns = record["Sns"]
