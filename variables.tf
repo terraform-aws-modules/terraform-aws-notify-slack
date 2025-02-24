@@ -168,6 +168,12 @@ variable "log_events" {
   default     = false
 }
 
+variable "log_level" {
+  description = "The log level for the Lambda function"
+  type        = string
+  default     = "WARN"
+}
+
 variable "reserved_concurrent_executions" {
   description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations"
   type        = number
