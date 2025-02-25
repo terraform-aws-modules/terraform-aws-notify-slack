@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.5.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.1...v6.5.2) (2025-02-25)
+
+
+### Bug Fixes
+
+* Modify logging for security inspector issue ([#249](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/249)) ([b3cd40f](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/b3cd40f6e90fa628e0481b5093d60a302e58f155))
+
 ## [6.5.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.0...v6.5.1) (2025-01-06)
 
 
