@@ -599,7 +599,7 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     :param context: lambda expected context object
     :returns: none
     """
-    
+
     if os.environ.get("LOG_EVENTS", "False") == "True":
         logging.info("Event logging enabled: %s", json.dumps(event))
 
