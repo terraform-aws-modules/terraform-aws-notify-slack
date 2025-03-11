@@ -503,6 +503,27 @@ def format_default(
     return attachments
 
 
+def parse_notification(message: Dict[str, Any], subject: Optional[str], region: str) -> Optional[Dict]:
+    """
+    Parse notification message and format into Slack message payload
+
+    :params message: SNS message body notification payload
+    :params subject: Optional subject line for Slack notification
+    :params region: AWS region where the event originated from
+    :returns: Slack message payload
+    """
+    if "AlarmName" in message:
+        return format_cloudwatch_alarm(message=message, region=region)
+    if message.get("detail-type") == "GuardDuty Finding":
+        return format_guardduty_finding(message=message, region=message["region"])
+    if message.get("detail-type") == "Security Hub Findings - Imported":
+        return format_aws_security_hub(message=message, region=message["region"])
+    if message.get("detail-type") == "AWS Health Event":
+        return format_aws_health(message=message, region=message["region"])
+    if subject == "Notification from AWS Backup":
+        return format_aws_backup(message=str(message))
+    return format_default(message=message, subject=subject)
+
 def get_slack_message_payload(
     message: Union[str, Dict], region: str, subject: Optional[str] = None
 ) -> Dict:
@@ -534,35 +555,10 @@ def get_slack_message_payload(
 
     message = cast(Dict[str, Any], message)
 
-    if "AlarmName" in message:
-        notification = format_cloudwatch_alarm(message=message, region=region)
-        attachment = notification
-
-    elif (
-        isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding"
-    ):
-        notification = format_guardduty_finding(
-            message=message, region=message["region"]
-        )
-        attachment = notification
-
-    elif isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
-        notification = format_aws_security_hub(message=message, region=message["region"])
-        attachment = notification
-
-    elif isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
-        notification = format_aws_health(message=message, region=message["region"])
-        attachment = notification
-
-    elif subject == "Notification from AWS Backup":
-        notification = format_aws_backup(message=str(message))
-        attachment = notification
-
-    elif "attachments" in message or "text" in message:
+    if "attachments" in message or "text" in message:
         payload = {**payload, **message}
-
     else:
-        attachment = format_default(message=message, subject=subject)
+        attachment = parse_notification(message, subject, region)
 
     if attachment:
         payload["attachments"] = [attachment]  # type: ignore
@@ -602,7 +598,6 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
     :param context: lambda expected context object
     :returns: none
     """
-    logging.warning(f"Event logging enabled: `{json.dumps(event)}`")
 
     for record in event["Records"]:
         sns = record["Sns"]
