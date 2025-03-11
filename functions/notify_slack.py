@@ -524,6 +524,7 @@ def parse_notification(message: Dict[str, Any], subject: Optional[str], region: 
         return format_aws_backup(message=str(message))
     return format_default(message=message, subject=subject)
 
+
 def get_slack_message_payload(
     message: Union[str, Dict], region: str, subject: Optional[str] = None
 ) -> Dict:
