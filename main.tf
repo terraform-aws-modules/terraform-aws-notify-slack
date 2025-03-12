@@ -26,6 +26,13 @@ locals {
     resources = [var.kms_key_arn]
   }
 
+  lambda_policy_document_securityhub = {
+    sid       = "AllowSecurityHub"
+    effect    = "Allow"
+    actions   = ["securityhub:BatchUpdateFindings"]
+    resources = ["*"]
+  }
+
   lambda_handler = try(split(".", basename(var.lambda_source_path))[0], "notify_slack")
 }
 
@@ -33,7 +40,8 @@ data "aws_iam_policy_document" "lambda" {
   count = var.create ? 1 : 0
 
   dynamic "statement" {
-    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
+    for_each = concat([local.lambda_policy_document,
+    local.lambda_policy_document_securityhub], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
     content {
       sid       = statement.value.sid
       effect    = statement.value.effect
