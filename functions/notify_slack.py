@@ -514,11 +514,11 @@ def parse_notification(message: Dict[str, Any], subject: Optional[str], region: 
     """
     if "AlarmName" in message:
         return format_cloudwatch_alarm(message=message, region=region)
-    if message.get("detail-type") == "GuardDuty Finding":
+    if isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding":
         return format_guardduty_finding(message=message, region=message["region"])
-    if message.get("detail-type") == "Security Hub Findings - Imported":
+    if isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
         return format_aws_security_hub(message=message, region=message["region"])
-    if message.get("detail-type") == "AWS Health Event":
+    if isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         return format_aws_health(message=message, region=message["region"])
     if subject == "Notification from AWS Backup":
         return format_aws_backup(message=str(message))
