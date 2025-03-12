@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.6.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.2...v6.6.0) (2025-03-12)
+
+
+### Features
+
+* Support for Security Hub ([#242](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/242)) ([3aef5ba](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/3aef5badc119568f8986eb4fea91b76aef99c4df))
+
 ## [6.5.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.1...v6.5.2) (2025-02-25)
 
 
