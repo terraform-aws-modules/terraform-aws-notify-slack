@@ -99,7 +99,7 @@ module "lambda" {
   handler                        = "${local.lambda_handler}.lambda_handler"
   source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
   recreate_missing_package       = var.recreate_missing_package
-  runtime                        = "python3.11"
+  runtime                        = var.runtime
   architectures                  = var.architectures
   timeout                        = 30
   kms_key_arn                    = var.kms_key_arn

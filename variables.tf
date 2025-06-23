@@ -287,3 +287,9 @@ variable "trigger_on_package_timestamp" {
   type        = bool
   default     = false
 }
+
+variable "runtime" {
+  description = "Lambda Function runtime"
+  type        = string
+  default     = "python3.11"
+}
