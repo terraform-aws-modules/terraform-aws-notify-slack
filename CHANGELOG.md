@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.7.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.6.0...v6.7.0) (2025-06-23)
+
+
+### Features
+
+* Allow changing runtime variable ([#252](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/252)) ([3502e45](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/3502e45c3dc61fda6fbe6e2c69d79ce25780a34e))
+
 ## [6.6.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.2...v6.6.0) (2025-03-12)
 
 
