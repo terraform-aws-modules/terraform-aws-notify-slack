@@ -7,7 +7,7 @@ locals {
 
   sns_topic_arn = try(
     aws_sns_topic.this[0].arn,
-    "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
+    "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
     ""
   )
 
