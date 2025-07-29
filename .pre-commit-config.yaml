@@ -1,10 +1,24 @@
 repos:
-- repo: git://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.12.0
-  hooks:
-    - id: terraform_fmt
-#    - id: terraform_docs
-- repo: git://github.com/pre-commit/pre-commit-hooks
-  rev: v2.2.3
-  hooks:
-    - id: check-merge-conflict
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Security
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+      - id: detect-private-key
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.88.2
+    hooks:
+      # Terraform
+      - id: terraform_tflint
+      - id: terraform_fmt
+        args:
+          - --args=-write
+          - --args=-recursive
+          - --args=-diff
+      - id: terraform_docs
+        args:
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=true
+          - --hook-config=--use-standard-markers=true

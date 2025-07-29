@@ -1,0 +1,47 @@
+formatter: "markdown" # this is required
+
+version: "~> 0.17.0"
+
+header-from: main.tf
+footer-from: ""
+
+recursive:
+  enabled: false # true if modules folder exists
+
+sections:
+  hide: []
+  show: []
+
+content: ""
+
+output:
+  # file: "" # this is correct for recursive enabled false
+  file: "README.md" # for recursive enabled true
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+output-values:
+  enabled: false
+  from: ""
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: true
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
