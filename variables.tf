@@ -75,5 +75,5 @@ variable "sns_topic_tags" {
 variable "python_version" {
   description = "The Runtime Python version"
   type        = string
-  default     = "python3.9"
+  default     = "python3.12"
 }

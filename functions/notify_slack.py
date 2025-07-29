@@ -386,7 +386,7 @@ def filter_message_from_slack(message):
         return True
       if message.get('detail', {}).get('desiredStatus', '') in ["RUNNING"] and message.get('detail', {}).get('lastStatus', '') in ["PENDING", "PROVISIONING"]:
         return True
-      if re.match("Scaling activity initiated by \(deployment ecs-svc\/[0-9]+\)", message.get('detail', {}).get('stoppedReason', '')):
+      if re.match(r"Scaling activity initiated by \(deployment ecs-svc\/[0-9]+\)", message.get('detail', {}).get('stoppedReason', '')):
         return True
       for key in message['detail']['containers']:
         if 'reason' in key:
@@ -409,15 +409,15 @@ def filter_message_from_slack(message):
     elif message.get('Event Source', "") in ["db-instance", "db-security-group", "db-parameter-group", "db-snapshot", "db-cluster", "db-cluster-snapshot"]:
       if message.get('Event Message', '') in ["Finished DB Instance backup", "Backing up DB instance", "Automated snapshot created", "Creating automated snapshot", "Creating automated cluster snapshot", "Automated cluster snapshot created", "Creating manual cluster snapshot", "Manual cluster snapshot created", "Creating manual snapshot", "Manual snapshot created", "Deleted manual snapshot"]:
         return True
-      if re.match("Finished copy of snapshot awsbackup\:.*", message.get('Event Message', '')):
+      if re.match(r"Finished copy of snapshot awsbackup\:.*", message.get('Event Message', '')):
         return True
-      if re.match("Started copy of snapshot awsbackup\:.*", message.get('Event Message', '')):
+      if re.match(r"Started copy of snapshot awsbackup\:.*", message.get('Event Message', '')):
         return True
-      if re.match("Started copy of snapshot rds\:.*", message.get('Event Message', '')):
+      if re.match(r"Started copy of snapshot rds\:.*", message.get('Event Message', '')):
         return True
-      if re.match("Finished copy of snapshot rds\:.*", message.get('Event Message', '')):
+      if re.match(r"Finished copy of snapshot rds\:.*", message.get('Event Message', '')):
         return True
-      if re.match("The log file .* will be deleted since it is past the log retention period and may not be uploaded to CloudWatch Logs", message.get('Event Message', '')):
+      if re.match(r"The log file .* will be deleted since it is past the log retention period and may not be uploaded to CloudWatch Logs", message.get('Event Message', '')):
         return True
     else:
       return False
