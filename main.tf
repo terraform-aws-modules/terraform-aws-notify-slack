@@ -88,7 +88,7 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "6.8.0"
+  version = "8.0.1"
 
   create = var.create
 
@@ -125,7 +125,6 @@ module "lambda" {
   role_permissions_boundary = var.iam_role_boundary_policy_arn
   role_tags                 = var.iam_role_tags
   role_path                 = var.iam_role_path
-  policy_path               = var.iam_policy_path
 
   # Do not use Lambda's policy for cloudwatch logs, because we have to add a policy
   # for KMS conditionally. This way attach_policy_json is always true independenty of
