@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.7.0...v7.0.0) (2025-07-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade min AWS provider and Terraform versions to 6.0 and 1.5.7 respectively (#256)
+
+### Features
+
+* Upgrade min AWS provider and Terraform versions to 6.0 and 1.5.7 respectively ([#256](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/256)) ([2368d42](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/2368d423d5616f95373e078db6526ebc81c389bf))
+
 ## [6.7.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.6.0...v6.7.0) (2025-06-23)
 
 
