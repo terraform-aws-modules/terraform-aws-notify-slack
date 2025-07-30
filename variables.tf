@@ -216,12 +216,6 @@ variable "iam_role_path" {
   default     = null
 }
 
-variable "iam_policy_path" {
-  description = "Path of policies to that should be added to IAM role for Lambda Function"
-  type        = string
-  default     = null
-}
-
 variable "lambda_function_tags" {
   description = "Additional tags for the Lambda function"
   type        = map(string)
@@ -291,5 +285,5 @@ variable "trigger_on_package_timestamp" {
 variable "runtime" {
   description = "Lambda Function runtime"
   type        = string
-  default     = "python3.11"
+  default     = "python3.13"
 }
