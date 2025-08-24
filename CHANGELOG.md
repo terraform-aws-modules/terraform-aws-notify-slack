@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.0.0...v7.0.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* Ensure logger is initialized correctly and propagate `log_level` variable to `LOG_LEVEL` environment variable ([#261](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/261)) ([af4b9eb](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/af4b9eb39a76cacedba84feb4cbff1dbc6d3a2d0)), closes [#253](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/253)
+
 ## [7.0.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.7.0...v7.0.0) (2025-07-30)
 
 
