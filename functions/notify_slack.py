@@ -23,6 +23,10 @@ import boto3
 # Set default region if not provided
 REGION = os.environ.get("AWS_REGION", "us-east-1")
 
+# Initialize logging
+logger = logging.getLogger()
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
+
 # Create client so its cached/frozen between invocations
 KMS_CLIENT = boto3.client("kms", region_name=REGION)
 
