@@ -602,6 +602,38 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_guardduty_findin
     }
 ]
 
+snapshots['test_sns_get_slack_message_payload_snapshots message_guardduty_malware_protection_object_scan_result.json'] = [
+    {
+        'attachments': [
+            {
+                'color': 'danger',
+                'fallback': 'GuardDuty Malware Scan Result: THREATS_FOUND',
+                'fields': [
+                    {
+                        'short': False,
+                        'title': 'S3 Bucket',
+                        'value': '`amzn-s3-demo-bucket`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'S3 Object',
+                        'value': '`APKAEIBAERJR2EXAMPLE`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Link to S3 object',
+                        'value': 'https://console.aws.amazon.com/s3/object/amzn-s3-demo-bucket?region=us-east-1&prefix=APKAEIBAERJR2EXAMPLE'
+                    }
+                ],
+                'text': 'AWS GuardDuty Malware Scan Result - THREATS_FOUND'
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    }
+]
+
 snapshots['test_sns_get_slack_message_payload_snapshots message_text_message.json'] = [
     {
         'attachments': [

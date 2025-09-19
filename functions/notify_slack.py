@@ -76,6 +76,20 @@ def get_service_url(region: str, service: str) -> str:
         raise
 
 
+def get_s3_object_url(region: str, bucket: str, key: str) -> str:
+    """Get the appropriate S3 object URL for the region
+
+    :param region: name of the AWS region
+    :param bucket: name of the S3 bucket
+    :param key: key of the relevant S3 object
+    :returns: AWS console url formatted for the region and bucket + key provided
+    """
+    if region.startswith("us-gov-"):
+        return f"https://console.amazonaws-us-gov.com/s3/object/{bucket}?region={region}&prefix={key}"
+    else:
+        return f"https://console.aws.amazon.com/s3/object/{bucket}?region={region}&prefix={key}"
+
+
 class CloudWatchAlarmState(Enum):
     """Maps CloudWatch notification state to Slack message format color"""
 
@@ -342,6 +356,59 @@ def format_guardduty_finding(message: Dict[str, Any], region: str) -> Dict[str, 
     }
 
 
+def format_guardduty_malware_protection_object_scan_result(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """
+    Format GuardDuty Malware Protection Object Scan Result into Slack message format
+
+    :params message: SNS message body containing GuardDuty Malware Protection Object Scan Result
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+
+    detail = message["detail"]
+    scanResultDetails = detail.get("scanResultDetails")
+    scanResultStatus = scanResultDetails.get("scanResultStatus")
+
+    s3ObjectDetails = detail.get("s3ObjectDetails")
+    s3_url = get_s3_object_url(region=region, bucket=s3ObjectDetails["bucketName"], key=s3ObjectDetails["objectKey"])
+
+    severity = "High"
+
+    if scanResultStatus == "NO_THREATS_FOUND":
+        severity = "Low"
+    elif scanResultStatus == "THREATS_FOUND":
+        severity = "High"
+    elif scanResultStatus == "UNSUPPORTED":
+        severity = "Medium"
+    elif scanResultStatus == "ACCESS_DENIED":
+        severity = "Medium"
+    elif scanResultStatus == "FAILED":
+        severity = "Medium"
+
+    return {
+        "color": GuardDutyFindingSeverity[severity].value,
+        "fallback": f"GuardDuty Malware Scan Result: {scanResultStatus}",
+        "fields": [
+            {
+                "title": "S3 Bucket",
+                "value": f"`{detail['s3ObjectDetails']['bucketName']}`",
+                "short": False,
+            },
+            {
+                "title": "S3 Object",
+                "value": f"`{detail['s3ObjectDetails']['objectKey']}`",
+                "short": False,
+            },
+            {
+                "title": "Link to S3 object",
+                "value": f"{s3_url}",
+                "short": False,
+            },
+        ],
+        "text": f"AWS GuardDuty Malware Scan Result - {scanResultStatus}",
+    }
+
+
 class AwsHealthCategory(Enum):
     """Maps AWS Health eventTypeCategory to Slack message format color
 
@@ -520,6 +587,8 @@ def parse_notification(message: Dict[str, Any], subject: Optional[str], region: 
         return format_cloudwatch_alarm(message=message, region=region)
     if isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding":
         return format_guardduty_finding(message=message, region=message["region"])
+    if isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Malware Protection Object Scan Result":
+        return format_guardduty_malware_protection_object_scan_result(message=message, region=message["region"])
     if isinstance(message, Dict) and message.get("detail-type") == "Security Hub Findings - Imported":
         return format_aws_security_hub(message=message, region=message["region"])
     if isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
