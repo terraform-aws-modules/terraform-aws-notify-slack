@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.1.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.0.1...v7.1.0) (2025-09-19)
+
+
+### Features
+
+* Add support for GuardDuty Malware Protection Object Scan Result events ([#262](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/262)) ([1013c35](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/1013c35f1446b2d03fd91556edfc68deddebdbbd))
+
 ## [7.0.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.0.0...v7.0.1) (2025-08-24)
 
 
