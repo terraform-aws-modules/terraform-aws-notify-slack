@@ -17,6 +17,7 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
   - AWS CloudWatch Alarms
   - AWS CloudWatch LogMetrics Alarms
   - AWS GuardDuty Findings
+  - AWS GuardDuty Malware Protection Object Scan Results
 
 ## Usage
 
