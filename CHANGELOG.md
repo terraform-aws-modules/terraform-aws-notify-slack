@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.1.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.1.0...v7.1.1) (2025-10-21)
+
+### Bug Fixes
+
+* Update CI workflow versions to latest ([#263](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/263)) ([43d3f5b](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/43d3f5bad5008e43a2d2188b1c98886356f2889d))
+
 ## [7.1.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.0.1...v7.1.0) (2025-09-19)
 
 
