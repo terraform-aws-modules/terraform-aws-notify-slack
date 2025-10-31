@@ -270,3 +270,9 @@ variable "subscription_filter_policy_scope" {
   type        = string
   default     = null
 }
+
+variable "runtime" {
+  description = "runtime lambda"
+  type        = string
+  default     = "python3.13"
+}
