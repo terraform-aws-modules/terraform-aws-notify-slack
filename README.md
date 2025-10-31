@@ -8,7 +8,7 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
 
 ## Supported Features
 
-- AWS Lambda runtime Python 3.8
+- AWS Lambda runtime Python 3.13
 - Create new SNS topic or use existing one
 - Support plaintext and encrypted version of Slack webhook URL
 - Most of Slack message options are customizable
@@ -17,14 +17,14 @@ Doing serverless with Terraform? Check out [serverless.tf framework](https://ser
   - AWS CloudWatch Alarms
   - AWS CloudWatch LogMetrics Alarms
   - AWS GuardDuty Findings
-
+  - AWS GuardDuty Malware Protection Object Scan Results
 
 ## Usage
 
 ```hcl
 module "notify_slack" {
   source  = "terraform-aws-modules/notify-slack/aws"
-  version = "~> 5.0"
+  version = "~> 7.0"
 
   sns_topic_name = "slack-topic"
 
@@ -38,11 +38,11 @@ module "notify_slack" {
 
 [Terraform Cloud Agents](https://www.terraform.io/docs/cloud/workspaces/agent.html) are a paid feature, available as part of the Terraform Cloud for Business upgrade package.
 
-This module requires Python 3.8. You can customize [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent) to include Python using this sample `Dockerfile`:
+This module requires Python 3.11. You can customize [tfc-agent](https://hub.docker.com/r/hashicorp/tfc-agent) to include Python using this sample `Dockerfile`:
 
-```
+```Dockerfile
 FROM hashicorp/tfc-agent:latest
-RUN apt-get -y update && apt-get -y install python3.8 python3-pip
+RUN apt-get -y update && apt-get -y install python3.11 python3-pip
 ENTRYPOINT ["/bin/tfc-agent"]
 ```
 
@@ -59,25 +59,25 @@ If you want to subscribe the AWS Lambda Function created by this module to an ex
 
 See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/tree/master/functions) for further details.
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.8 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.8 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | terraform-aws-modules/lambda/aws | 3.2.0 |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | terraform-aws-modules/lambda/aws | 8.0.1 |
 
 ## Resources
 
@@ -97,13 +97,14 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_architectures"></a> [architectures](#input\_architectures) | Instruction set architecture for your Lambda function. Valid values are ["x86\_64"] and ["arm64"]. | `list(string)` | `null` | no |
 | <a name="input_cloudwatch_log_group_kms_key_id"></a> [cloudwatch\_log\_group\_kms\_key\_id](#input\_cloudwatch\_log\_group\_kms\_key\_id) | The ARN of the KMS Key to use when encrypting log data for Lambda | `string` | `null` | no |
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | Specifies the number of days you want to retain log events in log group for Lambda. | `number` | `0` | no |
 | <a name="input_cloudwatch_log_group_tags"></a> [cloudwatch\_log\_group\_tags](#input\_cloudwatch\_log\_group\_tags) | Additional tags for the Cloudwatch log group | `map(string)` | `{}` | no |
 | <a name="input_create"></a> [create](#input\_create) | Whether to create all resources | `bool` | `true` | no |
 | <a name="input_create_sns_topic"></a> [create\_sns\_topic](#input\_create\_sns\_topic) | Whether to create new SNS topic | `bool` | `true` | no |
 | <a name="input_enable_sns_topic_delivery_status_logs"></a> [enable\_sns\_topic\_delivery\_status\_logs](#input\_enable\_sns\_topic\_delivery\_status\_logs) | Whether to enable SNS topic delivery status logs | `bool` | `false` | no |
-| <a name="input_iam_policy_path"></a> [iam\_policy\_path](#input\_iam\_policy\_path) | Path of policies to that should be added to IAM role for Lambda Function | `string` | `null` | no |
+| <a name="input_hash_extra"></a> [hash\_extra](#input\_hash\_extra) | The string to add into hashing function. Useful when building same source path for different functions. | `string` | `""` | no |
 | <a name="input_iam_role_boundary_policy_arn"></a> [iam\_role\_boundary\_policy\_arn](#input\_iam\_role\_boundary\_policy\_arn) | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `null` | no |
 | <a name="input_iam_role_name_prefix"></a> [iam\_role\_name\_prefix](#input\_iam\_role\_name\_prefix) | A unique role name beginning with the specified prefix | `string` | `"lambda"` | no |
 | <a name="input_iam_role_path"></a> [iam\_role\_path](#input\_iam\_role\_path) | Path of IAM role to use for Lambda Function | `string` | `null` | no |
@@ -122,9 +123,11 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_lambda_role"></a> [lambda\_role](#input\_lambda\_role) | IAM role attached to the Lambda Function.  If this is set then a role will not be created for you. | `string` | `""` | no |
 | <a name="input_lambda_source_path"></a> [lambda\_source\_path](#input\_lambda\_source\_path) | The source path of the custom Lambda function | `string` | `null` | no |
 | <a name="input_log_events"></a> [log\_events](#input\_log\_events) | Boolean flag to enabled/disable logging of incoming events | `bool` | `false` | no |
+| <a name="input_log_level"></a> [log\_level](#input\_log\_level) | Logging level for the Lambda function | `string` | `"INFO"` | no |
 | <a name="input_putin_khuylo"></a> [putin\_khuylo](#input\_putin\_khuylo) | Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo! | `bool` | `true` | no |
 | <a name="input_recreate_missing_package"></a> [recreate\_missing\_package](#input\_recreate\_missing\_package) | Whether to recreate missing Lambda package if it is missing locally or not | `bool` | `true` | no |
 | <a name="input_reserved_concurrent_executions"></a> [reserved\_concurrent\_executions](#input\_reserved\_concurrent\_executions) | The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations | `number` | `-1` | no |
+| <a name="input_runtime"></a> [runtime](#input\_runtime) | Lambda Function runtime | `string` | `"python3.13"` | no |
 | <a name="input_slack_channel"></a> [slack\_channel](#input\_slack\_channel) | The name of the channel in Slack for notifications | `string` | n/a | yes |
 | <a name="input_slack_emoji"></a> [slack\_emoji](#input\_slack\_emoji) | A custom emoji that will appear on Slack messages | `string` | `":aws:"` | no |
 | <a name="input_slack_username"></a> [slack\_username](#input\_slack\_username) | The username that will appear on Slack messages | `string` | n/a | yes |
@@ -143,6 +146,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="input_subscription_filter_policy"></a> [subscription\_filter\_policy](#input\_subscription\_filter\_policy) | (Optional) A valid filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `null` | no |
 | <a name="input_subscription_filter_policy_scope"></a> [subscription\_filter\_policy\_scope](#input\_subscription\_filter\_policy\_scope) | (Optional) A valid filter policy scope MessageAttributes\|MessageBody | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
+| <a name="input_trigger_on_package_timestamp"></a> [trigger\_on\_package\_timestamp](#input\_trigger\_on\_package\_timestamp) | (Optional) Whether or not to ignore the file timestamp when deciding to create the archive | `bool` | `false` | no |
 
 ## Outputs
 
@@ -159,7 +163,7 @@ See the [functions](https://github.com/terraform-aws-modules/terraform-aws-notif
 | <a name="output_slack_topic_arn"></a> [slack\_topic\_arn](#output\_slack\_topic\_arn) | The ARN of the SNS topic from which messages will be sent to Slack |
 | <a name="output_sns_topic_feedback_role_arn"></a> [sns\_topic\_feedback\_role\_arn](#output\_sns\_topic\_feedback\_role\_arn) | The Amazon Resource Name (ARN) of the IAM role used for SNS delivery status logging |
 | <a name="output_this_slack_topic_arn"></a> [this\_slack\_topic\_arn](#output\_this\_slack\_topic\_arn) | The ARN of the SNS topic from which messages will be sent to Slack (backward compatibility for version 4.x) |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 ## Authors
 

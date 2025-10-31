@@ -6,20 +6,18 @@ data "aws_iam_policy_document" "sns_feedback" {
   count = local.create_sns_feedback_role ? 1 : 0
 
   statement {
-    sid    = "PermitDeliveryStatusMessagesToCloudWatchLogs"
+    sid    = "SnsAssume"
     effect = "Allow"
 
     actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-      "logs:PutMetricFilter",
-      "logs:PutRetentionPolicy"
+      "sts:AssumeRole",
+      "sts:TagSession",
     ]
 
-    resources = [
-      "*"
-    ]
+    principals {
+      type        = "Service"
+      identifiers = ["sns.amazonaws.com"]
+    }
   }
 }
 
@@ -33,5 +31,8 @@ resource "aws_iam_role" "sns_feedback_role" {
   permissions_boundary  = var.sns_topic_feedback_role_permissions_boundary
   assume_role_policy    = data.aws_iam_policy_document.sns_feedback[0].json
 
-  tags = merge(var.tags, var.sns_topic_feedback_role_tags)
+  tags = merge(
+    var.tags,
+    var.sns_topic_feedback_role_tags,
+  )
 }

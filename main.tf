@@ -7,7 +7,7 @@ locals {
 
   sns_topic_arn = try(
     aws_sns_topic.this[0].arn,
-    "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
+    "arn:${data.aws_partition.current.id}:sns:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${var.sns_topic_name}",
     ""
   )
 
@@ -26,6 +26,13 @@ locals {
     resources = [var.kms_key_arn]
   }
 
+  lambda_policy_document_securityhub = {
+    sid       = "AllowSecurityHub"
+    effect    = "Allow"
+    actions   = ["securityhub:BatchUpdateFindings"]
+    resources = ["*"]
+  }
+
   lambda_handler = try(split(".", basename(var.lambda_source_path))[0], "notify_slack")
 }
 
@@ -33,7 +40,8 @@ data "aws_iam_policy_document" "lambda" {
   count = var.create ? 1 : 0
 
   dynamic "statement" {
-    for_each = concat([local.lambda_policy_document], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
+    for_each = concat([local.lambda_policy_document,
+    local.lambda_policy_document_securityhub], var.kms_key_arn != "" ? [local.lambda_policy_document_kms] : [])
     content {
       sid       = statement.value.sid
       effect    = statement.value.effect
@@ -80,13 +88,14 @@ resource "aws_sns_topic_subscription" "sns_notify_slack" {
 
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "3.2.0"
+  version = "8.0.1"
 
   create = var.create
 
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
+  hash_extra                     = var.hash_extra
   handler                        = "${local.lambda_handler}.lambda_handler"
   source_path                    = var.lambda_source_path != null ? "${path.root}/${var.lambda_source_path}" : "${path.module}/functions/notify_slack.py"
   recreate_missing_package       = var.recreate_missing_package
@@ -95,6 +104,7 @@ module "lambda" {
   kms_key_arn                    = var.kms_key_arn
   reserved_concurrent_executions = var.reserved_concurrent_executions
   ephemeral_storage_size         = var.lambda_function_ephemeral_storage_size
+  trigger_on_package_timestamp   = var.trigger_on_package_timestamp
 
   # If publish is disabled, there will be "Error adding new Lambda Permission for notify_slack:
   # InvalidParameterValueException: We currently do not support adding policies for $LATEST."
@@ -106,6 +116,7 @@ module "lambda" {
     SLACK_USERNAME    = var.slack_username
     SLACK_EMOJI       = var.slack_emoji
     LOG_EVENTS        = var.log_events ? "True" : "False"
+    LOG_LEVEL         = var.log_level
   }
 
   create_role               = var.lambda_role == ""
@@ -114,7 +125,6 @@ module "lambda" {
   role_permissions_boundary = var.iam_role_boundary_policy_arn
   role_tags                 = var.iam_role_tags
   role_path                 = var.iam_role_path
-  policy_path               = var.iam_policy_path
 
   # Do not use Lambda's policy for cloudwatch logs, because we have to add a policy
   # for KMS conditionally. This way attach_policy_json is always true independenty of

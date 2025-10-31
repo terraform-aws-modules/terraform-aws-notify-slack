@@ -4,6 +4,12 @@ variable "putin_khuylo" {
   default     = true
 }
 
+variable "architectures" {
+  description = "Instruction set architecture for your Lambda function. Valid values are [\"x86_64\"] and [\"arm64\"]."
+  type        = list(string)
+  default     = null
+}
+
 variable "create" {
   description = "Whether to create all resources"
   type        = bool
@@ -14,6 +20,12 @@ variable "create_sns_topic" {
   description = "Whether to create new SNS topic"
   type        = bool
   default     = true
+}
+
+variable "hash_extra" {
+  description = "The string to add into hashing function. Useful when building same source path for different functions."
+  type        = string
+  default     = ""
 }
 
 variable "lambda_role" {
@@ -157,6 +169,12 @@ variable "log_events" {
   default     = false
 }
 
+variable "log_level" {
+  description = "Logging level for the Lambda function"
+  type        = string
+  default     = "INFO"
+}
+
 variable "reserved_concurrent_executions" {
   description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations"
   type        = number
@@ -201,12 +219,6 @@ variable "iam_role_name_prefix" {
 
 variable "iam_role_path" {
   description = "Path of IAM role to use for Lambda Function"
-  type        = string
-  default     = null
-}
-
-variable "iam_policy_path" {
-  description = "Path of policies to that should be added to IAM role for Lambda Function"
   type        = string
   default     = null
 }

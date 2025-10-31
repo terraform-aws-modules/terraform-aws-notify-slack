@@ -2,6 +2,122 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.1.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.1.0...v7.1.1) (2025-10-21)
+
+### Bug Fixes
+
+* Update CI workflow versions to latest ([#263](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/263)) ([43d3f5b](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/43d3f5bad5008e43a2d2188b1c98886356f2889d))
+
+## [7.1.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.0.1...v7.1.0) (2025-09-19)
+
+
+### Features
+
+* Add support for GuardDuty Malware Protection Object Scan Result events ([#262](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/262)) ([1013c35](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/1013c35f1446b2d03fd91556edfc68deddebdbbd))
+
+## [7.0.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.0.0...v7.0.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* Ensure logger is initialized correctly and propagate `log_level` variable to `LOG_LEVEL` environment variable ([#261](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/261)) ([af4b9eb](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/af4b9eb39a76cacedba84feb4cbff1dbc6d3a2d0)), closes [#253](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/253)
+
+## [7.0.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.7.0...v7.0.0) (2025-07-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade min AWS provider and Terraform versions to 6.0 and 1.5.7 respectively (#256)
+
+### Features
+
+* Upgrade min AWS provider and Terraform versions to 6.0 and 1.5.7 respectively ([#256](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/256)) ([2368d42](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/2368d423d5616f95373e078db6526ebc81c389bf))
+
+## [6.7.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.6.0...v6.7.0) (2025-06-23)
+
+
+### Features
+
+* Allow changing runtime variable ([#252](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/252)) ([3502e45](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/3502e45c3dc61fda6fbe6e2c69d79ce25780a34e))
+
+## [6.6.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.2...v6.6.0) (2025-03-12)
+
+
+### Features
+
+* Support for Security Hub ([#242](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/242)) ([3aef5ba](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/3aef5badc119568f8986eb4fea91b76aef99c4df))
+
+## [6.5.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.1...v6.5.2) (2025-02-25)
+
+
+### Bug Fixes
+
+* Modify logging for security inspector issue ([#249](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/249)) ([b3cd40f](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/b3cd40f6e90fa628e0481b5093d60a302e58f155))
+
+## [6.5.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.5.0...v6.5.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* Reverts endpoint variable change from e95cde8 ([#240](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/240)) ([81e4b81](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/81e4b816f39c34fab8a5d78e8b854c43aed7dbd2))
+* Update CI workflow versions to latest ([#239](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/239)) ([50b951a](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/50b951a333ebab734c5afba984f0584fd1b43dd7))
+
+## [6.5.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.4.1...v6.5.0) (2024-09-03)
+
+
+### Features
+
+* Add variable to allow disabling the package timestamp trigger ([#233](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/233)) ([b3016e2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/b3016e2f059ffa4ce12745acd4c131c3744faf44))
+
+## [6.4.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.4.0...v6.4.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* Update `aws_sns_topic_subscription` endpoint to use qualified arn ([#231](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/231)) ([e95cde8](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/e95cde8acdaf221e74595daa2238b75f0682ea06)), closes [#230](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/230)
+
+## [6.4.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.3.0...v6.4.0) (2024-04-24)
+
+
+### Features
+
+* Improved AWS backup notification readability ([#222](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/222)) ([27d1c46](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/27d1c464f80708740d8d155e7cb11367b41bab6c))
+
+## [6.3.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.2.0...v6.3.0) (2024-04-22)
+
+
+### Features
+
+* Update Python lambda runtime from `3.8` to `3.11` ([#225](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/225)) ([b4ef4e4](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/b4ef4e45e9f3dafb774ccf62d9473b338de68f3f))
+
+## [6.2.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.2...v6.2.0) (2024-04-22)
+
+
+### Features
+
+* Added architecture variable ([#224](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/224)) ([1ae3ab7](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/1ae3ab7e084341e7a1fd3acccb15d2971020fce5))
+
+## [6.1.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.1...v6.1.2) (2024-03-26)
+
+
+### Bug Fixes
+
+* Correct assume role permissions for SNS service to assume IAM role ([#220](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/220)) ([dae0c0f](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/dae0c0f49d41cf98c5e31af7912ed406eea81c83))
+
+## [6.1.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.1.0...v6.1.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* Update CI workflow versions to remove deprecated runtime warnings ([#218](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/218)) ([44edd19](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/44edd191bac2812951faea9562c685fbeeeefee8))
+
+## [6.1.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v6.0.0...v6.1.0) (2023-12-11)
+
+
+### Features
+
+* Expose `hash_extra` variable from Lambda module ([#211](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/211)) ([ee30bb3](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/ee30bb3f5c0da7c118c8c09fbb195a7c0e607f73))
+
 ## [6.0.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v5.6.0...v6.0.0) (2023-05-18)
 
 

@@ -1,0 +1,109 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:...-a3802aa1ed45",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "12345678-abcd-123a-def0-abcd1a234567",
+        "TopicArn": "arn:aws:sns:us-west-1:123456789012:backup-2sqs-sns-topic",
+        "Subject": "Notification from AWS Backup",
+        "Message": "An AWS Backup job was completed successfully. Recovery point ARN: arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012d. Resource ARN : arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012e. BackupJob ID : 1b2345b2-f22c-4dab-5eb6-bbc7890ed123",
+        "Timestamp": "2019-08-02T18:46:02.788Z",
+        "MessageAttributes": {
+          "EventType": {
+            "Type": "String",
+            "Value": "BACKUP_JOB"
+          },
+          "State": {
+            "Type": "String",
+            "Value": "COMPLETED"
+          },
+          "AccountId": {
+            "Type": "String",
+            "Value": "123456789012"
+          },
+          "Id": {
+            "Type": "String",
+            "Value": "1b2345b2-f22c-4dab-5eb6-bbc7890ed123"
+          },
+          "StartTime": {
+            "Type": "String",
+            "Value": "2019-09-02T13:48:52.226Z"
+          }
+        }
+      }
+    },
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:...-a3802aa1ed45",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "12345678-abcd-123a-def0-abcd1a234567",
+        "TopicArn": "arn:aws:sns:us-west-1:123456789012:backup-2sqs-sns-topic",
+        "Subject": "Notification from AWS Backup",
+        "Message": "An AWS Backup job failed. Resource ARN : arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012e. BackupJob ID : 1b2345b2-f22c-4dab-5eb6-bbc7890ed123",
+        "Timestamp": "2019-08-02T18:46:02.788Z",
+        "MessageAttributes": {
+          "EventType": {
+            "Type": "String",
+            "Value": "BACKUP_JOB"
+          },
+          "State": {
+            "Type": "String",
+            "Value": "FAILED"
+          },
+          "AccountId": {
+            "Type": "String",
+            "Value": "123456789012"
+          },
+          "Id": {
+            "Type": "String",
+            "Value": "1b2345b2-f22c-4dab-5eb6-bbc7890ed123"
+          },
+          "StartTime": {
+            "Type": "String",
+            "Value": "2019-09-02T13:48:52.226Z"
+          }
+        }
+      }
+    },
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:...-a3802aa1ed45",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "12345678-abcd-123a-def0-abcd1a234567",
+        "TopicArn": "arn:aws:sns:us-west-1:123456789012:backup-2sqs-sns-topic",
+        "Subject": "Notification from AWS Backup",
+        "Message": "An AWS Backup job failed to complete in time. Resource ARN : arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012e. BackupJob ID : 1b2345b2-f22c-4dab-5eb6-bbc7890ed123",
+        "Timestamp": "2019-08-02T18:46:02.788Z",
+        "MessageAttributes": {
+          "EventType": {
+            "Type": "String",
+            "Value": "BACKUP_JOB"
+          },
+          "State": {
+            "Type": "String",
+            "Value": "EXPIRED"
+          },
+          "AccountId": {
+            "Type": "String",
+            "Value": "123456789012"
+          },
+          "Id": {
+            "Type": "String",
+            "Value": "1b2345b2-f22c-4dab-5eb6-bbc7890ed123"
+          },
+          "StartTime": {
+            "Type": "String",
+            "Value": "2019-09-02T13:48:52.226Z"
+          }
+        }
+      }
+    }
+  ]
+}
