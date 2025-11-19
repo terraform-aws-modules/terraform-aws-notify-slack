@@ -645,7 +645,7 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_text_message.jso
                         'value': '''This
 is
 a typical multi-line
-message from SNS!
+text-formatted message from SNS!
 
 Have a ~good~ amazing day! :)'''
                     }
