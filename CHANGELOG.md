@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.2.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.1.1...v7.2.0) (2026-01-08)
+
+### Features
+
+* Add provider meta user-agent ([#266](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/266)) ([03062b9](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/03062b92c882990b54a80ec72d25e951336cbf9c))
+
 ## [7.1.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.1.0...v7.1.1) (2025-10-21)
 
 ### Bug Fixes
