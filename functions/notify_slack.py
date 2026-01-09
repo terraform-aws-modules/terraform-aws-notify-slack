@@ -574,7 +574,7 @@ def format_default(
     return attachments
 
 
-def parse_notification(message: Dict[str, Any], subject: Optional[str], region: str) -> Optional[Dict]:
+def parse_notification(message: Union[str, Dict[str, Any]], subject: Optional[str], region: str) -> Dict[str, Any]:
     """
     Parse notification message and format into Slack message payload
 
@@ -583,7 +583,7 @@ def parse_notification(message: Dict[str, Any], subject: Optional[str], region: 
     :params region: AWS region where the event originated from
     :returns: Slack message payload
     """
-    if "AlarmName" in message:
+    if isinstance(message, Dict) and "AlarmName" in message:
         return format_cloudwatch_alarm(message=message, region=region)
     if isinstance(message, Dict) and message.get("detail-type") == "GuardDuty Finding":
         return format_guardduty_finding(message=message, region=message["region"])
@@ -619,7 +619,6 @@ def get_slack_message_payload(
         "username": slack_username,
         "icon_emoji": slack_emoji,
     }
-    attachment = None
 
     if isinstance(message, str):
         try:
@@ -627,15 +626,11 @@ def get_slack_message_payload(
         except json.JSONDecodeError:
             logging.info("Not a structured payload, just a string message")
 
-    message = cast(Dict[str, Any], message)
-
-    if "attachments" in message or "text" in message:
+    if isinstance(message, Dict) and ("attachments" in message or "text" in message):
+        message = cast(Dict[str, Any], message)
         payload = {**payload, **message}
     else:
-        attachment = parse_notification(message, subject, region)
-
-    if attachment:
-        payload["attachments"] = [attachment]  # type: ignore
+        payload["attachments"] = [parse_notification(message, subject, region)]
 
     return payload
 
