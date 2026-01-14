@@ -282,6 +282,212 @@ snapshots['test_event_get_slack_message_payload_snapshots event_guardduty_findin
     }
 ]
 
+snapshots['test_event_get_slack_message_payload_snapshots event_inspector_finding.json'] = [
+    {
+        'attachments': [
+            {
+                'color': 'warning',
+                'fallback': 'Inspector Finding: CVE-2024-29069 - snapd',
+                'fields': [
+                    {
+                        'short': False,
+                        'title': 'Title',
+                        'value': '`CVE-2024-29069 - snapd`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Description',
+                        'value': '`In snapd versions prior to 2.62, snapd failed to properly check the destination of symbolic links when extracting a snap...`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Severity',
+                        'value': '`MEDIUM`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Account ID',
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Finding Type',
+                        'value': '`PACKAGE_VULNERABILITY`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Status',
+                        'value': '`OPEN`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'First Observed',
+                        'value': '`Wed Sep 04 16:59:44.356 UTC 2024`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Last Observed',
+                        'value': '`Wed Sep 04 16:59:44.476 UTC 2024`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Remediation',
+                        'value': '`N/A`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding ARN',
+                        'value': '`arn:aws:inspector2:eu-central-1:123456789012:finding/FINDING_ID`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding Url',
+                        'value': 'https://console.aws.amazon.com/inspector/v2/home?region=eu-central-1#/findings/details/arn%3Aaws%3Ainspector2%3Aeu-central-1%3A123456789012%3Afinding/FINDING_ID'
+                    }
+                ],
+                'text': 'Amazon Inspector Finding - CVE-2024-29069 - snapd'
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    }
+]
+
+snapshots['test_event_get_slack_message_payload_snapshots event_inspector_network_reachability.json'] = [
+    {
+        'attachments': [
+            {
+                'color': 'warning',
+                'fallback': 'Inspector Finding: Port 22 is reachable from an Internet Gateway - TCP',
+                'fields': [
+                    {
+                        'short': False,
+                        'title': 'Title',
+                        'value': '`Port 22 is reachable from an Internet Gateway - TCP`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Description',
+                        'value': '`On the instance i-12345678901234567, the port range 22-22 is reachable from the InternetGateway igw-261bab4d from an attached ENI eni-094ad651219472857.`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Severity',
+                        'value': '`MEDIUM`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Account ID',
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Finding Type',
+                        'value': '`NETWORK_REACHABILITY`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Status',
+                        'value': '`ACTIVE`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Protocol',
+                        'value': '`TCP`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Port Range',
+                        'value': '`22-22`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'First Observed',
+                        'value': '`Thu Sep 05 13:06:56.334 UTC 2024`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Last Observed',
+                        'value': '`Thu Sep 05 13:06:56.334 UTC 2024`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Remediation',
+                        'value': '`You can restrict access to your instance by modifying the Security Groups or ACLs in the network path.`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding ARN',
+                        'value': '`arn:aws:inspector2:eu-central-1:123456789012:finding/FINDING_ID`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding Url',
+                        'value': 'https://console.aws.amazon.com/inspector/v2/home?region=eu-central-1#/findings/details/arn%3Aaws%3Ainspector2%3Aeu-central-1%3A123456789012%3Afinding/FINDING_ID'
+                    }
+                ],
+                'text': 'Amazon Inspector Finding - Port 22 is reachable from an Internet Gateway - TCP'
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    }
+]
+
+snapshots['test_event_get_slack_message_payload_snapshots event_inspector_scan.json'] = [
+    {
+        'attachments': [
+            {
+                'color': '#439FE0',
+                'fallback': 'Inspector Scan: INITIAL_SCAN_COMPLETE',
+                'fields': [
+                    {
+                        'short': True,
+                        'title': 'Scan Status',
+                        'value': '`INITIAL_SCAN_COMPLETE`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Instance ID',
+                        'value': '`i-087d63509b8c97098`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Critical Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'High Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Medium Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Total Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Inspector Console',
+                        'value': 'https://console.aws.amazon.com/inspector/v2/home?region=us-east-1'
+                    }
+                ],
+                'text': 'Amazon Inspector Scan Result - INITIAL_SCAN_COMPLETE'
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    }
+]
+
 snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = [
     {
         'attachments': [
@@ -626,6 +832,212 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_guardduty_malwar
                     }
                 ],
                 'text': 'AWS GuardDuty Malware Scan Result - THREATS_FOUND'
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    }
+]
+
+snapshots['test_sns_get_slack_message_payload_snapshots message_inspector_finding.json'] = [
+    {
+        'attachments': [
+            {
+                'color': 'warning',
+                'fallback': 'Inspector Finding: CVE-2024-29069 - snapd',
+                'fields': [
+                    {
+                        'short': False,
+                        'title': 'Title',
+                        'value': '`CVE-2024-29069 - snapd`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Description',
+                        'value': '`In snapd versions prior to 2.62, snapd failed to properly check the destination of symbolic links when extracting a snap...`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Severity',
+                        'value': '`MEDIUM`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Account ID',
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Finding Type',
+                        'value': '`PACKAGE_VULNERABILITY`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Status',
+                        'value': '`OPEN`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'First Observed',
+                        'value': '`Wed Sep 04 16:59:44.356 UTC 2024`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Last Observed',
+                        'value': '`Wed Sep 04 16:59:44.476 UTC 2024`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Remediation',
+                        'value': '`N/A`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding ARN',
+                        'value': '`arn:aws:inspector2:eu-central-1:123456789012:finding/FINDING_ID`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding Url',
+                        'value': 'https://console.aws.amazon.com/inspector/v2/home?region=eu-central-1#/findings/details/arn%3Aaws%3Ainspector2%3Aeu-central-1%3A123456789012%3Afinding/FINDING_ID'
+                    }
+                ],
+                'text': 'Amazon Inspector Finding - CVE-2024-29069 - snapd'
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    }
+]
+
+snapshots['test_sns_get_slack_message_payload_snapshots message_inspector_network_reachability.json'] = [
+    {
+        'attachments': [
+            {
+                'color': 'warning',
+                'fallback': 'Inspector Finding: Port 22 is reachable from an Internet Gateway - TCP',
+                'fields': [
+                    {
+                        'short': False,
+                        'title': 'Title',
+                        'value': '`Port 22 is reachable from an Internet Gateway - TCP`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Description',
+                        'value': '`On the instance i-12345678901234567, the port range 22-22 is reachable from the InternetGateway igw-261bab4d from an attached ENI eni-094ad651219472857.`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Severity',
+                        'value': '`MEDIUM`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Account ID',
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Finding Type',
+                        'value': '`NETWORK_REACHABILITY`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Status',
+                        'value': '`ACTIVE`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Protocol',
+                        'value': '`TCP`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Port Range',
+                        'value': '`22-22`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'First Observed',
+                        'value': '`Thu Sep 05 13:06:56.334 UTC 2024`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Last Observed',
+                        'value': '`Thu Sep 05 13:06:56.334 UTC 2024`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Remediation',
+                        'value': '`You can restrict access to your instance by modifying the Security Groups or ACLs in the network path.`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding ARN',
+                        'value': '`arn:aws:inspector2:eu-central-1:123456789012:finding/FINDING_ID`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Finding Url',
+                        'value': 'https://console.aws.amazon.com/inspector/v2/home?region=eu-central-1#/findings/details/arn%3Aaws%3Ainspector2%3Aeu-central-1%3A123456789012%3Afinding/FINDING_ID'
+                    }
+                ],
+                'text': 'Amazon Inspector Finding - Port 22 is reachable from an Internet Gateway - TCP'
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    }
+]
+
+snapshots['test_sns_get_slack_message_payload_snapshots message_inspector_scan.json'] = [
+    {
+        'attachments': [
+            {
+                'color': '#439FE0',
+                'fallback': 'Inspector Scan: INITIAL_SCAN_COMPLETE',
+                'fields': [
+                    {
+                        'short': True,
+                        'title': 'Scan Status',
+                        'value': '`INITIAL_SCAN_COMPLETE`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Instance ID',
+                        'value': '`i-087d63509b8c97098`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Critical Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'High Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Medium Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': True,
+                        'title': 'Total Findings',
+                        'value': '`0`'
+                    },
+                    {
+                        'short': False,
+                        'title': 'Inspector Console',
+                        'value': 'https://console.aws.amazon.com/inspector/v2/home?region=us-east-1'
+                    }
+                ],
+                'text': 'Amazon Inspector Scan Result - INITIAL_SCAN_COMPLETE'
             }
         ],
         'channel': 'slack_testing_sandbox',

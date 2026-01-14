@@ -39,6 +39,7 @@ class AwsService(Enum):
     cloudwatch = "cloudwatch"
     guardduty = "guardduty"
     securityhub = "securityhub"
+    inspector2 = "inspector/v2"
 
 
 def decrypt_url(encrypted_url: str) -> str:
@@ -267,6 +268,176 @@ def format_aws_security_hub(message: Dict[str, Any], region: str) -> Dict[str, A
         return slack_message
 
     return format_default(message=message)
+
+
+class InspectorFindingSeverity(Enum):
+    """Maps Amazon Inspector finding severity to Slack message format color"""
+
+    CRITICAL = "danger"
+    HIGH = "danger"
+    MEDIUM = "warning"
+    LOW = "#777777"
+    INFORMATIONAL = "#439FE0"
+
+    @staticmethod
+    def get(name, default):
+        try:
+            return InspectorFindingSeverity[name]
+        except KeyError:
+            return default
+
+
+def format_inspector_finding(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """
+    Format Amazon Inspector v2 finding event into Slack message format
+
+    :params message: SNS message body containing Inspector finding event
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+    service_url = get_service_url(region=region, service="inspector2")
+    detail = message["detail"]
+    severity = detail.get("severity", "INFORMATIONAL")
+    title = detail.get("title", "No Title Provided")
+    description = detail.get("description", "No Description Provided")
+    finding_arn = detail.get("findingArn", "")
+    finding_url = f"{service_url}#/findings/details/{urllib.parse.quote(finding_arn)}"
+
+    first_observed = detail.get("firstObservedAt", "Unknown Date")
+    last_observed = detail.get("lastObservedAt", "Unknown Date")
+    remediation = (
+        detail.get("remediation", {}).get("recommendation", {}).get("text", "N/A")
+    )
+
+    color = InspectorFindingSeverity.get(
+        severity.upper(), InspectorFindingSeverity.INFORMATIONAL
+    ).value
+
+    fields = [
+        {"title": "Title", "value": f"`{title}`", "short": False},
+        {"title": "Description", "value": f"`{description}`", "short": False},
+        {"title": "Severity", "value": f"`{severity}`", "short": True},
+        {
+            "title": "Account ID",
+            "value": f"`{detail.get('awsAccountId', 'Unknown Account')}`",
+            "short": True,
+        },
+        {
+            "title": "Finding Type",
+            "value": f"`{detail.get('type', 'N/A')}`",
+            "short": True,
+        },
+        {
+            "title": "Status",
+            "value": f"`{detail.get('status', 'N/A')}`",
+            "short": True,
+        },
+    ]
+
+    if detail.get("type") == "NETWORK_REACHABILITY":
+        nr_details = detail.get("networkReachabilityDetails", {})
+        protocol = nr_details.get("protocol", "N/A")
+        port_range = nr_details.get("openPortRange", {})
+        begin = port_range.get("begin", "N/A")
+        end = port_range.get("end", "N/A")
+        fields.append({"title": "Protocol", "value": f"`{protocol}`", "short": True})
+        fields.append(
+            {"title": "Port Range", "value": f"`{begin}-{end}`", "short": True}
+        )
+
+    fields.extend(
+        [
+            {"title": "First Observed", "value": f"`{first_observed}`", "short": True},
+            {"title": "Last Observed", "value": f"`{last_observed}`", "short": True},
+            {"title": "Remediation", "value": f"`{remediation}`", "short": False},
+            {"title": "Finding ARN", "value": f"`{finding_arn}`", "short": False},
+            {"title": "Finding Url", "value": f"{finding_url}", "short": False},
+        ]
+    )
+
+    return {
+        "color": color,
+        "fallback": f"Inspector Finding: {title}",
+        "fields": fields,
+        "text": f"Amazon Inspector Finding - {title}",
+    }
+
+
+def format_inspector_scan(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """
+    Format Amazon Inspector v2 scan result event into Slack message format
+
+    :params message: SNS message body containing Inspector scan event
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+    service_url = get_service_url(region=region, service="inspector2")
+    detail = message["detail"]
+    scan_status = detail.get("scan-status", "N/A")
+    instance_id = detail.get("instance-id", "N/A")
+    counts = detail.get("finding-severity-counts", {})
+    critical = counts.get("CRITICAL", 0)
+    high = counts.get("HIGH", 0)
+    medium = counts.get("MEDIUM", 0)
+    total = counts.get("TOTAL", 0)
+
+    if critical > 0 or high > 0:
+        color = InspectorFindingSeverity.CRITICAL.value
+    elif medium > 0:
+        color = InspectorFindingSeverity.MEDIUM.value
+    else:
+        color = InspectorFindingSeverity.INFORMATIONAL.value
+
+    return {
+        "color": color,
+        "fallback": f"Inspector Scan: {scan_status}",
+        "fields": [
+            {"title": "Scan Status", "value": f"`{scan_status}`", "short": True},
+            {"title": "Instance ID", "value": f"`{instance_id}`", "short": True},
+            {"title": "Critical Findings", "value": f"`{critical}`", "short": True},
+            {"title": "High Findings", "value": f"`{high}`", "short": True},
+            {"title": "Medium Findings", "value": f"`{medium}`", "short": True},
+            {"title": "Total Findings", "value": f"`{total}`", "short": True},
+            {"title": "Inspector Console", "value": f"{service_url}", "short": False},
+        ],
+        "text": f"Amazon Inspector Scan Result - {scan_status}",
+    }
+
+
+def format_inspector_coverage(message: Dict[str, Any], region: str) -> Dict[str, Any]:
+    """
+    Format Amazon Inspector v2 coverage event into Slack message format
+
+    :params message: SNS message body containing Inspector coverage event
+    :params region: AWS region where the event originated from
+    :returns: formatted Slack message payload
+    """
+    service_url = get_service_url(region=region, service="inspector2")
+    detail = message["detail"]
+    scan_status = detail.get("scanStatus", {})
+    status_code = scan_status.get("statusCodeValue", "N/A")
+    reason = scan_status.get("reason", "N/A")
+    scan_type = detail.get("scanType", "N/A")
+    resource = message.get("resources", ["N/A"])[0]
+
+    color = "warning"
+    if status_code == "ACTIVE":
+        color = "good"
+    elif status_code == "INACTIVE":
+        color = "danger"
+
+    return {
+        "color": color,
+        "fallback": f"Inspector Coverage Change: {status_code}",
+        "fields": [
+            {"title": "Status", "value": f"`{status_code}`", "short": True},
+            {"title": "Reason", "value": f"`{reason}`", "short": True},
+            {"title": "Scan Type", "value": f"`{scan_type}`", "short": True},
+            {"title": "Resource", "value": f"`{resource}`", "short": True},
+            {"title": "Inspector Console", "value": f"{service_url}", "short": False},
+        ],
+        "text": f"Amazon Inspector Coverage Change - {resource}",
+    }
 
 
 class SecurityHubSeverity(Enum):
@@ -593,6 +764,12 @@ def parse_notification(message: Dict[str, Any], subject: Optional[str], region: 
         return format_aws_security_hub(message=message, region=message["region"])
     if isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         return format_aws_health(message=message, region=message["region"])
+    if isinstance(message, Dict) and message.get("detail-type") == "Inspector2 Finding":
+        return format_inspector_finding(message=message, region=message["region"])
+    if isinstance(message, Dict) and message.get("detail-type") == "Inspector2 Scan":
+        return format_inspector_scan(message=message, region=message["region"])
+    if isinstance(message, Dict) and message.get("detail-type") == "Inspector2 Coverage":
+        return format_inspector_coverage(message=message, region=message["region"])
     if subject == "Notification from AWS Backup":
         return format_aws_backup(message=str(message))
     return format_default(message=message, subject=subject)

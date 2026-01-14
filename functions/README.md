@@ -111,7 +111,7 @@ Within the Slack channel that is associated to the webhook URL provided, you sho
 
 To add new events with custom message formatting, the general workflow will consist of (ignoring git actions for brevity):
 
-1. Add a new example event paylod to the `functions/events/` directory; please name the file, using snake casing, in the form `<service>_<event_type>.json` such as `guardduty_finding.json` or `cloudwatch_alarm.json`
+1. Add a new example event payload to the `functions/events/` directory; please name the file, using snake casing, in the form `<service>_<event_type>.json` such as `guardduty_finding.json`, `cloudwatch_alarm.json` or `inspector_finding.json`
 2. In the `functions/notify_slack.py` file, add the new formatting function, following a similar naming pattern like in step #1 where the function name is `format_<service>_<event_type>()` such as `format_guardduty_finding()` or `format_cloudwatch_alarm()`
 3. (Optional) Ff there are different "severity" type levels that are to be mapped to Slack message color bars, create an enum that maps the possible serverity values to the appropriate colors. See the `CloudWatchAlarmState` and `GuardDutyFindingSeverity` for examples. The enum name should follow pascal case, Python standard, in the form of `<service><event_type><attribute_field>`
 4. Update the snapshots to include your new event payload and expected output. Note - the other snapshots should not be affected by your change, the snapshot diff should only show your new event:

@@ -1,0 +1,22 @@
+{
+    "Records": [
+        {
+            "EventSource": "aws:sns",
+            "EventVersion": "1.0",
+            "EventSubscriptionArn": "arn:aws:sns:eu-central-1::ExampleTopic",
+            "Sns": {
+                "Type": "Notification",
+                "MessageId": "9eb1603b-4263-19ec-8be2-33184694cb92",
+                "TopicArn": "arn:aws:sns:eu-central-1:123456789012:ExampleTopic",
+                "Subject": "Inspector Network Finding",
+                "Message": "{\"version\": \"0\", \"id\": \"9eb1603b-4263-19ec-8be2-33184694cb92\", \"detail-type\": \"Inspector2 Finding\", \"source\": \"aws.inspector2\", \"account\": \"123456789012\", \"time\": \"2024-09-05T13:06:56Z\", \"region\": \"eu-central-1\", \"resources\": [\"i-12345678901234567\"], \"detail\": {\"awsAccountId\": \"123456789012\", \"description\": \"On the instance i-12345678901234567, the port range 22-22 is reachable from the InternetGateway igw-261bab4d from an attached ENI eni-094ad651219472857.\", \"findingArn\": \"arn:aws:inspector2:eu-central-1:123456789012:finding/FINDING_ID\", \"firstObservedAt\": \"Thu Sep 05 13:06:56.334 UTC 2024\", \"lastObservedAt\": \"Thu Sep 05 13:06:56.334 UTC 2024\", \"networkReachabilityDetails\": {\"networkPath\": {\"steps\": [{\"componentId\": \"igw-261bab4d\", \"componentType\": \"AWS::EC2::InternetGateway\"}, {\"componentId\": \"acl-171b527d\", \"componentType\": \"AWS::EC2::NetworkAcl\"}, {\"componentId\": \"sg-0d34debf87410f2d9\", \"componentType\": \"AWS::EC2::SecurityGroup\"}, {\"componentId\": \"eni-094ad651219472857\", \"componentType\": \"AWS::EC2::NetworkInterface\"}, {\"componentId\": \"i-12345678901234567\", \"componentType\": \"AWS::EC2::Instance\"}]}, \"openPortRange\": {\"begin\": 22, \"end\": 22}, \"protocol\": \"TCP\"}, \"remediation\": {\"recommendation\": {\"text\": \"You can restrict access to your instance by modifying the Security Groups or ACLs in the network path.\"}}, \"resources\": [{\"details\": {\"awsEc2Instance\": {\"iamInstanceProfileArn\": \"arn:aws:iam::123456789012:instance-profile/AmazonSSMRoleForInstancesQuickSetup\", \"imageId\": \"ami-02ff980600c693b38\", \"ipV4Addresses\": [\"1.23.456.789\", \"123.45.67.890\"], \"ipV6Addresses\": [], \"launchedAt\": \"Wed Sep 04 17:41:24.000 UTC 2024\", \"platform\": \"UBUNTU_22_04\", \"subnetId\": \"subnet-12345678\", \"type\": \"t2.small\", \"vpcId\": \"vpc-12345678\"}}, \"id\": \"i-12345678901234567\", \"partition\": \"aws\", \"region\": \"eu-central-1\", \"type\": \"AWS_EC2_INSTANCE\"}], \"severity\": \"MEDIUM\", \"status\": \"ACTIVE\", \"title\": \"Port 22 is reachable from an Internet Gateway - TCP\", \"type\": \"NETWORK_REACHABILITY\", \"updatedAt\": \"Thu Sep 05 13:06:56.334 UTC 2024\"}}",
+                "Timestamp": "1970-01-01T00:00:00.000Z",
+                "SignatureVersion": "1",
+                "Signature": "EXAMPLE",
+                "SigningCertUrl": "EXAMPLE",
+                "UnsubscribeUrl": "EXAMPLE",
+                "MessageAttributes": {}
+            }
+        }
+    ]
+}

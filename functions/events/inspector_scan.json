@@ -1,0 +1,23 @@
+{
+    "version": "0",
+    "id": "28a46762-6ac8-6cc4-4f55-bc9ab99af928",
+    "detail-type": "Inspector2 Scan",
+    "source": "aws.inspector2",
+    "account": "111122223333",
+    "time": "2023-01-20T22:52:35Z",
+    "region": "us-east-1",
+    "resources": [
+        "i-087d63509b8c97098"
+    ],
+    "detail": {
+        "scan-status": "INITIAL_SCAN_COMPLETE",
+        "finding-severity-counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "TOTAL": 0
+        },
+        "instance-id": "i-087d63509b8c97098",
+        "version": "1.0"
+    }
+}

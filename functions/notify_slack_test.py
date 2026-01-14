@@ -139,6 +139,11 @@ def test_environment_variables_missing():
             "guardduty",
             "https://console.amazonaws-us-gov.com/guardduty/home?region=us-gov-east-1",
         ),
+        (
+            "us-east-1",
+            "inspector2",
+            "https://console.aws.amazon.com/inspector/v2/home?region=us-east-1",
+        ),
     ],
 )
 def test_get_service_url(region, service, expected):

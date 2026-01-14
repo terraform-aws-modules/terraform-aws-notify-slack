@@ -1,0 +1,37 @@
+{
+  "version": "0",
+  "id": "4d621919-f1f4-4201-a0e2-37e4e330ff51",
+  "detail-type": "Inspector2 Finding",
+  "source": "aws.inspector2",
+  "account": "123456789012",
+  "time": "2024-09-04T17:00:36Z",
+  "region": "eu-central-1",
+  "resources": [
+    "i-12345678901234567"
+  ],
+  "detail": {
+    "awsAccountId": "123456789012",
+    "description": "In snapd versions prior to 2.62, snapd failed to properly check the destination of symbolic links when extracting a snap...",
+    "findingArn": "arn:aws:inspector2:eu-central-1:123456789012:finding/FINDING_ID",
+    "firstObservedAt": "Wed Sep 04 16:59:44.356 UTC 2024",
+    "fixAvailable": "YES",
+    "inspectorScore": 4.8,
+    "lastObservedAt": "Wed Sep 04 16:59:44.476 UTC 2024",
+    "packageVulnerabilityDetails": {
+      "vulnerabilityId": "CVE-2024-29069",
+      "vendorSeverity": "medium",
+      "sourceUrl": "https://people.canonical.com/~ubuntu-security/cve/2024/CVE-2024-29069.html"
+    },
+    "resources": [
+      {
+        "id": "i-12345678901234567",
+        "type": "AWS_EC2_INSTANCE"
+      }
+    ],
+    "severity": "MEDIUM",
+    "status": "OPEN",
+    "title": "CVE-2024-29069 - snapd",
+    "type": "PACKAGE_VULNERABILITY",
+    "updatedAt": "Wed Sep 04 17:00:36.951 UTC 2024"
+  }
+}
