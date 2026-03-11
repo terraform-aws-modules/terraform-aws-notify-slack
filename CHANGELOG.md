@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.2.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.2.0...v7.2.1) (2026-03-11)
+
+### Bug Fixes
+
+* Addresses error about inconsistent filexists result in recent terraform versions ([#272](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/272)) ([2ed6d42](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/2ed6d42674b287609ba5bf1e867e7fedf4249364))
+
 ## [7.2.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.1.1...v7.2.0) (2026-01-08)
 
 ### Features
