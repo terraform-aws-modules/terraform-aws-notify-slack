@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.3.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.2.1...v7.3.0) (2026-05-12)
+
+### Features
+
+* Add service url and s3 object url for AWS China ([#275](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/275)) ([6239378](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/623937870e890815958797376d097fefbe7ce394))
+
 ## [7.2.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.2.0...v7.2.1) (2026-03-11)
 
 ### Bug Fixes
