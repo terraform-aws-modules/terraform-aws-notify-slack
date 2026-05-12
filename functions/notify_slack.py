@@ -68,6 +68,8 @@ def get_service_url(region: str, service: str) -> str:
         service_name = AwsService[service].value
         if region.startswith("us-gov-"):
             return f"https://console.amazonaws-us-gov.com/{service_name}/home?region={region}"
+        elif region.startswith("cn-"):
+            return f"https://console.amazonaws.cn/{service_name}/home?region={region}"
         else:
             return f"https://console.aws.amazon.com/{service_name}/home?region={region}"
 
@@ -86,6 +88,8 @@ def get_s3_object_url(region: str, bucket: str, key: str) -> str:
     """
     if region.startswith("us-gov-"):
         return f"https://console.amazonaws-us-gov.com/s3/object/{bucket}?region={region}&prefix={key}"
+    elif region.startswith("cn-"):
+        return f"https://{region}.console.amazonaws.cn/s3/object/{bucket}?region={region}&prefix={key}"
     else:
         return f"https://console.aws.amazon.com/s3/object/{bucket}?region={region}&prefix={key}"
 
