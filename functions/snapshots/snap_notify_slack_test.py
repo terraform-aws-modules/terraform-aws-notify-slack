@@ -388,7 +388,7 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
-                'color': 'warning',
+                'color': 'danger',
                 'fields': [
                     {
                         'title': '⚠️ An AWS Backup job failed to complete in time'
