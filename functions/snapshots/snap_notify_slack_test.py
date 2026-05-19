@@ -286,9 +286,26 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
+                'color': 'good',
                 'fields': [
                     {
                         'title': '✅ An AWS Backup job was completed successfully'
+                    },
+                    {
+                        'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2019-09-02T13:48:52.226Z`'
                     },
                     {
                         'short': False,
@@ -324,9 +341,26 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
+                'color': 'danger',
                 'fields': [
                     {
                         'title': '⚠️ An AWS Backup job failed'
+                    },
+                    {
+                        'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2019-09-02T13:48:52.226Z`'
                     },
                     {
                         'short': False,
@@ -354,9 +388,26 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
+                'color': 'danger',
                 'fields': [
                     {
                         'title': '⚠️ An AWS Backup job failed to complete in time'
+                    },
+                    {
+                        'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2019-09-02T13:48:52.226Z`'
                     },
                     {
                         'short': False,
@@ -373,6 +424,45 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
                     {
                         'short': False,
                         'value': '`arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012e`'
+                    }
+                ]
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    },
+    {
+        'attachments': [
+            {
+                'color': 'danger',
+                'fields': [
+                    {
+                        'title': '⚠️ An AWS Copy job was completed but was failed or was aborted'
+                    },
+                    {
+                        'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2026-05-19T15:22:57.759Z`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'Copy Job Id'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2c3456c3-f33d-5ec6-cdc7-ccd890fe2345`'
                     }
                 ]
             }

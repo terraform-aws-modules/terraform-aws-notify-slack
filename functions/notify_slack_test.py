@@ -43,7 +43,10 @@ def test_sns_get_slack_message_payload_snapshots(snapshot, monkeypatch):
                 region = sns["TopicArn"].split(":")[3]
 
                 attachment = notify_slack.get_slack_message_payload(
-                    message=message, region=region, subject=subject
+                    message=message,
+                    region=region,
+                    subject=subject,
+                    message_attributes=sns.get("MessageAttributes"),
                 )
                 attachments.append(attachment)
 

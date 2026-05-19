@@ -104,6 +104,41 @@
           }
         }
       }
+    },
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:us-east-1:123456789012:example-backup-vault-events:9a5c3725-5924-454b-9eaf-f120fa7b49b1",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "73214c2e-47bf-5e25-9552-2ea8c4b38809",
+        "TopicArn": "arn:aws:sns:us-east-1:123456789012:example-backup-vault-events",
+        "Subject": "Notification from AWS Backup",
+        "Message": "An AWS Copy job was completed but was failed or was aborted. Copy Job Id : 2c3456c3-f33d-5ec6-cdc7-ccd890fe2345",
+        "Timestamp": "2026-05-19T15:25:00.622Z",
+        "MessageAttributes": {
+          "AccountId": {
+            "Type": "String",
+            "Value": "123456789012"
+          },
+          "EventType": {
+            "Type": "String",
+            "Value": "COPY_JOB"
+          },
+          "State": {
+            "Type": "String",
+            "Value": "FAILED"
+          },
+          "StartTime": {
+            "Type": "String",
+            "Value": "2026-05-19T15:22:57.759Z"
+          },
+          "Id": {
+            "Type": "String",
+            "Value": "2c3456c3-f33d-5ec6-cdc7-ccd890fe2345"
+          }
+        }
+      }
     }
   ]
 }
