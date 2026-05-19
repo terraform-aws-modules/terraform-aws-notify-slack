@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.4.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.3.0...v7.4.0) (2026-05-19)
+
+### Features
+
+* Encrich aws backup copy job notifications ([#276](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/276)) ([4f997c4](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/4f997c482b2094645b7c712fe6c3a1df2f9d8da9))
+
 ## [7.3.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.2.1...v7.3.0) (2026-05-12)
 
 ### Features
