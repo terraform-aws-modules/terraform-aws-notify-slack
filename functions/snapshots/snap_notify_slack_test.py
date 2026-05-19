@@ -7,281 +7,6 @@ from snapshottest import Snapshot
 
 snapshots = Snapshot()
 
-snapshots['test_event_get_slack_message_payload_snapshots event_aws_health_event.json'] = [
-    {
-        'attachments': [
-            {
-                'color': 'danger',
-                'fallback': 'New AWS Health Event for EC2',
-                'fields': [
-                    {
-                        'short': True,
-                        'title': 'Affected Service',
-                        'value': '`EC2`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Affected Region',
-                        'value': '`us-west-2`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Code',
-                        'value': '`AWS_EC2_INSTANCE_STORE_DRIVE_PERFORMANCE_DEGRADED`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Event Description',
-                        'value': '`A description of the event will be provided here`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Affected Resources',
-                        'value': '`i-abcd1111`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Start Time',
-                        'value': '`Sat, 05 Jun 2016 15:10:09 GMT`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'End Time',
-                        'value': '`<unknown>`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Link to Event',
-                        'value': 'https://phd.aws.amazon.com/phd/home?region=us-west-2#/dashboard/open-issues'
-                    }
-                ],
-                'text': 'New AWS Health Event for EC2'
-            }
-        ],
-        'channel': 'slack_testing_sandbox',
-        'icon_emoji': ':aws:',
-        'username': 'notify_slack_test'
-    }
-]
-
-snapshots['test_event_get_slack_message_payload_snapshots event_cloudwatch_alarm.json'] = [
-    {
-        'attachments': [
-            {
-                'color': 'danger',
-                'fallback': 'Alarm Example triggered',
-                'fields': [
-                    {
-                        'short': True,
-                        'title': 'Alarm Name',
-                        'value': '`Example`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Alarm Description',
-                        'value': '`Example alarm description.`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Alarm reason',
-                        'value': '`Threshold Crossed`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Old State',
-                        'value': '`OK`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Current State',
-                        'value': '`ALARM`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Link to Alarm',
-                        'value': 'https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#alarm:alarmFilter=ANY;name=Example'
-                    }
-                ],
-                'text': 'AWS CloudWatch notification - Example'
-            }
-        ],
-        'channel': 'slack_testing_sandbox',
-        'icon_emoji': ':aws:',
-        'username': 'notify_slack_test'
-    }
-]
-
-snapshots['test_event_get_slack_message_payload_snapshots event_guardduty_finding_high.json'] = [
-    {
-        'attachments': [
-            {
-                'color': 'danger',
-                'fallback': 'GuardDuty Finding: SAMPLE Unprotected port on EC2 instance i-123123123 is being probed',
-                'fields': [
-                    {
-                        'short': False,
-                        'title': 'Description',
-                        'value': '`EC2 instance has an unprotected port which is being probed by a known malicious host.`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Finding Type',
-                        'value': '`Recon:EC2 PortProbeUnprotectedPort`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'First Seen',
-                        'value': '`2020-01-02T01:02:03Z`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Last Seen',
-                        'value': '`2020-01-03T01:02:03Z`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Severity',
-                        'value': '`High`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Account ID',
-                        'value': '`123456789`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Count',
-                        'value': '`1234`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Link to Finding',
-                        'value': 'https://console.aws.amazon.com/guardduty/home?region=us-east-1#/findings?search=id%3Dsample-id-2'
-                    }
-                ],
-                'text': 'AWS GuardDuty Finding - SAMPLE Unprotected port on EC2 instance i-123123123 is being probed'
-            }
-        ],
-        'channel': 'slack_testing_sandbox',
-        'icon_emoji': ':aws:',
-        'username': 'notify_slack_test'
-    }
-]
-
-snapshots['test_event_get_slack_message_payload_snapshots event_guardduty_finding_low.json'] = [
-    {
-        'attachments': [
-            {
-                'color': '#777777',
-                'fallback': 'GuardDuty Finding: SAMPLE Unprotected port on EC2 instance i-123123123 is being probed',
-                'fields': [
-                    {
-                        'short': False,
-                        'title': 'Description',
-                        'value': '`EC2 instance has an unprotected port which is being probed by a known malicious host.`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Finding Type',
-                        'value': '`Recon:EC2 PortProbeUnprotectedPort`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'First Seen',
-                        'value': '`2020-01-02T01:02:03Z`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Last Seen',
-                        'value': '`2020-01-03T01:02:03Z`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Severity',
-                        'value': '`Low`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Account ID',
-                        'value': '`123456789`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Count',
-                        'value': '`1234`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Link to Finding',
-                        'value': 'https://console.aws.amazon.com/guardduty/home?region=us-east-1#/findings?search=id%3Dsample-id-2'
-                    }
-                ],
-                'text': 'AWS GuardDuty Finding - SAMPLE Unprotected port on EC2 instance i-123123123 is being probed'
-            }
-        ],
-        'channel': 'slack_testing_sandbox',
-        'icon_emoji': ':aws:',
-        'username': 'notify_slack_test'
-    }
-]
-
-snapshots['test_event_get_slack_message_payload_snapshots event_guardduty_finding_medium.json'] = [
-    {
-        'attachments': [
-            {
-                'color': 'warning',
-                'fallback': 'GuardDuty Finding: SAMPLE Unprotected port on EC2 instance i-123123123 is being probed',
-                'fields': [
-                    {
-                        'short': False,
-                        'title': 'Description',
-                        'value': '`EC2 instance has an unprotected port which is being probed by a known malicious host.`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Finding Type',
-                        'value': '`Recon:EC2 PortProbeUnprotectedPort`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'First Seen',
-                        'value': '`2020-01-02T01:02:03Z`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Last Seen',
-                        'value': '`2020-01-03T01:02:03Z`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Severity',
-                        'value': '`Medium`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Account ID',
-                        'value': '`123456789`'
-                    },
-                    {
-                        'short': True,
-                        'title': 'Count',
-                        'value': '`1234`'
-                    },
-                    {
-                        'short': False,
-                        'title': 'Link to Finding',
-                        'value': 'https://console.aws.amazon.com/guardduty/home?region=us-east-1#/findings?search=id%3Dsample-id-2'
-                    }
-                ],
-                'text': 'AWS GuardDuty Finding - SAMPLE Unprotected port on EC2 instance i-123123123 is being probed'
-            }
-        ],
-        'channel': 'slack_testing_sandbox',
-        'icon_emoji': ':aws:',
-        'username': 'notify_slack_test'
-    }
-]
-
 snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = [
     {
         'attachments': [
@@ -289,6 +14,22 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
                 'fields': [
                     {
                         'title': '✅ An AWS Backup job was completed successfully'
+                    },
+                    {
+                        'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2019-09-02T13:48:52.226Z`'
                     },
                     {
                         'short': False,
@@ -330,6 +71,22 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
                     },
                     {
                         'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2019-09-02T13:48:52.226Z`'
+                    },
+                    {
+                        'short': False,
                         'value': 'BackupJob ID'
                     },
                     {
@@ -360,6 +117,22 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
                     },
                     {
                         'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2019-09-02T13:48:52.226Z`'
+                    },
+                    {
+                        'short': False,
                         'value': 'BackupJob ID'
                     },
                     {
@@ -373,6 +146,44 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
                     {
                         'short': False,
                         'value': '`arn:aws:ec2:us-west-1:123456789012:volume/vol-012f345df6789012e`'
+                    }
+                ]
+            }
+        ],
+        'channel': 'slack_testing_sandbox',
+        'icon_emoji': ':aws:',
+        'username': 'notify_slack_test'
+    },
+    {
+        'attachments': [
+            {
+                'fields': [
+                    {
+                        'title': '⚠️ An AWS Copy job was completed but was failed or was aborted'
+                    },
+                    {
+                        'short': False,
+                        'value': 'AccountId'
+                    },
+                    {
+                        'short': False,
+                        'value': '`123456789012`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'StartTime'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2026-05-19T15:22:57.759Z`'
+                    },
+                    {
+                        'short': False,
+                        'value': 'Copy Job Id'
+                    },
+                    {
+                        'short': False,
+                        'value': '`2c3456c3-f33d-5ec6-cdc7-ccd890fe2345`'
                     }
                 ]
             }

@@ -498,6 +498,7 @@ def aws_backup_field_parser(message: str) -> Dict[str, str]:
     # to reduce right most matched values
     field_names = {
         "BackupJob ID": r"(BackupJob ID : ).*",
+        "Copy Job Id": r"(Copy Job Id : ).*",
         "Resource ARN": r"(Resource ARN : ).*[.]",
         "Recovery point ARN": r"(Recovery point ARN: ).*[.]",
     }
@@ -515,11 +516,14 @@ def aws_backup_field_parser(message: str) -> Dict[str, str]:
     return fields
 
 
-def format_aws_backup(message: str) -> Dict[str, Any]:
+def format_aws_backup(
+    message: str, message_attributes: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
     """
     Format AWS Backup event into Slack message format
 
     :params message: SNS message body containing AWS Backup event
+    :params message_attributes: optional SNS MessageAttributes for the event
     :returns: formatted Slack message payload
     """
 
@@ -528,13 +532,19 @@ def format_aws_backup(message: str) -> Dict[str, Any]:
 
     title = message.split(".")[0]
 
-    if "failed" in title:
+    if "failed" in title or "aborted" in title:
         title = f"⚠️ {title}"
-
-    if "completed" in title:
+    elif "completed" in title:
         title = f"✅ {title}"
 
     fields.append({"title": title})
+
+    if message_attributes:
+        for name in ("AccountId", "StartTime"):
+            attr = message_attributes.get(name)
+            if attr and attr.get("Value"):
+                fields.append({"value": name, "short": False})
+                fields.append({"value": f"`{attr['Value']}`", "short": False})
 
     backup_fields = aws_backup_field_parser(message)
 
@@ -578,13 +588,19 @@ def format_default(
     return attachments
 
 
-def parse_notification(message: Dict[str, Any], subject: Optional[str], region: str) -> Optional[Dict]:
+def parse_notification(
+    message: Dict[str, Any],
+    subject: Optional[str],
+    region: str,
+    message_attributes: Optional[Dict[str, Any]] = None,
+) -> Optional[Dict]:
     """
     Parse notification message and format into Slack message payload
 
     :params message: SNS message body notification payload
     :params subject: Optional subject line for Slack notification
     :params region: AWS region where the event originated from
+    :params message_attributes: optional SNS MessageAttributes for the event
     :returns: Slack message payload
     """
     if "AlarmName" in message:
@@ -598,12 +614,15 @@ def parse_notification(message: Dict[str, Any], subject: Optional[str], region: 
     if isinstance(message, Dict) and message.get("detail-type") == "AWS Health Event":
         return format_aws_health(message=message, region=message["region"])
     if subject == "Notification from AWS Backup":
-        return format_aws_backup(message=str(message))
+        return format_aws_backup(message=str(message), message_attributes=message_attributes)
     return format_default(message=message, subject=subject)
 
 
 def get_slack_message_payload(
-    message: Union[str, Dict], region: str, subject: Optional[str] = None
+    message: Union[str, Dict],
+    region: str,
+    subject: Optional[str] = None,
+    message_attributes: Optional[Dict[str, Any]] = None,
 ) -> Dict:
     """
     Parse notification message and format into Slack message payload
@@ -611,6 +630,7 @@ def get_slack_message_payload(
     :params message: SNS message body notification payload
     :params region: AWS region where the event originated from
     :params subject: Optional subject line for Slack notification
+    :params message_attributes: optional SNS MessageAttributes for the event
     :returns: Slack message payload
     """
 
@@ -636,7 +656,9 @@ def get_slack_message_payload(
     if "attachments" in message or "text" in message:
         payload = {**payload, **message}
     else:
-        attachment = parse_notification(message, subject, region)
+        attachment = parse_notification(
+            message, subject, region, message_attributes
+        )
 
     if attachment:
         payload["attachments"] = [attachment]  # type: ignore
@@ -687,7 +709,10 @@ def lambda_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
         region = sns["TopicArn"].split(":")[3]
 
         payload = get_slack_message_payload(
-            message=message, region=region, subject=subject
+            message=message,
+            region=region,
+            subject=subject,
+            message_attributes=sns.get("MessageAttributes"),
         )
         response = send_slack_notification(payload=payload)
 
