@@ -75,6 +75,12 @@ variable "sns_topic_kms_key_id" {
   default     = ""
 }
 
+variable "sns_topic_policy" {
+  description = "The fully-formed AWS policy as JSON."
+  type        = string
+  default     = null
+}
+
 variable "enable_sns_topic_delivery_status_logs" {
   description = "Whether to enable SNS topic delivery status logs"
   type        = bool
