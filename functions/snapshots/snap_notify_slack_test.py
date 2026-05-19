@@ -11,6 +11,7 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
+                'color': 'good',
                 'fields': [
                     {
                         'title': '✅ An AWS Backup job was completed successfully'
@@ -65,6 +66,7 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
+                'color': 'danger',
                 'fields': [
                     {
                         'title': '⚠️ An AWS Backup job failed'
@@ -111,6 +113,7 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
+                'color': 'warning',
                 'fields': [
                     {
                         'title': '⚠️ An AWS Backup job failed to complete in time'
@@ -157,6 +160,7 @@ snapshots['test_sns_get_slack_message_payload_snapshots message_backup.json'] = 
     {
         'attachments': [
             {
+                'color': 'danger',
                 'fields': [
                     {
                         'title': '⚠️ An AWS Copy job was completed but was failed or was aborted'

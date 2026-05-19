@@ -102,6 +102,14 @@ class CloudWatchAlarmState(Enum):
     ALARM = "danger"
 
 
+class AwsBackupJobState(Enum):
+    """Maps AWS Backup State MessageAttribute to Slack attachment color"""
+
+    COMPLETED = "good"
+    FAILED = "danger"
+    EXPIRED = "danger"
+
+
 def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, Any]:
     """Format CloudWatch alarm event into Slack message format
 
@@ -528,7 +536,12 @@ def format_aws_backup(
     """
 
     fields: list[Dict[str, Any]] = []
-    attachments = {}
+    attachments: Dict[str, Any] = {}
+
+    if message_attributes:
+        state_attr = message_attributes.get("State")
+        if state_attr and state_attr.get("Value"):
+            attachments["color"] = AwsBackupJobState[state_attr["Value"]].value
 
     title = message.split(".")[0]
 
