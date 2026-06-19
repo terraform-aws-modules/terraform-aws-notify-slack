@@ -67,6 +67,7 @@ resource "aws_sns_topic" "this" {
   name = var.sns_topic_name
 
   kms_master_key_id = var.sns_topic_kms_key_id
+  policy            = var.sns_topic_policy
 
   lambda_failure_feedback_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
   lambda_success_feedback_role_arn    = var.enable_sns_topic_delivery_status_logs ? local.sns_feedback_role : null
