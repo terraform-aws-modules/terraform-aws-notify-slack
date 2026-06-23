@@ -1,0 +1,50 @@
+name: Terraform Check CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+  pull_request:
+    paths:
+      - ./**/*.tf
+      - .tflint.hcl
+      - mise.toml
+      - mise.lock
+      - .github/workflows/terraform_check.yaml
+
+permissions:
+  contents: read
+
+env:
+  TERRAFORM_PATH: ./
+  TERRAFORM_TFLINT_PATH: ./
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  env_vars:
+    runs-on: ubuntu-latest
+    outputs:
+      terraform_path: ${{ env.TERRAFORM_PATH }}
+      terraform_tflint_path: ${{ env.TERRAFORM_TFLINT_PATH }}
+    steps:
+      - run: echo "setting up environment variables"
+
+  env_mise:
+    uses: smartrent/github-actions/.github/workflows/env_mise.yaml@3.2.0
+
+  terraform_check:
+    needs: [env_vars, env_mise]
+    uses: smartrent/github-actions/.github/workflows/terraform_check.yaml@3.2.0
+    with:
+      terraform_path: ${{ needs.env_vars.outputs.terraform_path }}
+      terraform_tflint_path: ${{ needs.env_vars.outputs.terraform_tflint_path }}
+      terraform_version: ${{ needs.env_mise.outputs.terraform_version }}
+      terraform_tflint_version: ${{ needs.env_mise.outputs.tflint_version }}
+      terraform_tflint_call_module_type: local
+    secrets:
+      SMARTRENT_CI_SSH_PRIVATE_KEY: ${{ secrets.SMARTRENT_CI_SSH_PRIVATE_KEY }}
