@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.5.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.4.0...v7.5.0) (2026-06-19)
+
+### Features
+
+* Add support for custom SNS topic policy ([#273](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/273)) ([1f189ef](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/1f189ef31ac6b39658fbf53b4731efcc86e0cf01))
+
 ## [7.4.0](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.3.0...v7.4.0) (2026-05-19)
 
 ### Features
