@@ -95,7 +95,7 @@ module "lambda" {
   create_package               = var.local_existing_package == null || var.recreate_missing_package
   local_existing_package       = var.local_existing_package
 
-  runtime                        = "python3.11"
+  runtime                        = "python3.14"
   architectures                  = var.architectures
   timeout                        = 30
   kms_key_arn                    = var.kms_key_arn
