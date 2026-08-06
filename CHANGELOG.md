@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.5.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.5.1...v7.5.2) (2026-08-06)
+
+### Bug Fixes
+
+* Update GitHub Actions and pre-commit hook versions ([#282](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/282)) ([80111cd](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/80111cd907657c3e506009bad7785de00214bd51))
+
 ## [7.5.1](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.5.0...v7.5.1) (2026-07-09)
 
 ### Bug Fixes
