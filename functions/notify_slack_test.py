@@ -154,3 +154,29 @@ def test_get_service_url_exception():
     """
     with pytest.raises(KeyError):
         notify_slack.get_service_url(region="us-east-1", service="athena")
+
+
+def test_format_cloudwatch_alarm_strips_backticks_from_description():
+    """
+    Should strip any backticks inside the alarm description so
+    Slack's code formatting does not break.
+    """
+    alarm = {
+        "AlarmName": "BacktickAlarm",
+        "AlarmDescription": "App is reporting `A JPA error` and `another`",
+        "AWSAccountId": "000000000000",
+        "NewStateValue": "ALARM",
+        "NewStateReason": "Threshold Crossed",
+        "StateChangeTime": "2017-01-12T16:30:42.236+0000",
+        "Region": "US (Virginia)",
+        "OldStateValue": "OK",
+    }
+
+    attachment = notify_slack.format_cloudwatch_alarm(alarm, region="us-east-1")
+    description = next(
+        field["value"]
+        for field in attachment["fields"]
+        if field["title"] == "Alarm Description"
+    )
+
+    assert description == "`App is reporting A JPA error and another`"

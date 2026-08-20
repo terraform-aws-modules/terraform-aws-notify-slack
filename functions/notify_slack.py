@@ -120,6 +120,7 @@ def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, A
 
     cloudwatch_url = get_service_url(region=region, service="cloudwatch")
     alarm_name = message["AlarmName"]
+    alarm_description = str(message["AlarmDescription"]).replace("`", "")
 
     return {
         "color": CloudWatchAlarmState[message["NewStateValue"]].value,
@@ -128,7 +129,7 @@ def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, A
             {"title": "Alarm Name", "value": f"`{alarm_name}`", "short": True},
             {
                 "title": "Alarm Description",
-                "value": f"`{message['AlarmDescription']}`",
+                "value": f"`{alarm_description}`",
                 "short": False,
             },
             {
