@@ -154,3 +154,27 @@ def test_get_service_url_exception():
     """
     with pytest.raises(KeyError):
         notify_slack.get_service_url(region="us-east-1", service="athena")
+
+
+def test_format_cloudwatch_alarm_replaces_backticks_in_code_spans():
+    """
+    Should replace backticks inside code-span fields with single quotes so
+    Slack's code formatting does not break and the quoting is kept.
+    """
+    alarm = {
+        "AlarmName": "`Backtick` alarm",
+        "AlarmDescription": "App is reporting `A JPA error` and `another`",
+        "AWSAccountId": "000000000000",
+        "NewStateValue": "ALARM",
+        "NewStateReason": "Threshold `5` crossed",
+        "StateChangeTime": "2017-01-12T16:30:42.236+0000",
+        "Region": "US (Virginia)",
+        "OldStateValue": "OK",
+    }
+
+    attachment = notify_slack.format_cloudwatch_alarm(alarm, region="us-east-1")
+    fields = {field["title"]: field["value"] for field in attachment["fields"]}
+
+    assert fields["Alarm Name"] == "`'Backtick' alarm`"
+    assert fields["Alarm Description"] == "`App is reporting 'A JPA error' and 'another'`"
+    assert fields["Alarm reason"] == "`Threshold '5' crossed`"

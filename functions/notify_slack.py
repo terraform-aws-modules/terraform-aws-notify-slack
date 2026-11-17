@@ -110,6 +110,11 @@ class AwsBackupJobState(Enum):
     EXPIRED = "danger"
 
 
+def code_span(value: Any) -> str:
+    """Wrap a value in a Slack code span; a backtick inside would end the span early, so it becomes a single quote"""
+    return "`" + str(value).replace("`", "'") + "`"
+
+
 def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, Any]:
     """Format CloudWatch alarm event into Slack message format
 
@@ -125,15 +130,15 @@ def format_cloudwatch_alarm(message: Dict[str, Any], region: str) -> Dict[str, A
         "color": CloudWatchAlarmState[message["NewStateValue"]].value,
         "fallback": f"Alarm {alarm_name} triggered",
         "fields": [
-            {"title": "Alarm Name", "value": f"`{alarm_name}`", "short": True},
+            {"title": "Alarm Name", "value": code_span(alarm_name), "short": True},
             {
                 "title": "Alarm Description",
-                "value": f"`{message['AlarmDescription']}`",
+                "value": code_span(message["AlarmDescription"]),
                 "short": False,
             },
             {
                 "title": "Alarm reason",
-                "value": f"`{message['NewStateReason']}`",
+                "value": code_span(message["NewStateReason"]),
                 "short": False,
             },
             {
