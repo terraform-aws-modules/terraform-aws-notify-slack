@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.5.3](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.5.2...v7.5.3) (2026-11-17)
+
+### Bug Fixes
+
+* Strip backticks from CloudWatch alarm description ([#283](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/issues/283)) ([7d84cf4](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/commit/7d84cf4622b19bc79602ecb594bf99bb808b3221))
+
 ## [7.5.2](https://github.com/terraform-aws-modules/terraform-aws-notify-slack/compare/v7.5.1...v7.5.2) (2026-08-06)
 
 ### Bug Fixes
